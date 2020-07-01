@@ -37,7 +37,7 @@ def input_Names2():
     Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
                                                now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
     if name == None:
-        pass
+        return 'No'
     else:
         db = sqlite3.connect("DB/FO_savefile2.db")
         cursor = db.cursor()
