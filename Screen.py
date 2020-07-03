@@ -27,8 +27,28 @@ class Screen:
     def Main_Screen(self):
         Menu_Screen_background = Get_image.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0)
-        Return_button = Get_image.image_button(
-            self.Gui, "Return_btn.png", 920, 10, self.Menu_Screen)
+        Logo_button = Get_image.image_button(
+            self.Gui, "logo_btn.png", 31, 33, self.Main_Screen)
+        Save_button = Get_image.image_button(
+            self.Gui, "save_btn.png", 121, 33, self.Main_Screen)
+        menu1_button = Get_image.image_button(
+            self.Gui, "menu1.png", 34, 140, self.Main_Screen)
+        menu2_button = Get_image.image_button(
+            self.Gui, "menu2.png", 34, 210, self.Main_Screen)
+        menu3_button = Get_image.image_button(
+            self.Gui, "menu3.png", 34, 280, self.Main_Screen)
+        menu4_button = Get_image.image_button(
+            self.Gui, "menu4.png", 34, 350, self.Main_Screen)
+        menu5_button = Get_image.image_button(
+            self.Gui, "menu5.png", 34, 420, self.Main_Screen)
+        menu6_button = Get_image.image_button(
+            self.Gui, "menu6.png", 34, 490, self.Main_Screen)
+        menu7_button = Get_image.image_button(
+            self.Gui, "menu7.png", 34, 560, self.Main_Screen)
+        menu8_button = Get_image.image_button(
+            self.Gui, "menu8.png", 34, 630, self.Main_Screen)
+        menu9_button = Get_image.image_button(
+            self.Gui, "menu9.png", 34, 700, self.Main_Screen)
 
     def Incomplete_Screen(self):
         Incomplete_Screen_background = Get_image.image_label(
