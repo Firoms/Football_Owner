@@ -20,7 +20,7 @@ class Screen:
             self.Gui, "Settings_btn.png", 20, 550, self.Incomplete_Screen)
         Exit_button = Get_image.image_button(
             self.Gui, "Exit_btn.png", 20, 650, self._quit)
-        Version_label = Label(self.Gui.Gui, text="Version 0.05",
+        Version_label = Label(self.Gui.Gui, text="Version 0.10",
                               fg="green", font=("맑은 고딕", 12), height=1)
         Version_label.place(x=1100, y=5)
 

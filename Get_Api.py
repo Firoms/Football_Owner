@@ -34,7 +34,7 @@ def get_league_id():
 def get_team_id():
     db = sqlite3.connect("DB/new_datafile.db")
     cursor = db.cursor()
-    leauge_id = 1271
+    leauge_id = 1163
     r = requests.get(
         f'https://data.football-api.com/v3/standings/{leauge_id}?Authorization=cfnR6LWc4i4MDFLlPJrajoa465c4qjF594kpIy4b')
     data = r.json()
@@ -69,7 +69,7 @@ def get_team_id():
         Team_stadium = data["venue_name"]
         Team_coach = data["coach_name"]
         insert_query = \
-            f'INSERT INTO J_Leauge_Teams VALUES("{Team_country}", "{Team_id}", "{Team_name}","{Team_coach}", "{Team_form}", "{Team_position}", "{Team_home_match}",\
+            f'INSERT INTO China_Teams VALUES("{Team_country}", "{Team_id}", "{Team_name}","{Team_coach}", "{Team_form}", "{Team_position}", "{Team_home_match}",\
                                             "{Team_home_win}", "{Team_home_draw}", "{Team_home_lose}", "{Team_home_goal}", "{Team_home_goal_lost}",\
                                             "{Team_away_match}", "{Team_away_win}", "{Team_away_draw}", "{Team_away_lose}", "{Team_away_goal}",\
                                             "{Team_away_goal_lost}", "{Team_goal_dif}", "{Team_points}","{Team_stadium}")'
@@ -82,21 +82,21 @@ def get_team_id():
 
 
 def get_team_data():
-    db = sqlite3.connect("DB/Football_API.db")
+    db = sqlite3.connect("DB/new_datafile.db")
     cursor = db.cursor()
     cursor.execute(
-        "SELECT COUNT(*) FROM Team_Datas")
+        "SELECT COUNT(*) FROM SerieA_Teams")
     Team_range = cursor.fetchone()[0]
     Teams = []
     Teams_id = []
 
     cursor.execute(
-        "SELECT name FROM Team_Datas ORDER BY position")
+        "SELECT Team_name FROM SerieA_Teams ORDER BY Rank")
     for i in range(Team_range):
         Teams.append(cursor.fetchone()[0])
 
     cursor.execute(
-        "SELECT id FROM Team_Datas")
+        "SELECT Team_id FROM SerieA_Teams")
     for i in range(Team_range):
         Teams_id.append(cursor.fetchone()[0])
 
@@ -106,31 +106,28 @@ def get_team_data():
             f'https://data.football-api.com/v3/teams/{Teams_id[i]}?Authorization=cfnR6LWc4i4MDFLlPJrajoa465c4qjF594kpIy4b')
         player_datas = r.json()[0]["squad"]
         for j in range(len(player_datas)):
-            try:
-                data = player_datas[j]
-                Player_id = data["id"]
-                Player_name = data["name"]
-                Player_number = data["number"]
-                Player_age = data["age"]
-                Player_position = data["position"]
-                Player_injured = data["injured"]
-                Player_minutes = data["minutes"]
-                Player_appearences = data["appearences"]
-                Player_goals = data["goals"]
-                Player_assists = data["assists"]
-                Player_yellowcards = data["yellowcards"]
-                Player_yellowred = data["yellowred"]
-                Player_redcards = data["redcards"]
 
-                insert_query = \
-                    f"INSERT INTO Players VALUES('{Teams[i]}',  '{Player_id}', '{Player_name}', '{Player_number}', '{Player_age}',\
-                                                    '{Player_position}', '{Player_injured}', '{Player_minutes}', '{Player_appearences}',\
-                                                    '{Player_goals}', '{Player_assists}', '{Player_yellowcards}', '{Player_yellowred}', '{Player_redcards}')"
-                cursor.execute(insert_query)
-                db.commit()
-            except:
-                print(Teams[i], end="")
-                print("error")
+            data = player_datas[j]
+            Player_id = data["id"]
+            Player_name = data["name"]
+            Player_number = data["number"]
+            Player_age = data["age"]
+            Player_position = data["position"]
+            Player_injured = data["injured"]
+            Player_minutes = data["minutes"]
+            Player_appearences = data["appearences"]
+            Player_goals = data["goals"]
+            Player_assists = data["assists"]
+            Player_yellowcards = data["yellowcards"]
+            Player_yellowred = data["yellowred"]
+            Player_redcards = data["redcards"]
+
+            insert_query = \
+                f'INSERT INTO Players VALUES("{Teams[i]}",  "{Player_id}", "{Player_name}", "{Player_number}", "{Player_age}",\
+                                                "{Player_position}", "{Player_injured}", "{Player_minutes}", "{Player_appearences}",\
+                                                "{Player_goals}", "{Player_assists}", "{Player_yellowcards}", "{Player_yellowred}", "{Player_redcards}")'
+            cursor.execute(insert_query)
+            db.commit()
 
 
 ###########################################################################
@@ -188,5 +185,4 @@ def get_team_statistics():
 
 
 if __name__ == "__main__":
-
-    get_team_id()
+    get_team_data()

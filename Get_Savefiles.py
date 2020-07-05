@@ -5,6 +5,11 @@ from tkinter.simpledialog import askstring
 from tkinter.messagebox import showinfo
 import time
 
+table_list = ['Belgium_Teams', 'Brazil_Teams', 'Bundesliga_Teams',
+              'Champions_Leauge_Teams', 'Championship_Teams', 'EPL_Teams',
+              'Euro_League_Teams', 'J_League_Teams', 'K_League_Teams', 'Laliga_Teams',
+              'League1_Teams', 'Players', 'Portugal_Teams', 'Scotland_Teams', 'SerieA_Teams']
+
 
 def Check_Savefiles(savefile):
     db = sqlite3.connect(f"DB/FO_savefile{savefile}.db")
@@ -54,8 +59,25 @@ def reset_datas():
         for i in range(3):
             db = sqlite3.connect(f"DB/FO_savefile{i+1}.db")
             cursor = db.cursor()
+            for table in table_list:
+                cursor.execute(f"DELETE FROM {table}")
             cursor.execute("DELETE FROM Gamer")
-            cursor.execute("DELETE FROM Players")
-            cursor.execute("DELETE FROM Statistics")
-            cursor.execute("DELETE FROM Team_Datas")
             db.commit()
+
+
+def Auto_save_get_data():
+    db_load = sqlite3.connect(f"DB/FO_datafile_200705.db")
+    l_cursor = db_load.cursor()
+    db_save = sqlite3.connect(f"DB/FO_savefile3.db")
+    s_cursor = db_save.cursor()
+    for table in table_list:
+        l_cursor.execute(
+            f"SELECT COUNT(*) FROM {table}")
+        count = l_cursor.fetchone()[0]
+        l_cursor.execute(
+            f"SELECT * FROM {table}")
+        for i in range(count):
+            Save_list = l_cursor.fetchone()
+            s_cursor.execute(
+                f"INSERT INTO {table} VALUES{Save_list}")
+    db_save.commit()

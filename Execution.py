@@ -28,7 +28,7 @@ class Execution:
     def Game_menu(self):
         def _msgBox():
             tkinter.messagebox.showinfo(
-                '소개', '아직 미완성')
+                '소개', 'Firoms가 만든 Football_Owner\n 약 8000명의 축구 선수와 함께하는 시뮬레이션 게임입니다.')
 
         def _quit():
             answer = messagebox.askyesno("확인", "정말 종료하시겠습니까?")
