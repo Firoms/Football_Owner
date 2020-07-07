@@ -65,10 +65,10 @@ def reset_datas():
             db.commit()
 
 
-def Auto_save_get_data():
+def Auto_save_get_data(num):
     db_load = sqlite3.connect(f"DB/FO_datafile_200705.db")
     l_cursor = db_load.cursor()
-    db_save = sqlite3.connect(f"DB/FO_savefile3.db")
+    db_save = sqlite3.connect(f"DB/FO_savefile{num}.db")
     s_cursor = db_save.cursor()
     for table in table_list:
         l_cursor.execute(
@@ -107,7 +107,16 @@ def Save1_data():
                 Save_list = l_cursor.fetchone()
                 s_cursor.execute(
                     f"INSERT INTO {table} VALUES{Save_list}")
+        l_cursor.execute(f"SELECT * FROM Gamer")
+        Save_list = l_cursor.fetchone()
+        now = time.localtime()
+        Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
+                                                   now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+        s_cursor.execute(
+            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}')")
         db_save.commit()
+        Save_message = tkinter.messagebox.showinfo(
+            "저장 완료", "데이터 파일을 저장했습니다.")
 
 
 def Save2_data():
@@ -134,7 +143,16 @@ def Save2_data():
                 Save_list = l_cursor.fetchone()
                 s_cursor.execute(
                     f"INSERT INTO {table} VALUES{Save_list}")
+        l_cursor.execute(f"SELECT * FROM Gamer")
+        Save_list = l_cursor.fetchone()
+        now = time.localtime()
+        Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
+                                                   now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+        s_cursor.execute(
+            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}')")
         db_save.commit()
+        Save_message = tkinter.messagebox.showinfo(
+            "저장 완료", "데이터 파일을 저장했습니다.")
 
 
 def load1_data():
@@ -158,6 +176,13 @@ def load1_data():
             Save_list = l_cursor.fetchone()
             s_cursor.execute(
                 f"INSERT INTO {table} VALUES{Save_list}")
+    l_cursor.execute(f"SELECT * FROM Gamer")
+    Save_list = l_cursor.fetchone()
+    now = time.localtime()
+    Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
+                                               now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    s_cursor.execute(
+        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}')")
     db_save.commit()
 
 
@@ -182,4 +207,11 @@ def load2_data():
             Save_list = l_cursor.fetchone()
             s_cursor.execute(
                 f"INSERT INTO {table} VALUES{Save_list}")
+    l_cursor.execute(f"SELECT * FROM Gamer")
+    Save_list = l_cursor.fetchone()
+    now = time.localtime()
+    Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
+                                               now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    s_cursor.execute(
+        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}')")
     db_save.commit()
