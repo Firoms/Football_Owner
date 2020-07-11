@@ -1,17 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
 import sqlite3
-
 ###########################################################################################################
-# 팀 가져오기
+# 리그 가져오기
 ###########################################################################################################
 
 
-def Get_Team(league_num):
+def Get_Leauge():
     Base_URLs = []
     Con_URLs = []
     Country = []
     Country_list = []
+    League_list = []
+    Clubs_list = []
+    League_value_list = []
 
     continents = ['europa', 'europa/wettbewerbe?ajax=yw1&page=2', 'europa/wettbewerbe?ajax=yw1&page=3', 'europa/wettbewerbe?ajax=yw1&page=4',
                   'asien', 'asienn/wettbewerbe?ajax=yw1&page=2', 'amerika', 'afrika']
@@ -39,9 +41,76 @@ def Get_Team(league_num):
             if Team_URL == "/3-liga/startseite/wettbewerb/L3":
                 break
             Base_URLs.append(First_URL+Team_URL)
+            print(Team_URL)
+    i = 0
+    for Con_URL2 in Con_URLs:
+        Con_html2 = requests.get(Con_URL2, headers=headers).text
+        Con_soup2 = BeautifulSoup(Con_html2, 'html.parser')
+        for alt in Con_soup2.find_all("td", {"class": 'zentriert'}):
+            i = i + 1
+            if i % 6 == 1:
+                find_country = alt.find("img")["title"]
+                Country_list.append(find_country)
+                print(find_country)
+            if i % 6 == 2:
+                Clubs_list.append(alt.text)
+                print(alt.text)
+            if i % 6 == 0:
+                League_value_list.append(alt.text)
 
-        for alt in Con_soup.find_all("td", {"class": 'zentriert'}):
-            find_country = alt.find_all("img")["alt"]
+    for Base_URL in Base_URLs:
+        Base_html = requests.get(Base_URL, headers=headers).text
+        Base_soup = BeautifulSoup(Base_html, 'html.parser')
+
+        League_soup = Base_soup.find(
+            "h1", {"class": 'spielername-profil'})
+        try:
+            League_list.append(League_soup.text)
+            print(League_soup.text)
+        except:
+            pass
+
+    print("DB")
+    db = sqlite3.connect("DB/FO_datafile.db")
+    cursor = db.cursor()
+    print(len(League_list), len(Country_list),
+          len(Clubs_list), len(League_value_list))
+    print(Country_list, Clubs_list, League_value_list)
+    for i in range(len(League_list)):
+        insert_query = \
+            f'INSERT INTO Leagues VALUES("{League_list[i]}", "{Country_list[i]}", "{Clubs_list[i]}","{League_value_list[i]}")'
+        cursor.execute(insert_query)
+        db.commit()
+
+###########################################################################################################
+# 팀 가져오기
+###########################################################################################################
+
+
+def Get_Team():
+    Base_URLs = []
+    Con_URLs = []
+    Country = []
+    Country_list = []
+    Leauge_list = []
+
+    continents = ['europa', 'europa/wettbewerbe?ajax=yw1&page=2', 'europa/wettbewerbe?ajax=yw1&page=3', 'europa/wettbewerbe?ajax=yw1&page=4',
+                  'asien', 'asienn/wettbewerbe?ajax=yw1&page=2', 'amerika', 'afrika']
+    for continent in continents:
+        Con_URLs.append(
+            f'https://www.transfermarkt.com/wettbewerbe/{continent}')
+
+    URLs = []
+    First_URL = 'https://www.transfermarkt.com'
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'}
+    print("1")
+    for Con_URL1 in Con_URLs:
+        Con_html1 = requests.get(Con_URL1, headers=headers).text
+        Con_soup1 = BeautifulSoup(Con_html1, 'html.parser')
+        for href in Con_soup1.find_all("table", {"class": 'inline-table'}):
+            Team_URL = href.find_all("a")[1]["href"]
             if Team_URL == "/nedbank-cup/startseite/wettbewerb/NEDC":
                 break
             if Team_URL == "/campeonato-brasileiro-serie-b/startseite/wettbewerb/BRA2":
@@ -50,30 +119,49 @@ def Get_Team(league_num):
                 break
             if Team_URL == "/3-liga/startseite/wettbewerb/L3":
                 break
-            Country.append(find_country)
+            Base_URLs.append(First_URL+Team_URL)
     i = 0
+    print("2")
+    for Con_URL2 in Con_URLs:
+        Con_html2 = requests.get(Con_URL2, headers=headers).text
+        Con_soup2 = BeautifulSoup(Con_html2, 'html.parser')
+        for alt in Con_soup2.find_all("td", {"class": 'zentriert'}):
+            i = i + 1
+            if i % 6 == 1:
+                find_country = alt.find("img")["title"]
+                Country.append(find_country)
+    i = 0
+    print("3")
     for Base_URL in Base_URLs:
         Base_html = requests.get(Base_URL, headers=headers).text
         Base_soup = BeautifulSoup(Base_html, 'html.parser')
 
         League_soup = Base_soup.find(
             "h1", {"class": 'spielername-profil'})
-        League_name = League_soup.text
+        try:
+            League_name = League_soup.text
+        except:
+            pass
 
         for href in Base_soup.find_all("td", class_="hauptlink no-border-links show-for-small show-for-pad"):
             Team_URL = href.find("a")["href"]
             URLs.append(First_URL+Team_URL)
+            Leauge_list.append(League_name)
             Country_list.append(Country[i])
         i = i + 1
-
+    print("4")
+    Team_list = []
     for URL in URLs:
         html = requests.get(URL, headers=headers).text
         soup = BeautifulSoup(html, 'html.parser')
 
         Team_soup = soup.find(
             "h1", {"itemprop": 'name'})
-        Team_list.append(Team_soup.text.strip())
-
+        try:
+            print(Team_soup.text.strip())
+            Team_list.append(Team_soup.text.strip())
+        except:
+            pass
     Team_value_list = []
     Team_value_soup = Base_soup.find_all(
         "td", {"class": 'rechts hide-for-small hide-for-pad'})
@@ -82,8 +170,12 @@ def Get_Team(league_num):
         i = i + 1
         if i % 2 == 0:
             continue
-        Team_value_list.append(Team_value.text)
-
+        try:
+            Team_value_list.append(Team_value.text)
+            print(Team_value.text)
+        except:
+            pass
+    print("5")
     Team_age_list = []
     Team_age_soup = Base_soup.find_all(
         "td", {"class": 'zentriert'})
@@ -92,12 +184,12 @@ def Get_Team(league_num):
         i = i + 1
         if i % 4 == 2:
             Team_age_list.append(Team_age.text)
-
+    print("6")
     db = sqlite3.connect("DB/FO_datafile.db")
     cursor = db.cursor()
     for i in range(len(Team_list)):
         insert_query = \
-            f'INSERT INTO Teams VALUES("{League_name}", "{Country_list[i]}", "{Team_list[i]}", "{Team_value_list[i]}", "{Team_age_list[i]}")'
+            f'INSERT INTO Teams VALUES("{League_list[i]}", "{Country_list[i]}", "{Team_list[i]}", "{Team_value_list[i]}", "{Team_age_list[i]}")'
         cursor.execute(insert_query)
         db.commit()
 
@@ -108,8 +200,10 @@ def Get_Team(league_num):
 def Get_Player():
     Base_URLs = []
     Con_URLs = []
-    continents = ['europa', 'europa/wettbewerbe?ajax=yw1&page=2', 'europa/wettbewerbe?ajax=yw1&page=3', 'europa/wettbewerbe?ajax=yw1&page=4',
-                  'asien', 'asienn/wettbewerbe?ajax=yw1&page=2', 'amerika', 'afrika']
+    continents = ['asien', 'asienn/wettbewerbe?ajax=yw1&page=2',
+                  'amerika', 'afrika']
+    # continents = ['europa', 'europa/wettbewerbe?ajax=yw1&page=2', 'europa/wettbewerbe?ajax=yw1&page=3', 'europa/wettbewerbe?ajax=yw1&page=4',
+    #   'asien', 'asienn/wettbewerbe?ajax=yw1&page=2', 'amerika', 'afrika']
     for continent in continents:
         Con_URLs.append(
             f'https://www.transfermarkt.com/wettbewerbe/{continent}')
@@ -210,15 +304,24 @@ def Get_Player():
         Player_value_list = T.split("!!")
         T = '!'.join(Player_value_list)
         Player_value_list = T.split("!")
+        if len(Player_list) < len(Player_value_list):
+            Player_value_list.pop(-1)
 
         db = sqlite3.connect("DB/FO_datafile.db")
         cursor = db.cursor()
         for i in range(len(Player_list)):
-            insert_query = \
-                f'INSERT INTO Players VALUES("{Player_list[i]}","{Team_name}", "{Player_num_list[i]}", "{Player_pos_list[i]}","{Player_age_list[i]}", "{Player_value_list[i]}")'
-            cursor.execute(insert_query)
-            db.commit()
+            try:
+                insert_query = \
+                    f'INSERT INTO Players VALUES("{Player_list[i]}","{Team_name}", "{Player_num_list[i]}", "{Player_pos_list[i]}","{Player_age_list[i]}", "{Player_value_list[i]}")'
+                cursor.execute(insert_query)
+                db.commit()
+            except:
+                insert_query = \
+                    f'INSERT INTO Players VALUES("{Player_list[i]}","{Team_name}", "{Player_num_list[i]}", "{Player_pos_list[i]}","{Player_age_list[i]}", "")'
+                cursor.execute(insert_query)
+                db.commit()
 
 
 ########################################################################################
-    Get_Player()
+if __name__ == "__main__":
+    Get_Leauge()

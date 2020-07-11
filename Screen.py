@@ -15,12 +15,12 @@ class Screen:
         Game_Start_button = Get_image.image_button(
             self.Gui, "Game_Start_btn.png", 20, 350, self.First_Savefiles_Screen)
         HowToPlay_button = Get_image.image_button(
-            self.Gui, "HowToPlay_btn.png", 20, 450, self.Incomplete_Screen)
+            self.Gui, "HowToPlay_btn.png", 20, 450, self.HowToPlay_Screen)
         Settings_button = Get_image.image_button(
             self.Gui, "Settings_btn.png", 20, 550, self.Incomplete_Screen)
         Exit_button = Get_image.image_button(
             self.Gui, "Exit_btn.png", 20, 650, self._quit)
-        Version_label = Label(self.Gui.Gui, text="Version 0.10",
+        Version_label = Label(self.Gui.Gui, text="Version 0.21",
                               fg="green", font=("맑은 고딕", 12), height=1)
         Version_label.place(x=1100, y=5)
 
@@ -110,7 +110,7 @@ class Screen:
             MainScreen = self.Main_Screen()
 
         Savefiles_Screen_background = Get_image.image_label(
-            self.Gui, "Savefiles_bg.png", 0, 0)
+            self.Gui, "Loadfiles_bg.png", 0, 0)
         Return_button = Get_image.image_button(
             self.Gui, "Return_btn.png", 885, 30, self.Menu_Screen)
         Save_check1 = Check_Savefiles(1)
@@ -178,6 +178,12 @@ class Screen:
                 Return_MainScreen = self.Menu_Screen()
         else:
             Savefile_Screen = self.Savefiles_Screen()
+
+    def HowToPlay_Screen(self):
+        HowToPlay_Screen_background = Get_image.image_label(
+            self.Gui, "HowToPlay_bg.png", 0, 0)
+        Return_button = Get_image.image_button(
+            self.Gui, "Return_btn.png", 920, 10, self.Menu_Screen)
 
     def _quit(self):
         answer = messagebox.askyesno("확인", "정말 종료하시겠습니까?")
