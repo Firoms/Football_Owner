@@ -5,10 +5,8 @@ from tkinter.simpledialog import askstring
 from tkinter.messagebox import showinfo
 import time
 
-table_list = ['Belgium_Teams', 'Brazil_Teams', 'Bundesliga_Teams',
-              'Champions_Leauge_Teams', 'Championship_Teams', 'EPL_Teams',
-              'Euro_League_Teams', 'J_League_Teams', 'K_League_Teams', 'Laliga_Teams',
-              'League1_Teams', 'Players', 'Portugal_Teams', 'Scotland_Teams', 'SerieA_Teams']
+table_list = ['Coaches', 'Leagues', 'Players',
+              'Staffs', 'Teams']
 
 
 def Check_Savefiles(savefile):
@@ -66,7 +64,7 @@ def reset_datas():
 
 
 def Auto_save_get_data(num):
-    db_load = sqlite3.connect(f"DB/FO_datafile_200705.db")
+    db_load = sqlite3.connect(f"DB/FO_datafile.db")
     l_cursor = db_load.cursor()
     db_save = sqlite3.connect(f"DB/FO_savefile{num}.db")
     s_cursor = db_save.cursor()

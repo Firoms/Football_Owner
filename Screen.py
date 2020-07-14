@@ -31,6 +31,8 @@ class Screen:
             self.Gui, "logo_btn.png", 31, 33, self.Menu_Screen)
         Save_button = Get_image.image_button(
             self.Gui, "save_btn.png", 121, 33, self.Savefiles_Screen)
+        Go_button = Get_image.image_button(
+            self.Gui, "go_btn.png", 1090, 33, self.Main_Screen)
         menu1_button = Get_image.image_button(
             self.Gui, "menu1.png", 34, 140, self.Main_Screen)
         menu2_button = Get_image.image_button(
