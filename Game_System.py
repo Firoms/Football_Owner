@@ -6,15 +6,17 @@ def change_ages():
     db = sqlite3.connect(f"DB/FO_datafile1.db")
     cursor = db.cursor()
     cursor1 = db.cursor()
-    # cursor.execute(
-    #     "SELECT Seq, Age From Players")
-    # for i in range(56297):
-    #     a = cursor.fetchone()
-    #     Seq = a[0]
-    #     Age = a[1][-3:-1]
-    cursor1.execute(
-        f"UPDATE Players SET Age='23'  WHERE Age == '(-'")
-    db.commit()
+    cursor.execute(
+        "SELECT Seq, Age From Staffs")
+    for i in range(56297):
+        a = cursor.fetchone()
+        Seq = a[0]
+        Age = str(a[1])
+        ran = random.randrange(30, 70)
+        if len(Age) != 2:
+            cursor1.execute(
+                f"UPDATE Staffs SET Age='{ran}'  WHERE Seq == '{Seq}'")
+            db.commit()
 
 
 def change_values():
@@ -254,4 +256,96 @@ def make_potential():
         db.commit()
 
 
-make_row_num()
+def make_staff_ability():
+    db = sqlite3.connect(f"DB/FO_datafile1.db")
+    cursor = db.cursor()
+    cursor1 = db.cursor()
+    cursor.execute(
+        "SELECT Team FROM Teams Order By Value")
+    rank = {}
+    for i in range(2203):
+        a = cursor.fetchone()
+        Team = a[0]
+        Value = i+1
+        if Value <= 1000:
+            Value = 1000
+        rank[Team] = Value
+
+    # for key in rank:
+    #     cursor1.execute(
+    #         f'UPDATE Staffs SET Ability="1"  WHERE Team == "{key}"')
+    #     db.commit()
+    cursor.execute(
+        "SELECT Seq, Team FROM Staffs")
+    for i in range(6552):
+        a = cursor.fetchone()
+        print(a)
+        Seq = a[0]
+        Team = a[1]
+        ability = 93
+        while True:
+            ranpot = random.randrange(30000)
+            if rank[Team] <= ranpot:
+                ability -= 1
+            else:
+                break
+        if ability < 20:
+            ability = random.randrange(20, 40)
+        cursor1.execute(
+            f"UPDATE Staffs SET Ability='{ability}'  WHERE Seq == '{Seq}'")
+        db.commit()
+
+
+def make_money():
+    db = sqlite3.connect(f"DB/FO_datafile1.db")
+    cursor = db.cursor()
+    cursor1 = db.cursor()
+    # cursor.execute(
+    #     "SELECT Seq,Position,Age,Ability FROM Staffs")
+    # for i in range(6552):
+    #     a = cursor.fetchone()
+    #     Seq = int(a[0])
+    #     Position = str(a[1])
+    #     Age = 50 - int(a[2])
+    #     if Age < 0:
+    #         Age = -Age
+    #     Age = 55 - Age
+    #     Ability = int(a[3])
+    #     money = Age*Ability
+    #     if Position == 'Owner':
+    #         money = 0
+    #     if Seq < 500:
+    #         money = money*2
+    #     cursor1.execute(
+    #         f'UPDATE Staffs Set Money="{int(money/8)}" Where Seq=="{Seq}"')
+    #     db.commit()
+    cursor.execute(
+        "SELECT Seq,Age,Ability,Potential,Position FROM Players")
+    for i in range(56297):
+        a = cursor.fetchone()
+        Seq = a[0]
+        Age = int(a[1])
+        if Age >= 35:
+            Age = 35
+        Ability = int(a[2])
+        Potential = int(a[3])
+        Position = str(a[4])
+        money = Age*Ability*Potential/5
+        if Position == 'Goalkeeper':
+            money = money*4/5
+        if Ability < 70:
+            money = money/2
+        if Ability < 65:
+            money = money/3
+        if Ability < 60:
+            money = money/4
+        if Ability < 55:
+            money = money/5
+        if Ability < 50:
+            money = money/6
+        cursor1.execute(
+            f'UPDATE Players Set Money="{int(money)}" Where Seq=="{Seq}"')
+        db.commit()
+
+
+make_money()

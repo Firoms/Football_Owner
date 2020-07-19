@@ -29,7 +29,7 @@ def input_Names1():
         db = sqlite3.connect("DB/FO_savefile1.db")
         cursor = db.cursor()
         insert_query = \
-            f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}')"
+            f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}','0만원')"
         cursor.execute(insert_query)
         db.commit()
 
@@ -45,7 +45,7 @@ def input_Names2():
         db = sqlite3.connect("DB/FO_savefile2.db")
         cursor = db.cursor()
         insert_query = \
-            f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}')"
+            f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}','0만원')"
         cursor.execute(insert_query)
         db.commit()
 
@@ -111,7 +111,7 @@ def Save1_data():
         Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
                                                    now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
         s_cursor.execute(
-            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}')")
+            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
         db_save.commit()
         Save_message = tkinter.messagebox.showinfo(
             "저장 완료", "데이터 파일을 저장했습니다.")
@@ -147,7 +147,7 @@ def Save2_data():
         Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
                                                    now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
         s_cursor.execute(
-            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}')")
+            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
         db_save.commit()
         Save_message = tkinter.messagebox.showinfo(
             "저장 완료", "데이터 파일을 저장했습니다.")
@@ -180,7 +180,7 @@ def load1_data():
     Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
                                                now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
     s_cursor.execute(
-        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}')")
+        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
     db_save.commit()
 
 
@@ -211,5 +211,5 @@ def load2_data():
     Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
                                                now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
     s_cursor.execute(
-        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}')")
+        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
     db_save.commit()
