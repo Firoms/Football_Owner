@@ -21,15 +21,15 @@ def Check_Savefiles(savefile):
 def input_Names1():
     name = askstring('구단주 생성', '구단주 이름을 입력하세요.')
     now = time.localtime()
-    Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
-                                               now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
+                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
     if name == None:
         return 'No'
     else:
         db = sqlite3.connect("DB/FO_savefile1.db")
         cursor = db.cursor()
         insert_query = \
-            f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}','0만원')"
+            f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}','-')"
         cursor.execute(insert_query)
         db.commit()
 
@@ -37,17 +37,26 @@ def input_Names1():
 def input_Names2():
     name = askstring('구단주 생성', '구단주 이름을 입력하세요.')
     now = time.localtime()
-    Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
-                                               now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
+                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
     if name == None:
         return 'No'
     else:
         db = sqlite3.connect("DB/FO_savefile2.db")
         cursor = db.cursor()
         insert_query = \
-            f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}','0만원')"
+            f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}','-')"
         cursor.execute(insert_query)
         db.commit()
+
+
+def check_money():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        "SELECT * FROM Gamer")
+    Save_list = cursor.fetchone()[3]
+    return Save_list
 
 
 def reset_datas():
@@ -108,8 +117,8 @@ def Save1_data():
         l_cursor.execute(f"SELECT * FROM Gamer")
         Save_list = l_cursor.fetchone()
         now = time.localtime()
-        Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
-                                                   now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+        Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
+                                                         now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
         s_cursor.execute(
             f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
         db_save.commit()
@@ -144,8 +153,8 @@ def Save2_data():
         l_cursor.execute(f"SELECT * FROM Gamer")
         Save_list = l_cursor.fetchone()
         now = time.localtime()
-        Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
-                                                   now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+        Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
+                                                         now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
         s_cursor.execute(
             f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
         db_save.commit()
@@ -177,39 +186,52 @@ def load1_data():
     l_cursor.execute(f"SELECT * FROM Gamer")
     Save_list = l_cursor.fetchone()
     now = time.localtime()
-    Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
-                                               now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
+                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
     s_cursor.execute(
         f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
     db_save.commit()
 
 
 def load2_data():
+    try:
+        db = sqlite3.connect(f"DB/FO_savefile3.db")
+        cursor = db.cursor()
+        for table in table_list:
+            cursor.execute(f"DELETE FROM {table}")
+        cursor.execute("DELETE FROM Gamer")
+        db.commit()
+        db_load = sqlite3.connect(f"DB/FO_savefile2.db")
+        l_cursor = db_load.cursor()
+        db_save = sqlite3.connect(f"DB/FO_savefile3.db")
+        s_cursor = db_save.cursor()
+        for table in table_list:
+            l_cursor.execute(
+                f"SELECT COUNT(*) FROM {table}")
+            count = l_cursor.fetchone()[0]
+            l_cursor.execute(
+                f"SELECT * FROM {table}")
+            for i in range(count):
+                Save_list = l_cursor.fetchone()
+                s_cursor.execute(
+                    f"INSERT INTO {table} VALUES{Save_list}")
+        l_cursor.execute(f"SELECT * FROM Gamer")
+        Save_list = l_cursor.fetchone()
+        now = time.localtime()
+        Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
+                                                         now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+        s_cursor.execute(
+            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
+        db_save.commit()
+    except:
+        input_Names2()
+
+
+def time_auto_load():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    for table in table_list:
-        cursor.execute(f"DELETE FROM {table}")
-    cursor.execute("DELETE FROM Gamer")
-    db.commit()
-    db_load = sqlite3.connect(f"DB/FO_savefile2.db")
-    l_cursor = db_load.cursor()
-    db_save = sqlite3.connect(f"DB/FO_savefile3.db")
-    s_cursor = db_save.cursor()
-    for table in table_list:
-        l_cursor.execute(
-            f"SELECT COUNT(*) FROM {table}")
-        count = l_cursor.fetchone()[0]
-        l_cursor.execute(
-            f"SELECT * FROM {table}")
-        for i in range(count):
-            Save_list = l_cursor.fetchone()
-            s_cursor.execute(
-                f"INSERT INTO {table} VALUES{Save_list}")
-    l_cursor.execute(f"SELECT * FROM Gamer")
-    Save_list = l_cursor.fetchone()
     now = time.localtime()
-    Date = ("%04d.%02d.%02d.%02d.%02d.%02d" % (now.tm_year, now.tm_mon,
-                                               now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
-    s_cursor.execute(
-        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
-    db_save.commit()
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
+                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    cursor.execute(f"UPDATE Gamer Set Date= '{Date}'")
+    db.commit()

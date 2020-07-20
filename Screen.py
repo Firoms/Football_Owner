@@ -51,6 +51,28 @@ class Screen:
             self.Gui, "menu8.png", 34, 630, self.Main_Screen)
         menu9_button = Get_image.image_button(
             self.Gui, "menu9.png", 34, 700, self.Main_Screen)
+        self.message()
+
+    def message(self):
+        check_mon = check_money()
+        if check_mon == '-':
+            self.get_first_money()
+
+    def get_first_money(self):
+        money = 10000
+        win = 0
+        Name = Get_image.image_label(
+            self.Gui, "Name_Tag.png", 250, 40)
+        Intro1 = Get_image.image_label(
+            self.Gui, "intro1.png", 245, 170)
+        Intro2 = Get_image.image_label_text(
+            self.Gui, "intro2.png", 250, 345, f"         {win}")
+        Intro3 = Get_image.image_label_text(
+            self.Gui, "intro3.png", 600, 345, f"         {money}")
+        bg1 = Get_image.image_button(
+            self.Gui, "bg1.png", 250, 445, self.get_first_money)
+        bg2 = Get_image.image_button(
+            self.Gui, "bg1.png", 720, 445, self.get_first_money)
 
     def Incomplete_Screen(self):
         Incomplete_Screen_background = Get_image.image_label(
@@ -62,6 +84,8 @@ class Screen:
         reset_datas_btn.place(x=75, y=198)
 
     def Savefiles_Screen(self):
+        time_load = time_auto_load()
+
         def save1():
             save = Save1_data()
             MainScreen = self.Main_Screen()
@@ -98,11 +122,13 @@ class Screen:
                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3)
             third_save_btn.place(x=75, y=606)
         else:
-            third_save_btn = Button(self.Gui.Gui, text=Save_check3,
+            third_save_btn = Button(self.Gui.Gui, text=f"{Save_check3}\n자동 저장 공간입니다.",
                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3)
             third_save_btn.place(x=75, y=606)
 
     def loadfiles_Screen(self):
+        time_load = time_auto_load()
+
         def load1():
             load = load1_data()
             MainScreen = self.Main_Screen()
@@ -140,7 +166,7 @@ class Screen:
             third_save_btn.place(x=75, y=606)
         else:
             third_save_btn = Button(self.Gui.Gui, text=Save_check3,
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3)
+                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3, command=self.Main_Screen)
             third_save_btn.place(x=75, y=606)
 
     def First_Savefiles_Screen(self):
