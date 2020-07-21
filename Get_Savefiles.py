@@ -4,6 +4,7 @@ import tkinter.messagebox
 from tkinter.simpledialog import askstring
 from tkinter.messagebox import showinfo
 import time
+import random
 
 table_list = ['Coaches', 'Leagues', 'Players',
               'Staffs', 'Teams']
@@ -235,3 +236,13 @@ def time_auto_load():
                                                      now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
     cursor.execute(f"UPDATE Gamer Set Date= '{Date}'")
     db.commit()
+
+
+def mini_game():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    ran = random.randrange(1, 3001)
+    cursor.execute(
+        f"SELECT * FROM Players Where Seq = '{ran}'")
+    a = cursor.fetchone()
+    return a

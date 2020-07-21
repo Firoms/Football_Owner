@@ -21,7 +21,7 @@ class Screen:
         Exit_button = Get_image.image_button(
             self.Gui, "Exit_btn.png", 20, 650, self._quit)
         Version_label = Label(self.Gui.Gui, text="Version 0.21",
-                              fg="green", font=("맑은 고딕", 12), height=1)
+                              fg="green", bg="purple", font=("맑은 고딕", 12), height=1)
         Version_label.place(x=1100, y=5)
 
     def Main_Screen(self):
@@ -66,13 +66,62 @@ class Screen:
         Intro1 = Get_image.image_label(
             self.Gui, "intro1.png", 245, 170)
         Intro2 = Get_image.image_label_text(
-            self.Gui, "intro2.png", 250, 345, f"         {win}")
+            self.Gui, "intro2.png", 250, 345, f"                {win}번", "DarkGreen", ("견고딕", 26))
         Intro3 = Get_image.image_label_text(
-            self.Gui, "intro3.png", 600, 345, f"         {money}")
-        bg1 = Get_image.image_button(
-            self.Gui, "bg1.png", 250, 445, self.get_first_money)
-        bg2 = Get_image.image_button(
-            self.Gui, "bg1.png", 720, 445, self.get_first_money)
+            self.Gui, "intro3.png", 600, 345, f"             {money}원", "DarkGreen", ("견고딕", 26))
+
+        def Game():
+            def select1():
+                bg1.configure(
+                    text=f"\n선수이름 : {first_player[1]}\n\n 선수가치 : {first_value}\n")
+                bg2.configure(
+                    text=f"\n선수이름 : {second_player[1]}\n\n 선수가치 : {second_value}\n")
+                bg1.configure(state="disabled")
+                bg2.configure(state="disabled")
+                if first_value >= second_value:
+                    money *= 2
+                    win += 1
+                    Intro2 = Get_image.image_label_text(
+                        self.Gui, "intro2.png", 250, 345, f"                {win}번", "DarkGreen", ("견고딕", 26))
+                    Intro3 = Get_image.image_label_text(
+                        self.Gui, "intro3.png", 600, 345, f"             {money}원", "DarkGreen", ("견고딕", 26))
+                    time.sleep(3000)
+                    bg1.configure(state="disabled")
+                    bg2.configure(state="disabled")
+                    restart = Game()
+                else:
+                    time.sleep(3000)
+
+            def select2():
+                bg1.configure(
+                    text=f"\n선수이름 : {first_player[1]}\n\n 선수가치 : {first_value}\n")
+                bg2.configure(
+                    text=f"\n선수이름 : {second_player[1]}\n\n 선수가치 : {second_value}\n")
+                bg1.configure(state="disabled")
+                bg2.configure(state="disabled")
+                if first_value <= second_value:
+                    money *= 2
+                    win += 1
+                    Intro2 = Get_image.image_label_text(
+                        self.Gui, "intro2.png", 250, 345, f"                {win}번", "DarkGreen", ("견고딕", 26))
+                    Intro3 = Get_image.image_label_text(
+                        self.Gui, "intro3.png", 600, 345, f"             {money}원", "DarkGreen", ("견고딕", 26))
+                    time.sleep(3000)
+                    bg1.configure(state="disabled")
+                    bg2.configure(state="disabled")
+                    restart = Game()
+                else:
+                    time.sleep(3000)
+
+            first_player = mini_game()
+            first_value = int(first_player[6])
+            second_player = mini_game()
+            second_value = int(second_player[6])
+            bg1 = Get_image.image_button_text(
+                self.Gui, "bg1.png", 250, 445, select1, f"\n선수이름 : {first_player[1]}\n\n 팀 : {first_player[2]}\n\n 등번호 : {first_player[3]}\n\n 포지션 {first_player[4]}\n\n 나이 : {first_player[5]}\n", "DarkGreen", ("견고딕", 18))
+            bg2 = Get_image.image_button_text(
+                self.Gui, "bg1.png", 720, 445, select2, f"\n선수이름 : {second_player[1]}\n\n 팀 : {second_player[2]}\n\n 등번호 : {second_player[3]}\n\n 포지션 {second_player[4]}\n\n 나이 : {second_player[5]}\n", "DarkGreen", ("견고딕", 18))
+        start = Game()
 
     def Incomplete_Screen(self):
         Incomplete_Screen_background = Get_image.image_label(
