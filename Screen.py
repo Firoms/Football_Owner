@@ -58,60 +58,54 @@ class Screen:
         if check_mon == '-':
             self.get_first_money()
 
+    def no_action(self):
+        pass
+
     def get_first_money(self):
-        money = 10000
-        win = 0
+        self.money = 10000
+        self.win = 0
         Name = Get_image.image_label(
             self.Gui, "Name_Tag.png", 250, 40)
         Intro1 = Get_image.image_label(
             self.Gui, "intro1.png", 245, 170)
         Intro2 = Get_image.image_label_text(
-            self.Gui, "intro2.png", 250, 345, f"                {win}번", "DarkGreen", ("견고딕", 26))
+            self.Gui, "intro2.png", 250, 345, f"                {self.win}번", "DarkGreen", ("견고딕", 26))
         Intro3 = Get_image.image_label_text(
-            self.Gui, "intro3.png", 600, 345, f"             {money}원", "DarkGreen", ("견고딕", 26))
+            self.Gui, "intro3.png", 600, 345, f"             {self.money}원", "DarkGreen", ("견고딕", 26))
 
         def Game():
+
             def select1():
-                bg1.configure(
-                    text=f"\n선수이름 : {first_player[1]}\n\n 선수가치 : {first_value}\n")
-                bg2.configure(
-                    text=f"\n선수이름 : {second_player[1]}\n\n 선수가치 : {second_value}\n")
-                bg1.configure(state="disabled")
-                bg2.configure(state="disabled")
+                bg1 = Get_image.image_button_text(
+                    self.Gui, "bg1.png", 250, 445, self.no_action, f"\n선수이름 : {first_player[1]}\n\n 선수가치 : {first_value}\n", "DarkGreen", ("견고딕", 18))
+                bg2 = Get_image.image_button_text(
+                    self.Gui, "bg1.png", 720, 445, self.no_action, f"\n선수이름 : {second_player[1]}\n\n 선수가치 : {second_value}\n", "DarkGreen", ("견고딕", 18))
+                bg1.config(state='disabled')
+                bg2.config(state='disabled')
                 if first_value >= second_value:
-                    money *= 2
-                    win += 1
+                    self.money *= 2
+                    self.win += 1
                     Intro2 = Get_image.image_label_text(
-                        self.Gui, "intro2.png", 250, 345, f"                {win}번", "DarkGreen", ("견고딕", 26))
+                        self.Gui, "intro2.png", 250, 345, f"                {self.win}번", "DarkGreen", ("견고딕", 26))
                     Intro3 = Get_image.image_label_text(
-                        self.Gui, "intro3.png", 600, 345, f"             {money}원", "DarkGreen", ("견고딕", 26))
-                    time.sleep(3000)
-                    bg1.configure(state="disabled")
-                    bg2.configure(state="disabled")
+                        self.Gui, "intro3.png", 600, 345, f"             {self.money}원", "DarkGreen", ("견고딕", 26))
                     restart = Game()
-                else:
-                    time.sleep(3000)
 
             def select2():
-                bg1.configure(
-                    text=f"\n선수이름 : {first_player[1]}\n\n 선수가치 : {first_value}\n")
-                bg2.configure(
-                    text=f"\n선수이름 : {second_player[1]}\n\n 선수가치 : {second_value}\n")
-                bg1.configure(state="disabled")
-                bg2.configure(state="disabled")
+                bg1 = Get_image.image_button_text(
+                    self.Gui, "bg1.png", 250, 445, self.no_action, f"\n선수이름 : {first_player[1]}\n\n 선수가치 : {first_value}\n", "DarkGreen", ("견고딕", 18))
+                bg2 = Get_image.image_button_text(
+                    self.Gui, "bg1.png", 720, 445, self.no_action, f"\n선수이름 : {second_player[1]}\n\n 선수가치 : {second_value}\n", "DarkGreen", ("견고딕", 18))
+                bg1.config(state='disabled')
+                bg2.config(state='disabled')
                 if first_value <= second_value:
-                    money *= 2
-                    win += 1
+                    self.money *= 2
+                    self.win += 1
                     Intro2 = Get_image.image_label_text(
-                        self.Gui, "intro2.png", 250, 345, f"                {win}번", "DarkGreen", ("견고딕", 26))
+                        self.Gui, "intro2.png", 250, 345, f"                {self.win}번", "DarkGreen", ("견고딕", 26))
                     Intro3 = Get_image.image_label_text(
-                        self.Gui, "intro3.png", 600, 345, f"             {money}원", "DarkGreen", ("견고딕", 26))
-                    time.sleep(3000)
-                    bg1.configure(state="disabled")
-                    bg2.configure(state="disabled")
+                        self.Gui, "intro3.png", 600, 345, f"             {self.money}원", "DarkGreen", ("견고딕", 26))
                     restart = Game()
-                else:
-                    time.sleep(3000)
 
             first_player = mini_game()
             first_value = int(first_player[6])
