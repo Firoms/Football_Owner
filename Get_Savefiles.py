@@ -60,6 +60,15 @@ def check_money():
     return Save_list
 
 
+def give_money(money):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"UPDATE Gamer SET Money ='{money}'")
+    db.commit()
+    return 0
+
+
 def reset_datas():
     Warning_message = tkinter.messagebox.askokcancel(
         "경고", "정말 모든 데이터 파일을 삭제하시겠습니까?")

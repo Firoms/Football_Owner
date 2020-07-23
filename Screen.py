@@ -9,6 +9,19 @@ class Screen:
         self.Gui = Gui
         self.Menu_Screen()
 
+    def _quit(self):
+        answer = messagebox.askyesno("확인", "정말 종료하시겠습니까?")
+        if answer == True:
+            self.Gui.Gui.quit()
+            self.Gui.Gui.destroy()
+            exit()
+
+    def no_action(self):
+        pass
+
+    ###########################################################################
+    # 첫 메뉴 화면
+    ###########################################################################
     def Menu_Screen(self):
         Menu_Screen_background = Get_image.image_label(
             self.Gui, "Title_Screen_bg.png", 0, 0)
@@ -23,6 +36,31 @@ class Screen:
         Version_label = Label(self.Gui.Gui, text="Version 0.21",
                               fg="green", bg="purple", font=("맑은 고딕", 12), height=1)
         Version_label.place(x=1100, y=5)
+
+    ###########################################################################
+    # 미완성 화면
+    ###########################################################################
+    def Incomplete_Screen(self):
+        Incomplete_Screen_background = Get_image.image_label(
+            self.Gui, "Incomplete_bg.png", 0, 0)
+        Return_button = Get_image.image_button(
+            self.Gui, "Return_btn.png", 920, 10, self.Menu_Screen)
+        reset_datas_btn = Button(self.Gui.Gui, text="reset datas",
+                                 bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=reset_datas)
+        reset_datas_btn.place(x=75, y=198)
+
+    ###########################################################################
+    # 설명 화면
+    ###########################################################################
+    def HowToPlay_Screen(self):
+        HowToPlay_Screen_background = Get_image.image_label(
+            self.Gui, "HowToPlay_bg.png", 0, 0)
+        Return_button = Get_image.image_button(
+            self.Gui, "Return_btn.png", 920, 10, self.Menu_Screen)
+
+    ###########################################################################
+    # 메인 게임 화면
+    ###########################################################################
 
     def Main_Screen(self):
         Menu_Screen_background = Get_image.image_label(
@@ -53,14 +91,17 @@ class Screen:
             self.Gui, "menu9.png", 34, 700, self.Main_Screen)
         self.message()
 
+    ###########################################################################
+    # 메세지 화면
+    ###########################################################################
     def message(self):
         check_mon = check_money()
         if check_mon == '-':
             self.get_first_money()
 
-    def no_action(self):
-        pass
-
+    ###########################################################################
+    # 미니게임 화면
+    ###########################################################################
     def get_first_money(self):
         self.money = 10000
         self.win = 0
@@ -69,63 +110,63 @@ class Screen:
         Intro1 = Get_image.image_label(
             self.Gui, "intro1.png", 245, 170)
         Intro2 = Get_image.image_label_text(
-            self.Gui, "intro2.png", 250, 345, f"                {self.win}번", "DarkGreen", ("견고딕", 26))
+            self.Gui, "intro2.png", 250, 345, f"                {self.win}번", "#ed1c24", ("견고딕", 26))
         Intro3 = Get_image.image_label_text(
-            self.Gui, "intro3.png", 600, 345, f"             {self.money}원", "DarkGreen", ("견고딕", 26))
+            self.Gui, "intro3.png", 600, 345, f"             {self.money}원", "#ed1c24", ("견고딕", 26))
+        start = self.MINI_Game()
 
-        def Game():
+    def MINI_Game(self):
+        self.first_player = mini_game()
+        self.first_value = int(self.first_player[6])
+        self.second_player = mini_game()
+        self.second_value = int(self.second_player[6])
+        self.bg1 = Get_image.image_button_text(
+            self.Gui, "bg1.png", 250, 445, self.select1, f"\n이름 : {self.first_player[1]}\n\n 팀 : {self.first_player[2]}\n\n 등번호 : {self.first_player[3]}\n\n 포지션 {self.first_player[4]}\n\n 나이 : {self.first_player[5]}\n", "#472f91", ("견고딕", 18))
+        self.bg2 = Get_image.image_button_text(
+            self.Gui, "bg1.png", 720, 445, self.select2, f"\n이름 : {self.second_player[1]}\n\n 팀 : {self.second_player[2]}\n\n 등번호 : {self.second_player[3]}\n\n 포지션 {self.second_player[4]}\n\n 나이 : {self.second_player[5]}\n", "#472f91", ("견고딕", 18))
 
-            def select1():
-                bg1 = Get_image.image_button_text(
-                    self.Gui, "bg1.png", 250, 445, self.no_action, f"\n선수이름 : {first_player[1]}\n\n 선수가치 : {first_value}\n", "DarkGreen", ("견고딕", 18))
-                bg2 = Get_image.image_button_text(
-                    self.Gui, "bg1.png", 720, 445, self.no_action, f"\n선수이름 : {second_player[1]}\n\n 선수가치 : {second_value}\n", "DarkGreen", ("견고딕", 18))
-                bg1.config(state='disabled')
-                bg2.config(state='disabled')
-                if first_value >= second_value:
-                    self.money *= 2
-                    self.win += 1
-                    Intro2 = Get_image.image_label_text(
-                        self.Gui, "intro2.png", 250, 345, f"                {self.win}번", "DarkGreen", ("견고딕", 26))
-                    Intro3 = Get_image.image_label_text(
-                        self.Gui, "intro3.png", 600, 345, f"             {self.money}원", "DarkGreen", ("견고딕", 26))
-                    restart = Game()
+    def select1(self):
+        self.bg1 = Get_image.image_button_text(
+            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n 선수가치 : {self.first_value}\n", "#28a44a", ("견고딕", 18))
+        self.bg2 = Get_image.image_button_text(
+            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n 선수가치 : {self.second_value}\n", "#28a44a", ("견고딕", 18))
 
-            def select2():
-                bg1 = Get_image.image_button_text(
-                    self.Gui, "bg1.png", 250, 445, self.no_action, f"\n선수이름 : {first_player[1]}\n\n 선수가치 : {first_value}\n", "DarkGreen", ("견고딕", 18))
-                bg2 = Get_image.image_button_text(
-                    self.Gui, "bg1.png", 720, 445, self.no_action, f"\n선수이름 : {second_player[1]}\n\n 선수가치 : {second_value}\n", "DarkGreen", ("견고딕", 18))
-                bg1.config(state='disabled')
-                bg2.config(state='disabled')
-                if first_value <= second_value:
-                    self.money *= 2
-                    self.win += 1
-                    Intro2 = Get_image.image_label_text(
-                        self.Gui, "intro2.png", 250, 345, f"                {self.win}번", "DarkGreen", ("견고딕", 26))
-                    Intro3 = Get_image.image_label_text(
-                        self.Gui, "intro3.png", 600, 345, f"             {self.money}원", "DarkGreen", ("견고딕", 26))
-                    restart = Game()
+        if self.first_value >= self.second_value:
+            self.bg2.after(3000, self.wait_answer)
+        else:
+            self.bg1.config(state='disabled')
+            self.bg2.config(state='disabled')
+            self.finished()
 
-            first_player = mini_game()
-            first_value = int(first_player[6])
-            second_player = mini_game()
-            second_value = int(second_player[6])
-            bg1 = Get_image.image_button_text(
-                self.Gui, "bg1.png", 250, 445, select1, f"\n선수이름 : {first_player[1]}\n\n 팀 : {first_player[2]}\n\n 등번호 : {first_player[3]}\n\n 포지션 {first_player[4]}\n\n 나이 : {first_player[5]}\n", "DarkGreen", ("견고딕", 18))
-            bg2 = Get_image.image_button_text(
-                self.Gui, "bg1.png", 720, 445, select2, f"\n선수이름 : {second_player[1]}\n\n 팀 : {second_player[2]}\n\n 등번호 : {second_player[3]}\n\n 포지션 {second_player[4]}\n\n 나이 : {second_player[5]}\n", "DarkGreen", ("견고딕", 18))
-        start = Game()
+    def select2(self):
+        self.bg1 = Get_image.image_button_text(
+            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n 선수가치 : {self.first_value}\n", "#28a44a", ("견고딕", 18))
+        self.bg2 = Get_image.image_button_text(
+            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n 선수가치 : {self.second_value}\n", "#28a44a", ("견고딕", 18))
 
-    def Incomplete_Screen(self):
-        Incomplete_Screen_background = Get_image.image_label(
-            self.Gui, "Incomplete_bg.png", 0, 0)
-        Return_button = Get_image.image_button(
-            self.Gui, "Return_btn.png", 920, 10, self.Menu_Screen)
-        reset_datas_btn = Button(self.Gui.Gui, text="reset datas",
-                                 bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=reset_datas)
-        reset_datas_btn.place(x=75, y=198)
+        if self.first_value <= self.second_value:
+            self.bg2.after(3000, self.wait_answer)
+        else:
+            self.bg1.config(state='disabled')
+            self.bg2.config(state='disabled')
+            self.finished()
 
+    def wait_answer(self):
+        self.money *= 2
+        self.win += 1
+        Intro2 = Get_image.image_label_text(
+            self.Gui, "intro2.png", 250, 345, f"                {self.win}번", "#472f91", ("견고딕", 26))
+        Intro3 = Get_image.image_label_text(
+            self.Gui, "intro3.png", 600, 345, f"             {self.money}원", "#472f91", ("견고딕", 26))
+        restart = self.MINI_Game()
+
+    def finished(self):
+        update_money = give_money(self.money)
+        self.bg2.after(7000, self.Main_Screen)
+
+    ###########################################################################
+    # 세이브 화면
+    ###########################################################################
     def Savefiles_Screen(self):
         time_load = time_auto_load()
 
@@ -169,6 +210,9 @@ class Screen:
                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3)
             third_save_btn.place(x=75, y=606)
 
+    ###########################################################################
+    # 불러오기 화면
+    ###########################################################################
     def loadfiles_Screen(self):
         time_load = time_auto_load()
 
@@ -238,27 +282,3 @@ class Screen:
                 Return_MainScreen = self.Menu_Screen()
         else:
             Savefile_Screen = self.loadfiles_Screen()
-
-    def Second_Savefiles_Screen(self):
-        Save_check2 = Check_Savefiles(2)
-        if Save_check2 == None:
-            Second_Save = input_Names2()
-            Main_Screen = self.Main_Screen()
-            if Second_Save == 'No':
-                time.sleep(0.3)
-                Return_MainScreen = self.Menu_Screen()
-        else:
-            Savefile_Screen = self.Savefiles_Screen()
-
-    def HowToPlay_Screen(self):
-        HowToPlay_Screen_background = Get_image.image_label(
-            self.Gui, "HowToPlay_bg.png", 0, 0)
-        Return_button = Get_image.image_button(
-            self.Gui, "Return_btn.png", 920, 10, self.Menu_Screen)
-
-    def _quit(self):
-        answer = messagebox.askyesno("확인", "정말 종료하시겠습니까?")
-        if answer == True:
-            self.Gui.Gui.quit()
-            self.Gui.Gui.destroy()
-            exit()
