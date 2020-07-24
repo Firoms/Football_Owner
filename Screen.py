@@ -65,31 +65,34 @@ class Screen:
     def Main_Screen(self):
         Menu_Screen_background = Get_image.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0)
+        self.game_buttons()
+        self.message()
+
+    def game_buttons(self):
         Logo_button = Get_image.image_button(
             self.Gui, "logo_btn.png", 31, 33, self.Menu_Screen)
         Save_button = Get_image.image_button(
             self.Gui, "save_btn.png", 121, 33, self.Savefiles_Screen)
         Go_button = Get_image.image_button(
-            self.Gui, "go_btn.png", 1090, 33, self.Main_Screen)
+            self.Gui, "go_btn.png", 1090, 33, self.no_action)
         menu1_button = Get_image.image_button(
-            self.Gui, "menu1.png", 34, 140, self.Main_Screen)
+            self.Gui, "menu1.png", 34, 140, self.message)
         menu2_button = Get_image.image_button(
-            self.Gui, "menu2.png", 34, 210, self.Main_Screen)
+            self.Gui, "menu2.png", 34, 210, self.no_action)
         menu3_button = Get_image.image_button(
-            self.Gui, "menu3.png", 34, 280, self.Main_Screen)
+            self.Gui, "menu3.png", 34, 280, self.no_action)
         menu4_button = Get_image.image_button(
-            self.Gui, "menu4.png", 34, 350, self.Main_Screen)
+            self.Gui, "menu4.png", 34, 350, self.no_action)
         menu5_button = Get_image.image_button(
-            self.Gui, "menu5.png", 34, 420, self.Main_Screen)
+            self.Gui, "menu5.png", 34, 420, self.no_action)
         menu6_button = Get_image.image_button(
-            self.Gui, "menu6.png", 34, 490, self.Main_Screen)
+            self.Gui, "menu6.png", 34, 490, self.no_action)
         menu7_button = Get_image.image_button(
-            self.Gui, "menu7.png", 34, 560, self.Main_Screen)
+            self.Gui, "menu7.png", 34, 560, self.no_action)
         menu8_button = Get_image.image_button(
-            self.Gui, "menu8.png", 34, 630, self.Main_Screen)
+            self.Gui, "menu8.png", 34, 630, self.no_action)
         menu9_button = Get_image.image_button(
-            self.Gui, "menu9.png", 34, 700, self.Main_Screen)
-        self.message()
+            self.Gui, "menu9.png", 34, 700, self.no_action)
 
     ###########################################################################
     # 메세지 화면
@@ -98,6 +101,20 @@ class Screen:
         check_mon = check_money()
         if check_mon == '-':
             self.get_first_money()
+        else:
+            Message_Screen_background = Get_image.image_label(
+                self.Gui, "message_box_bg.png", 0, 0)
+            self.game_buttons()
+            message_notice1 = Get_image.image_button(
+                self.Gui, "message_notice_btn.png", 219, 130, self.no_action)
+            message_notice1 = Get_image.image_button(
+                self.Gui, "message_notice_btn.png", 219, 260, self.no_action)
+            message_notice1 = Get_image.image_button(
+                self.Gui, "message_notice_btn.png", 219, 390, self.no_action)
+            message_notice1 = Get_image.image_button(
+                self.Gui, "message_notice_btn.png", 219, 520, self.no_action)
+            message_notice1 = Get_image.image_button(
+                self.Gui, "message_notice_btn.png", 219, 650, self.no_action)
 
     ###########################################################################
     # 미니게임 화면
@@ -132,7 +149,7 @@ class Screen:
             self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n 선수가치 : {self.second_value}\n", "#28a44a", ("견고딕", 18))
 
         if self.first_value >= self.second_value:
-            self.bg2.after(3000, self.wait_answer)
+            self.bg2.after(2000, self.wait_answer)
         else:
             self.bg1.config(state='disabled')
             self.bg2.config(state='disabled')
@@ -162,7 +179,7 @@ class Screen:
 
     def finished(self):
         update_money = give_money(self.money)
-        self.bg2.after(7000, self.Main_Screen)
+        self.bg2.after(4000, self.Main_Screen)
 
     ###########################################################################
     # 세이브 화면
