@@ -19,7 +19,7 @@ class Get_label:
         final_path = os.path.join(img_path, file_name)
         image = ImageTk.PhotoImage(file=final_path)
         image_label = Label(
-            Gui.Gui, text=text, compound=tkinter.CENTER, fg=color, font=font)
+            Gui.Gui, text=text, compound=tkinter.CENTER, fg=color, font=font, justify=LEFT)
         image_label.configure(image=image)
         image_label.image = image
         image_label.configure(text=text)

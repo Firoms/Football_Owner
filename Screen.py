@@ -178,6 +178,8 @@ class Screen:
         restart = self.MINI_Game()
 
     def finished(self):
+        if self.money <= 30000:
+            self.money = 30000
         update_money = give_money(self.money)
         self.bg2.after(4000, self.Main_Screen)
 
@@ -186,11 +188,47 @@ class Screen:
     ###########################################################################
 
     def acquisition(self):
-        pass
+        Message_Screen_background = Get_label.image_label(
+            self.Gui, "Main_Screen_bg.png", 0, 0)
+        self.game_buttons()
+        money = check_money()
+        myteam = check_myteam()
+        myteam_info = my_team_ac()
+        if myteam == 0:
+            self.acquistion_list = ran_team_ac(money)
+
+        Intro1 = Get_label.image_label_text(
+            self.Gui, "acquistion_bg1.jpg", 212, 123, f"{self.acquistion_list[0][1:]}\n\n\n{self.acquistion_list[1][1:]}\n\n\n{self.acquistion_list[2][1:]}\n\n\n{self.acquistion_list[3][1:]}\n\n\n{self.acquistion_list[4][1:]}\n\n\n{self.acquistion_list[5][1:]}\n\
+                \n                                                                                                                                \n{self.acquistion_list[6][1:]}", "#472f91", ("견고딕", 16))
+        if myteam == 0:
+            Intro2 = Get_label.image_label(
+                self.Gui, "acquistion_bg2.jpg", 212, 576)
+        elif myteam == 1:
+            Intro2 = Get_label.image_label_text(
+                self.Gui, "acquistion_bg2.jpg", 212, 576, f"{myteam_info[0][1:]}\n\n\n\n\n                                                                                                                                \n\
+                ", "#472f91", ("견고딕", 16))
+        elif myteam == 2:
+            Intro2 = Get_label.image_label_text(
+                self.Gui, "acquistion_bg2.jpg", 212, 576, f"{myteam_info[0][1:]}\n\n                                                                                                                                \n{myteam_info[1][1:]}\n\n\n", "#472f91", ("견고딕", 16))
+        else:
+            Intro2 = Get_label.image_label_text(
+                self.Gui, "acquistion_bg2.jpg", 212, 576, f"{myteam_info[0][1:]}\n\n                                                                                                                                \n{myteam_info[1][1:]}\n\n\n{myteam_info[2][1:]}", "#472f91", ("견고딕", 16))
+        for i in range(7):
+            def buy():
+                save_buy_team(self.acquistion_list[self.for_num])
+                self.acquisition()
+            self.for_num = i
+            Team_label = Get_label.image_button(
+                self.Gui, "acquistion_btn1.png", 1060, 138+(62*i), buy)
+
+        for i in range(myteam):
+            Team_label = Get_label.image_button(
+                self.Gui, "acquistion_btn2.png", 1060, 590+(62*i), self.no_action)
 
     ###########################################################################
     # 세이브 화면
     ###########################################################################
+
     def Savefiles_Screen(self):
         time_save = time_auto_save()
 

@@ -6,7 +6,7 @@ from tkinter.messagebox import showinfo
 import time
 import random
 
-table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams']
+table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team']
 
 ###############################################################################
 # 게이머 생성
@@ -253,6 +253,15 @@ def check_money():
     return Save_list
 
 
+def check_myteam():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT COUNT(*) FROM Gamer_Team")
+    count = cursor.fetchone()[0]
+    return int(count)
+
+
 ###############################################################################
 # 데이터 변경
 ###############################################################################
@@ -263,6 +272,26 @@ def give_money(money):
         f"UPDATE Gamer SET Money ='{money}'")
     db.commit()
     return 0
+
+
+def save_buy_team(Team):
+    Warning_message = tkinter.messagebox.askokcancel(
+        "인수", "정말 팀을 인수하시겠습니까?")
+    if Warning_message == True:
+        db = sqlite3.connect(f"DB/FO_savefile3.db")
+        cursor = db.cursor()
+        cursor.execute(
+            f"SELECT COUNT(*) FROM Gamer_Team")
+        count = cursor.fetchone()[0]
+        if count < 3:
+            cursor.execute(
+                f"INSERT INTO Gamer_Team VALUES{Team}")
+            db.commit()
+            Save_message = tkinter.messagebox.showinfo(
+                "인수 완료", f"{Team[3]} 팀을 인수했습니다.")
+        else:
+            no_message = tkinter.messagebox.showinfo(
+                "인수 불가", f"3팀 이상 인수 불가합니다.")
 
 
 ###############################################################################
@@ -283,13 +312,26 @@ def ran_team_ac(money):
     cursor = db.cursor()
     cursor.execute(
         f"SELECT * FROM Teams WHERE Value<='{money}' ORDER BY random()")
-    for i in range(1):
+    acquistion_list = []
+    for i in range(7):
+        acquistion_list.append(cursor.fetchone())
+    return acquistion_list
 
-        a = cursor.fetchone()
-        print(a)
+
+def my_team_ac():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT COUNT(*) FROM Gamer_Team")
+    count = cursor.fetchone()[0]
+    cursor.execute(
+        f"SELECT * FROM Gamer_Team")
+    acquistion_list = []
+    for i in range(count):
+        acquistion_list.append(cursor.fetchone())
+    return acquistion_list
 
 
 ###############################################################################
 # 그 외
 ###############################################################################
-ran_team_ac(40000)
