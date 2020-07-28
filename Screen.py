@@ -26,14 +26,14 @@ class Screen:
         Menu_Screen_background = Get_label.image_label(
             self.Gui, "Title_Screen_bg.png", 0, 0)
         Game_Start_button = Get_label.image_button(
-            self.Gui, "Game_Start_btn.png", 20, 350, self.First_Savefiles_Screen)
+            self.Gui, "Game_Start_btn.png", 20, 350, self.loadfiles_Screen)
         HowToPlay_button = Get_label.image_button(
             self.Gui, "HowToPlay_btn.png", 20, 450, self.HowToPlay_Screen)
         Settings_button = Get_label.image_button(
             self.Gui, "Settings_btn.png", 20, 550, self.Incomplete_Screen)
         Exit_button = Get_label.image_button(
             self.Gui, "Exit_btn.png", 20, 650, self._quit)
-        Version_label = Label(self.Gui.Gui, text="Version 0.21",
+        Version_label = Label(self.Gui.Gui, text="Version 0.4",
                               fg="green", bg="purple", font=("맑은 고딕", 12), height=1)
         Version_label.place(x=1100, y=5)
 
@@ -75,24 +75,30 @@ class Screen:
             self.Gui, "save_btn.png", 121, 33, self.Savefiles_Screen)
         Go_button = Get_label.image_button(
             self.Gui, "go_btn.png", 1090, 33, self.no_action)
-        menu1_button = Get_label.image_button(
+        self.menu1_button = Get_label.image_button(
             self.Gui, "menu1.png", 34, 140, self.message)
-        menu2_button = Get_label.image_button(
+        self.menu2_button = Get_label.image_button(
             self.Gui, "menu2.png", 34, 210, self.no_action)
-        menu3_button = Get_label.image_button(
+        self.menu3_button = Get_label.image_button(
             self.Gui, "menu3.png", 34, 280, self.acquisition)
-        menu4_button = Get_label.image_button(
+        self.menu4_button = Get_label.image_button(
             self.Gui, "menu4.png", 34, 350, self.no_action)
-        menu5_button = Get_label.image_button(
+        self.menu5_button = Get_label.image_button(
             self.Gui, "menu5.png", 34, 420, self.no_action)
-        menu6_button = Get_label.image_button(
+        self.menu6_button = Get_label.image_button(
             self.Gui, "menu6.png", 34, 490, self.no_action)
-        menu7_button = Get_label.image_button(
+        self.menu7_button = Get_label.image_button(
             self.Gui, "menu7.png", 34, 560, self.no_action)
-        menu8_button = Get_label.image_button(
+        self.menu8_button = Get_label.image_button(
             self.Gui, "menu8.png", 34, 630, self.no_action)
-        menu9_button = Get_label.image_button(
+        self.menu9_button = Get_label.image_button(
             self.Gui, "menu9.png", 34, 700, self.no_action)
+
+    def logo_com():
+        time_save = time_auto_save()
+        answer = messagebox.askyesno("확인", "정말 메인화면으로 돌아가시겠습니까?")
+        if answer == True:
+            screen = self.Menu_Screen()
 
     ###########################################################################
     # 메세지 화면
@@ -100,6 +106,15 @@ class Screen:
     def message(self):
         check_mon = check_money()
         if check_mon == '-':
+            self.menu1_button.config(state='disabled')
+            self.menu2_button.config(state='disabled')
+            self.menu3_button.config(state='disabled')
+            self.menu4_button.config(state='disabled')
+            self.menu5_button.config(state='disabled')
+            self.menu6_button.config(state='disabled')
+            self.menu7_button.config(state='disabled')
+            self.menu8_button.config(state='disabled')
+            self.menu9_button.config(state='disabled')
             self.get_first_money()
         else:
             Message_Screen_background = Get_label.image_label(
@@ -181,6 +196,7 @@ class Screen:
         if self.money <= 30000:
             self.money = 30000
         update_money = give_money(self.money)
+
         self.bg2.after(4000, self.Main_Screen)
 
     ###########################################################################
@@ -191,12 +207,11 @@ class Screen:
         Message_Screen_background = Get_label.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0)
         self.game_buttons()
-        money = check_money()
+        money = int(check_money())
         myteam = check_myteam()
         myteam_info = my_team_ac()
         if myteam == 0:
             self.acquistion_list = ran_team_ac(money)
-
         Intro1 = Get_label.image_label_text(
             self.Gui, "acquistion_bg1.jpg", 212, 123, f"{self.acquistion_list[0][1:]}\n\n\n{self.acquistion_list[1][1:]}\n\n\n{self.acquistion_list[2][1:]}\n\n\n{self.acquistion_list[3][1:]}\n\n\n{self.acquistion_list[4][1:]}\n\n\n{self.acquistion_list[5][1:]}\n\
                 \n                                                                                                                                \n{self.acquistion_list[6][1:]}", "#472f91", ("견고딕", 16))
@@ -286,6 +301,18 @@ class Screen:
             load = load2_data()
             MainScreen = self.Main_Screen()
 
+        def first():
+            name_save = input_Names1()
+            data = Auto_save_get_data(1)
+            load = load1_data()
+            MainScreen = self.Main_Screen()
+
+        def second():
+            name_save = input_Names2()
+            data = Auto_save_get_data(2)
+            load = load2_data()
+            MainScreen = self.Main_Screen()
+
         Savefiles_Screen_background = Get_label.image_label(
             self.Gui, "Loadfiles_bg.png", 0, 0)
         Return_button = Get_label.image_button(
@@ -295,7 +322,7 @@ class Screen:
         Save_check3 = Check_Savefiles(3)
         if Save_check1 == None:
             first_save_btn = Button(self.Gui.Gui, text="+",
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=load1)
+                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=first)
             first_save_btn.place(x=75, y=198)
         else:
             first_save_btn = Button(self.Gui.Gui, text=Save_check1,
@@ -303,7 +330,7 @@ class Screen:
             first_save_btn.place(x=75, y=198)
         if Save_check2 == None:
             second_save_btn = Button(self.Gui.Gui, text="+",
-                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=input_Names2)
+                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=second)
             second_save_btn.place(x=75, y=402)
         else:
             second_save_btn = Button(self.Gui.Gui, text=Save_check2,
@@ -317,30 +344,3 @@ class Screen:
             third_save_btn = Button(self.Gui.Gui, text=Save_check3,
                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3, command=self.Main_Screen)
             third_save_btn.place(x=75, y=606)
-
-    def First_Savefiles_Screen(self):
-        Save_check1 = Check_Savefiles(1)
-        if Save_check1 == None:
-            Savefiles_Screen_background = Get_label.image_label(
-                self.Gui, "Savefiles_bg.png", 0, 0)
-            Return_button = Get_label.image_button(
-                self.Gui, "Return_btn.png", 885, 30, self.Menu_Screen)
-
-            first_save_btn = Button(self.Gui.Gui, text="+",
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21)
-            first_save_btn.place(x=75, y=198)
-            second_save_btn = Button(self.Gui.Gui, text="+",
-                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21)
-            second_save_btn.place(x=75, y=402)
-            third_save_btn = Button(self.Gui.Gui, text="자동 저장 된 정보가 없습니다.",
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3)
-            third_save_btn.place(x=75, y=606)
-            Get_data = Auto_save_get_data(1)
-            First_Save = input_Names1()
-            load_data = load1_data()
-            Main_Screen = self.Main_Screen()
-            if First_Save == 'No':
-                time.sleep(0.3)
-                Return_MainScreen = self.Menu_Screen()
-        else:
-            Savefile_Screen = self.loadfiles_Screen()

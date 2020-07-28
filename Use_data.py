@@ -125,7 +125,7 @@ def Auto_save_get_data(num):
     l_cursor = db_load.cursor()
     db_save = sqlite3.connect(f"DB/FO_savefile{num}.db")
     s_cursor = db_save.cursor()
-    for table in table_list:
+    for table in table_list[0:5]:
         l_cursor.execute(
             f"SELECT COUNT(*) FROM {table}")
         count = l_cursor.fetchone()[0]

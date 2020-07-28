@@ -13,6 +13,7 @@ class Get_label:
         image_label.configure(image=image)
         image_label.image = image
         image_label.place(x=x, y=y)
+        return image_label
 
     def image_label_text(Gui, file_name, x, y, text, color, font):
         img_path = os.path.join(os.getcwd(), "images")
@@ -35,6 +36,7 @@ class Get_label:
         image_button.configure(image=image)
         image_button.image = image
         image_button.place(x=x, y=y)
+        return image_button
 
     def image_button_text(Gui, file_name, x, y, command, text, color, font):
         img_path = os.path.join(os.getcwd(), "images")
