@@ -43,7 +43,7 @@ class Get_label:
         final_path = os.path.join(img_path, file_name)
         image = ImageTk.PhotoImage(file=final_path)
         image_button = Button(
-            Gui.Gui, overrelief=SOLID,  command=command, text=text, compound=tkinter.CENTER, fg=color, font=font)
+            Gui.Gui, overrelief=SOLID,  command=command, text=text, compound=tkinter.CENTER, fg=color, font=font, justify=LEFT)
         image_button.configure(image=image)
         image_button.image = image
         image_button.configure(text=text)

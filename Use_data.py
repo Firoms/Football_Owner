@@ -135,6 +135,7 @@ def Auto_save_get_data(num):
             Save_list = l_cursor.fetchone()
             s_cursor.execute(
                 f"INSERT INTO {table} VALUES{Save_list}")
+    db_load.commit()
     db_save.commit()
 
 
@@ -179,41 +180,42 @@ def load1_data():
                                                      now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
     s_cursor.execute(
         f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
+    db.commit()
+    db_load.commit()
     db_save.commit()
 
 
 def load2_data():
-    try:
-        db = sqlite3.connect(f"DB/FO_savefile3.db")
-        cursor = db.cursor()
-        for table in table_list:
-            cursor.execute(f"DELETE FROM {table}")
-        cursor.execute("DELETE FROM Gamer")
-        db.commit()
-        db_load = sqlite3.connect(f"DB/FO_savefile2.db")
-        l_cursor = db_load.cursor()
-        db_save = sqlite3.connect(f"DB/FO_savefile3.db")
-        s_cursor = db_save.cursor()
-        for table in table_list:
-            l_cursor.execute(
-                f"SELECT COUNT(*) FROM {table}")
-            count = l_cursor.fetchone()[0]
-            l_cursor.execute(
-                f"SELECT * FROM {table}")
-            for i in range(count):
-                Save_list = l_cursor.fetchone()
-                s_cursor.execute(
-                    f"INSERT INTO {table} VALUES{Save_list}")
-        l_cursor.execute(f"SELECT * FROM Gamer")
-        Save_list = l_cursor.fetchone()
-        now = time.localtime()
-        Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
-                                                         now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
-        s_cursor.execute(
-            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
-        db_save.commit()
-    except:
-        input_Names2()
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    for table in table_list:
+        cursor.execute(f"DELETE FROM {table}")
+    cursor.execute("DELETE FROM Gamer")
+    db.commit()
+    db_load = sqlite3.connect(f"DB/FO_savefile2.db")
+    l_cursor = db_load.cursor()
+    db_save = sqlite3.connect(f"DB/FO_savefile3.db")
+    s_cursor = db_save.cursor()
+    for table in table_list:
+        l_cursor.execute(
+            f"SELECT COUNT(*) FROM {table}")
+        count = l_cursor.fetchone()[0]
+        l_cursor.execute(
+            f"SELECT * FROM {table}")
+        for i in range(count):
+            Save_list = l_cursor.fetchone()
+            s_cursor.execute(
+                f"INSERT INTO {table} VALUES{Save_list}")
+    l_cursor.execute(f"SELECT * FROM Gamer")
+    Save_list = l_cursor.fetchone()
+    now = time.localtime()
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
+                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    s_cursor.execute(
+        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
+    db.commit()
+    db_load.commit()
+    db_save.commit()
 
 
 ###############################################################################
@@ -283,15 +285,24 @@ def save_buy_team(Team):
         cursor.execute(
             f"SELECT COUNT(*) FROM Gamer_Team")
         count = cursor.fetchone()[0]
-        if count < 3:
+        cursor.execute(
+            f"SELECT Money From Gamer")
+        money = cursor.fetchone()[0]
+        sale = int(Team[4])
+        if count < 3 and money > sale:
             cursor.execute(
                 f"INSERT INTO Gamer_Team VALUES{Team}")
             db.commit()
             Save_message = tkinter.messagebox.showinfo(
                 "인수 완료", f"{Team[3]} 팀을 인수했습니다.")
+            cursor.execute(
+                f"UPDATE Gamer SET Money ='{money-sale}'")
+            cursor.execute(
+                f"UPDATE Gamer SET Team ='{Team[3]}'")
+            db.commit()
         else:
             no_message = tkinter.messagebox.showinfo(
-                "인수 불가", f"3팀 이상 인수 불가합니다.")
+                "인수 불가", f"돈이 부족하거나 3팀 이상 인수 불가합니다.")
 
 
 ###############################################################################

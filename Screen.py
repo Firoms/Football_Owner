@@ -34,7 +34,7 @@ class Screen:
         Exit_button = Get_label.image_button(
             self.Gui, "Exit_btn.png", 20, 650, self._quit)
         Version_label = Label(self.Gui.Gui, text="Version 0.4",
-                              fg="green", bg="purple", font=("맑은 고딕", 12), height=1)
+                              fg="yellow", bg="purple", font=("맑은 고딕", 12), height=1)
         Version_label.place(x=1100, y=5)
 
     ###########################################################################
@@ -210,35 +210,75 @@ class Screen:
         money = int(check_money())
         myteam = check_myteam()
         myteam_info = my_team_ac()
-        if myteam == 0:
-            self.acquistion_list = ran_team_ac(money)
-        Intro1 = Get_label.image_label_text(
-            self.Gui, "acquistion_bg1.jpg", 212, 123, f"{self.acquistion_list[0][1:]}\n\n\n{self.acquistion_list[1][1:]}\n\n\n{self.acquistion_list[2][1:]}\n\n\n{self.acquistion_list[3][1:]}\n\n\n{self.acquistion_list[4][1:]}\n\n\n{self.acquistion_list[5][1:]}\n\
-                \n                                                                                                                                \n{self.acquistion_list[6][1:]}", "#472f91", ("견고딕", 16))
-        if myteam == 0:
-            Intro2 = Get_label.image_label(
-                self.Gui, "acquistion_bg2.jpg", 212, 576)
-        elif myteam == 1:
-            Intro2 = Get_label.image_label_text(
-                self.Gui, "acquistion_bg2.jpg", 212, 576, f"{myteam_info[0][1:]}\n\n\n\n\n                                                                                                                                \n\
-                ", "#472f91", ("견고딕", 16))
-        elif myteam == 2:
-            Intro2 = Get_label.image_label_text(
-                self.Gui, "acquistion_bg2.jpg", 212, 576, f"{myteam_info[0][1:]}\n\n                                                                                                                                \n{myteam_info[1][1:]}\n\n\n", "#472f91", ("견고딕", 16))
+        self.acquisition_list = ran_team_ac(money)
+        if self.acquisition_list[-1] == None:
+            Message_Screen_background = Get_label.image_label(
+                self.Gui, "cantuse_bg.png", 0, 0)
+            self.game_buttons()
         else:
-            Intro2 = Get_label.image_label_text(
-                self.Gui, "acquistion_bg2.jpg", 212, 576, f"{myteam_info[0][1:]}\n\n                                                                                                                                \n{myteam_info[1][1:]}\n\n\n{myteam_info[2][1:]}", "#472f91", ("견고딕", 16))
-        for i in range(7):
-            def buy():
-                save_buy_team(self.acquistion_list[self.for_num])
-                self.acquisition()
-            self.for_num = i
-            Team_label = Get_label.image_button(
-                self.Gui, "acquistion_btn1.png", 1060, 138+(62*i), buy)
+            Intro1 = Get_label.image_label_text(
+                self.Gui, "acquisition_bg1.jpg", 212, 123, f"{self.acquisition_list[0][1:]}\n\n\n{self.acquisition_list[1][1:]}\n\n\n{self.acquisition_list[2][1:]}\n\n\n{self.acquisition_list[3][1:]}\n\n\n{self.acquisition_list[4][1:]}\n\n\n{self.acquisition_list[5][1:]}\n\
+                    \n                                                                                                                                \n{self.acquisition_list[6][1:]}", "#472f91", ("견고딕", 16))
+            Team_label1 = Get_label.image_button(
+                self.Gui, "acquisition_btn1.png", 1060, 138+(62*0), self.buy1)
+            Team_label2 = Get_label.image_button(
+                self.Gui, "acquisition_btn1.png", 1060, 138+(62*1), self.buy2)
+            Team_label3 = Get_label.image_button(
+                self.Gui, "acquisition_btn1.png", 1060, 138+(62*2), self.buy3)
+            Team_label4 = Get_label.image_button(
+                self.Gui, "acquisition_btn1.png", 1060, 138+(62*3), self.buy4)
+            Team_label5 = Get_label.image_button(
+                self.Gui, "acquisition_btn1.png", 1060, 138+(62*4), self.buy5)
+            Team_label6 = Get_label.image_button(
+                self.Gui, "acquisition_btn1.png", 1060, 138+(62*5), self.buy6)
+            Team_label7 = Get_label.image_button(
+                self.Gui, "acquisition_btn1.png", 1060, 138+(62*6), self.buy7)
 
-        for i in range(myteam):
-            Team_label = Get_label.image_button(
-                self.Gui, "acquistion_btn2.png", 1060, 590+(62*i), self.no_action)
+            if myteam == 0:
+                Intro2 = Get_label.image_label(
+                    self.Gui, "acquisition_bg2.jpg", 212, 576)
+            elif myteam == 1:
+                Intro2 = Get_label.image_label_text(
+                    self.Gui, "acquisition_bg2.jpg", 212, 576, f"{myteam_info[0][1:]}\n\n\n\n\n                                                                                                                                \n\
+                    ", "#472f91", ("견고딕", 16))
+            elif myteam == 2:
+                Intro2 = Get_label.image_label_text(
+                    self.Gui, "acquisition_bg2.jpg", 212, 576, f"{myteam_info[0][1:]}\n\n                                                                                                                                \n{myteam_info[1][1:]}\n\n\n", "#472f91", ("견고딕", 16))
+            else:
+                Intro2 = Get_label.image_label_text(
+                    self.Gui, "acquisition_bg2.jpg", 212, 576, f"{myteam_info[0][1:]}\n\n                                                                                                                                \n{myteam_info[1][1:]}\n\n\n{myteam_info[2][1:]}", "#472f91", ("견고딕", 16))
+
+            for i in range(myteam):
+                Team_label = Get_label.image_button(
+                    self.Gui, "acquisition_btn2.png", 1060, 590+(62*i), self.no_action)
+
+    def buy1(self):
+        save_buy_team(self.acquisition_list[0])
+        self.acquisition()
+
+    def buy2(self):
+        save_buy_team(self.acquisition_list[1])
+        self.acquisition()
+
+    def buy3(self):
+        save_buy_team(self.acquisition_list[2])
+        self.acquisition()
+
+    def buy4(self):
+        save_buy_team(self.acquisition_list[3])
+        self.acquisition()
+
+    def buy5(self):
+        save_buy_team(self.acquisition_list[4])
+        self.acquisition()
+
+    def buy6(self):
+        save_buy_team(self.acquisition_list[5])
+        self.acquisition()
+
+    def buy7(self):
+        save_buy_team(self.acquisition_list[6])
+        self.acquisition()
 
     ###########################################################################
     # 세이브 화면
@@ -263,29 +303,23 @@ class Screen:
         Save_check2 = Check_Savefiles(2)
         Save_check3 = Check_Savefiles(3)
         if Save_check1 == None:
-            first_save_btn = Button(self.Gui.Gui, text="+",
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=save1)
-            first_save_btn.place(x=75, y=198)
+            first_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 82, 198, save1, f"+", "#407F7F", ("1훈떡볶이 Regular", 26))
         else:
-            first_save_btn = Button(self.Gui.Gui, text=Save_check1,
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3, command=save1)
-            first_save_btn.place(x=75, y=198)
+            first_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 82, 198, save1, f"☆ 구단주 이름 : {Save_check1[0]}\n☆ 소속 팀 : {Save_check1[1]}     ☆ 현재 자금 : {Save_check1[3]}\n☆ 저장 날짜 : {Save_check1[2]}", "#407F7F", ("1훈떡볶이 Regular", 26))
         if Save_check2 == None:
-            second_save_btn = Button(self.Gui.Gui, text="+",
-                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=save2)
-            second_save_btn.place(x=75, y=402)
+            second_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 82, 398, save2, f"+", "#407F7F", ("1훈떡볶이 Regular", 26))
         else:
-            second_save_btn = Button(self.Gui.Gui, text=Save_check2,
-                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3, command=save2)
-            second_save_btn.place(x=75, y=402)
+            second_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 82, 398, save2, f"☆ 구단주 이름 : {Save_check2[0]}\n☆ 소속 팀 : {Save_check2[1]}     ☆ 현재 자금 : {Save_check2[3]}\n☆ 저장 날짜 : {Save_check2[2]}", "#407F7F", ("1훈떡볶이 Regular", 26))
         if Save_check3 == None:
-            third_save_btn = Button(self.Gui.Gui, text="자동 저장 된 정보가 없습니다.",
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3)
-            third_save_btn.place(x=75, y=606)
+            third_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 82, 598, self.no_action, f"자동 저장 된 정보가 없습니다", "#407F7F", ("1훈떡볶이 Regular", 26))
         else:
-            third_save_btn = Button(self.Gui.Gui, text=f"{Save_check3}\n자동 저장 공간입니다.",
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3)
-            third_save_btn.place(x=75, y=606)
+            third_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 82, 598, self.no_action, f"☆ 구단주 이름 : {Save_check3[0]}\n☆ 소속 팀 : {Save_check3[1]}     ☆ 현재 자금 : {Save_check3[3]}\n☆ 저장 날짜 : {Save_check3[2]}", "#407F7F", ("1훈떡볶이 Regular", 26))
 
     ###########################################################################
     # 불러오기 화면
@@ -316,31 +350,25 @@ class Screen:
         Savefiles_Screen_background = Get_label.image_label(
             self.Gui, "Loadfiles_bg.png", 0, 0)
         Return_button = Get_label.image_button(
-            self.Gui, "Return_btn.png", 885, 30, self.Menu_Screen)
+            self.Gui, "Return_btn.png", 45, 44, self.Menu_Screen)
         Save_check1 = Check_Savefiles(1)
         Save_check2 = Check_Savefiles(2)
         Save_check3 = Check_Savefiles(3)
         if Save_check1 == None:
-            first_save_btn = Button(self.Gui.Gui, text="+",
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=first)
-            first_save_btn.place(x=75, y=198)
+            first_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 395, 198, first, f"+", "#407F7F", ("1훈떡볶이 Regular", 26))
         else:
-            first_save_btn = Button(self.Gui.Gui, text=Save_check1,
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3, command=load1)
-            first_save_btn.place(x=75, y=198)
+            first_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 395, 198, load1, f"☆ 구단주 이름 : {Save_check1[0]}\n☆ 소속 팀 : {Save_check1[1]}     ☆ 현재 자금 : {Save_check1[3]}\n☆ 저장 날짜 : {Save_check1[2]}", "#407F7F", ("1훈떡볶이 Regular", 26))
         if Save_check2 == None:
-            second_save_btn = Button(self.Gui.Gui, text="+",
-                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 45), width=21, command=second)
-            second_save_btn.place(x=75, y=402)
+            second_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 395, 398, second, f"+", "#407F7F", ("1훈떡볶이 Regular", 26))
         else:
-            second_save_btn = Button(self.Gui.Gui, text=Save_check2,
-                                     bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3, command=load2)
-            second_save_btn.place(x=75, y=402)
+            second_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 395, 398, load2, f"☆ 구단주 이름 : {Save_check2[0]}\n☆ 소속 팀 : {Save_check2[1]}     ☆ 현재 자금 : {Save_check2[3]}\n☆ 저장 날짜 : {Save_check2[2]}", "#407F7F", ("1훈떡볶이 Regular", 26))
         if Save_check3 == None:
-            third_save_btn = Button(self.Gui.Gui, text="자동 저장 된 정보가 없습니다.",
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3)
-            third_save_btn.place(x=75, y=606)
+            third_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 395, 598, self.no_action, f"자동 저장 된 정보가 없습니다", "#407F7F", ("1훈떡볶이 Regular", 26))
         else:
-            third_save_btn = Button(self.Gui.Gui, text=Save_check3,
-                                    bg="yellowgreen", fg="blue", font=("맑은 고딕", 20), width=48, height=3, command=self.Main_Screen)
-            third_save_btn.place(x=75, y=606)
+            third_save_btn = Get_label.image_button_text(
+                self.Gui, "Save_label.png", 395, 598, self.Main_Screen, f"☆ 구단주 이름 : {Save_check3[0]}\n☆ 소속 팀 : {Save_check3[1]}     ☆ 현재 자금 : {Save_check3[3]}\n☆ 저장 날짜 : {Save_check3[2]}", "#407F7F", ("1훈떡볶이 Regular", 26))

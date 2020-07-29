@@ -7,6 +7,7 @@ import threading
 from playsound import playsound
 import sys
 import os
+import time
 
 
 class Execution:
@@ -15,17 +16,17 @@ class Execution:
         self.Gui.title("Football Owner")
         self.Gui.geometry("1203x803")
         self.Gui.resizable(width=False, height=False)
-        execute_location = self.center_window(1203, 803)
+        execute_location = self.center_window(1203, 823)
         self.Gui.iconbitmap('images/logo.ico')
         Make_menu = self.Game_menu()
 
-        # def songthread():
-        #     while True:
-        #         playsound('music/Alone_Together.mp3')
-        #         time.sleep(1)
-        # song_thread = threading.Thread(target=songthread)
-        # song_thread.daemon = True
-        # song_thread.start()
+        def songthread():
+            while True:
+                playsound('music/Alone_Together.mp3')
+                time.sleep(1)
+        song_thread = threading.Thread(target=songthread)
+        song_thread.daemon = True
+        song_thread.start()
         execute_Menu_Screen = Screen(self)
         self.Gui.mainloop()
 
