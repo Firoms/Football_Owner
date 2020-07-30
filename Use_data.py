@@ -296,9 +296,9 @@ def save_buy_team(Team):
             Save_message = tkinter.messagebox.showinfo(
                 "인수 완료", f"{Team[3]} 팀을 인수했습니다.")
             cursor.execute(
-                f"UPDATE Gamer SET Money ='{money-sale}'")
+                f'UPDATE Gamer SET Money ="{money-sale}"')
             cursor.execute(
-                f"UPDATE Gamer SET Team ='{Team[3]}'")
+                f'UPDATE Gamer SET Team ="{Team[3]}"')
             db.commit()
         else:
             no_message = tkinter.messagebox.showinfo(
@@ -326,6 +326,10 @@ def ran_team_ac(money):
     acquistion_list = []
     for i in range(7):
         acquistion_list.append(cursor.fetchone())
+    if money <= 30000:
+        acquistion_list = []
+        for i in range(7):
+            acquistion_list.append(['', '', '', '돈을 더 모으고 오세요', '', ''])
     return acquistion_list
 
 
