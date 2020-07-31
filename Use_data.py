@@ -289,7 +289,7 @@ def save_buy_team(Team):
             f"SELECT Money From Gamer")
         money = cursor.fetchone()[0]
         sale = int(Team[4])
-        if count < 3 and money > sale:
+        if count < 1 and money > sale:
             cursor.execute(
                 f"INSERT INTO Gamer_Team VALUES{Team}")
             db.commit()
@@ -302,12 +302,46 @@ def save_buy_team(Team):
             db.commit()
         else:
             no_message = tkinter.messagebox.showinfo(
-                "인수 불가", f"돈이 부족하거나 3팀 이상 인수 불가합니다.")
+                "인수 불가", f"돈이 부족하거나 1팀 이상 인수 불가합니다.")
 
+
+def save_sell_team(Team):
+    Warning_message = tkinter.messagebox.askokcancel(
+        "매각", "정말 팀을 매각하시겠습니까?")
+    if Warning_message == True:
+        db = sqlite3.connect(f"DB/FO_savefile3.db")
+        cursor = db.cursor()
+        cursor.execute(
+            f"SELECT COUNT(*) FROM Gamer_Team")
+        count = cursor.fetchone()[0]
+        cursor.execute(
+            f"SELECT Money From Gamer")
+        money = cursor.fetchone()[0]
+        sale = int(Team[4])
+        Seq = int(Team[0])
+        cursor.execute(
+            f'DELETE FROM Gamer_Team WHERE Seq=="{Seq}"')
+        db.commit()
+        Save_message = tkinter.messagebox.showinfo(
+            "매각 완료", f"{Team[3]} 팀을 매각했습니다.")
+        cursor.execute(
+            f'UPDATE Gamer SET Money ="{money+sale}"')
+        if count == 1:
+            cursor.execute(
+                f'UPDATE Gamer SET Team ="무직"')
+        else:
+            cursor.execute(
+                f'SELECT Team From Gamer_Team')
+            team_name = cursor.fetchone()[0]
+            cursor.execute(
+                f'UPDATE Gamer SET Team ="{team_name}"')
+        db.commit()
 
 ###############################################################################
 # 데이터 SELECT
 ###############################################################################
+
+
 def mini_game():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
@@ -346,6 +380,28 @@ def my_team_ac():
         acquistion_list.append(cursor.fetchone())
     return acquistion_list
 
+
+def team_players(sort, desc):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT COUNT(*) FROM Players Where Team =="{my_team}"')
+    count_player = cursor.fetchone()[0]
+    player_list = []
+    if int(desc) == 0:
+        cursor.execute(
+            f'SELECT * FROM Players Where Team =="{my_team}" Order By "{sort}"')
+    else:
+        cursor.execute(
+            f'SELECT * FROM Players Where Team =="{my_team}" Order By "{sort}" DESC')
+
+    for i in range(count_player):
+        player = cursor.fetchone()[1:]
+        player_list.append(player)
+    return player_list
 
 ###############################################################################
 # 그 외
