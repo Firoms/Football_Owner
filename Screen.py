@@ -19,6 +19,11 @@ class Screen:
     def no_action(self):
         pass
 
+    def destroy(self):
+        list1 = self.Gui.Gui.place_slaves()
+        for l in list1:
+            l.destroy()
+
     ############################################################################################################################################################################################
     # 첫 메뉴 화면
     ############################################################################################################################################################################################
@@ -41,6 +46,7 @@ class Screen:
     # 미완성 화면
     ############################################################################################################################################################################################
     def Incomplete_Screen(self):
+        self.destroy()
         Incomplete_Screen_background = Get_label.image_label(
             self.Gui, "Incomplete_bg.png", 0, 0)
         Return_button = Get_label.image_button(
@@ -53,6 +59,7 @@ class Screen:
     # 설명 화면
     ############################################################################################################################################################################################
     def HowToPlay_Screen(self):
+        self.destroy()
         HowToPlay_Screen_background = Get_label.image_label(
             self.Gui, "HowToPlay_bg.png", 0, 0)
         Return_button = Get_label.image_button(
@@ -63,6 +70,7 @@ class Screen:
     ############################################################################################################################################################################################
 
     def Savefiles_Screen(self):
+        self.destroy()
         time_save = time_auto_save()
 
         def save1():
@@ -103,6 +111,7 @@ class Screen:
     # 불러오기 화면
     ############################################################################################################################################################################################
     def loadfiles_Screen(self):
+        self.destroy()
         time_save = time_auto_save()
 
         def load1():
@@ -156,6 +165,7 @@ class Screen:
     ############################################################################################################################################################################################
 
     def Main_Screen(self):
+        self.destroy()
         Menu_Screen_background = Get_label.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0)
         self.game_buttons()
@@ -179,9 +189,9 @@ class Screen:
         self.menu5_button = Get_label.image_button(
             self.Gui, "menu5.png", 34, 420, self.Team_Player_Screen)
         self.menu6_button = Get_label.image_button(
-            self.Gui, "menu6.png", 34, 490, self.no_action)
+            self.Gui, "menu6.png", 34, 490, self.Team_Coach_Screen)
         self.menu7_button = Get_label.image_button(
-            self.Gui, "menu7.png", 34, 560, self.no_action)
+            self.Gui, "menu7.png", 34, 560, self.Team_Staff_Screen)
         self.menu8_button = Get_label.image_button(
             self.Gui, "menu8.png", 34, 630, self.no_action)
         self.menu9_button = Get_label.image_button(
@@ -197,6 +207,7 @@ class Screen:
     # 메세지 화면
     ############################################################################################################################################################################################
     def message(self):
+        self.destroy()
         check_mon = check_money()
         if check_mon == '-':
             self.menu1_button.config(state='disabled')
@@ -297,84 +308,78 @@ class Screen:
     ############################################################################################################################################################################################
 
     def acquisition(self):
+        self.destroy()
         Message_Screen_background = Get_label.image_label(
-            self.Gui, "Main_Screen_bg.png", 0, 0)
+            self.Gui, "acquisition_bg.png", 0, 0)
         self.game_buttons()
         money = int(check_money())
         myteam = check_myteam()
         self.myteam_info = my_team_ac()
         self.acquisition_list = ran_team_ac(money)
-        intro_label1 = f'☆ 인수\n/           팀            /     가격     /         나라        -         리그         /                                  '
-        intro_label2 = '%-23s %s만원    %s - %s' % (
-            self.acquisition_list[0][3], self.acquisition_list[0][4], self.acquisition_list[0][2], self.acquisition_list[0][1])
-        intro_label3 = '%-23s %s만원    %s - %s' % (
-            self.acquisition_list[1][3], self.acquisition_list[1][4], self.acquisition_list[1][2], self.acquisition_list[1][1])
-        intro_label4 = '%-23s %s만원     %s - %s' % (
-            self.acquisition_list[2][3], self.acquisition_list[2][4], self.acquisition_list[2][2], self.acquisition_list[2][1])
-        intro_label5 = '%-23s %s만원     %s - %s' % (
-            self.acquisition_list[3][3], self.acquisition_list[3][4], self.acquisition_list[3][2], self.acquisition_list[3][1])
-        intro_label6 = '%-23s %s만원     %s - %s' % (
-            self.acquisition_list[4][3], self.acquisition_list[4][4], self.acquisition_list[4][2], self.acquisition_list[4][1])
-        intro_label7 = '%-23s %s만원     %s - %s' % (
-            self.acquisition_list[5][3], self.acquisition_list[5][4], self.acquisition_list[5][2], self.acquisition_list[5][1])
-        intro_label8 = '%-23s %s만원     %s - %s' % (
-            self.acquisition_list[6][3], self.acquisition_list[6][4], self.acquisition_list[6][2], self.acquisition_list[6][1])
-        Intro1 = Get_label.image_label_text(
-            self.Gui, "acquisition_bg1.jpg", 212, 123, f"{intro_label1}\n\n1. {intro_label2}\n\n2. {intro_label3}\n\n3. {intro_label4}\n\n4. {intro_label5}\n\n5. {intro_label6}\n\n6. {intro_label7}\n\n7. {intro_label8}\n", "#472f91", ("고도 M", 17))
+        self.Intro1 = Get_label.image_label_text(
+            self.Gui, "ac1.png", 302, 138, f"팀 이름", "#472f91", ("고도 M", 12))
+        self.Intro2 = Get_label.image_label_text(
+            self.Gui, "ac2.png", 572, 138,  f"인수 가격", "#472f91", ("고도 M", 12))
+        self.Intro3 = Get_label.image_label_text(
+            self.Gui, "ac3.png", 722, 138,  f"속한 나라", "#472f91", ("고도 M", 12))
+        self.Intro4 = Get_label.image_label_text(
+            self.Gui, "ac4.png", 952, 138,  f"속한 리그", "#472f91", ("고도 M", 12))
+        for i in range(7):
+            team1 = Get_label.image_label_text(
+                self.Gui, "ac1-1.png", 302, 188+(50*i), f"{self.acquisition_list[i][3]}", "#472f91", ("고도 M", 12))
+            team2 = Get_label.image_label_text(
+                self.Gui, "ac2-1.png", 572, 188+(50*i), f"{self.acquisition_list[i][4]} 만원", "#472f91", ("고도 M", 12))
+            team3 = Get_label.image_label_text(
+                self.Gui, "ac3-1.png", 722, 188+(50*i), f"{self.acquisition_list[i][2]}", "#472f91", ("고도 M", 12))
+            team4 = Get_label.image_label_text(
+                self.Gui, "ac4-1.png", 952, 188+(50*i), f"{self.acquisition_list[i][1]}", "#472f91", ("고도 M", 10))
         Team_label1 = Get_label.image_button(
-            self.Gui, "acquisition_btn1.png", 1060, 200+(52*0), self.buy1)
+            self.Gui, "acquisition_btn1.png", 222, 188+(50*0), self.buy1)
         Team_label2 = Get_label.image_button(
-            self.Gui, "acquisition_btn1.png", 1060, 200+(52*1), self.buy2)
+            self.Gui, "acquisition_btn1.png", 222, 188+(50*1), self.buy2)
         Team_label3 = Get_label.image_button(
-            self.Gui, "acquisition_btn1.png", 1060, 200+(52*2), self.buy3)
+            self.Gui, "acquisition_btn1.png", 222, 188+(50*2), self.buy3)
         Team_label4 = Get_label.image_button(
-            self.Gui, "acquisition_btn1.png", 1060, 200+(52*3), self.buy4)
+            self.Gui, "acquisition_btn1.png", 222, 188+(50*3), self.buy4)
         Team_label5 = Get_label.image_button(
-            self.Gui, "acquisition_btn1.png", 1060, 200+(52*4), self.buy5)
+            self.Gui, "acquisition_btn1.png", 222, 188+(50*4), self.buy5)
         Team_label6 = Get_label.image_button(
-            self.Gui, "acquisition_btn1.png", 1060, 200+(52*5), self.buy6)
+            self.Gui, "acquisition_btn1.png", 222, 188+(50*5), self.buy6)
         Team_label7 = Get_label.image_button(
-            self.Gui, "acquisition_btn1.png", 1060, 200+(52*6), self.buy7)
+            self.Gui, "acquisition_btn1.png", 222, 188+(50*6), self.buy7)
 
-        if myteam == 0:
-            Intro2 = Get_label.image_label(
-                self.Gui, "acquisition_bg2.jpg", 212, 576)
-        elif myteam == 1:
-            intro_label9 = f'☆ 매각                                                                                                                        '
-            intro_label10 = '%-23s %s만원     %s - %s' % (
-                self.myteam_info[0][3], self.myteam_info[0][4], self.myteam_info[0][2], self.myteam_info[0][1])
-            Intro2 = Get_label.image_label_text(
-                self.Gui, "acquisition_bg2.jpg", 212, 576, f"{intro_label9}\n\n1. {intro_label10}\n\n\n\n", "#472f91", ("고도 M", 17))
+        self.Intro5 = Get_label.image_label_text(
+            self.Gui, "ac1.png", 302, 575, f"팀 이름", "#472f91", ("고도 M", 12))
+        self.Intro6 = Get_label.image_label_text(
+            self.Gui, "ac2.png", 572, 575,  f"인수 가격", "#472f91", ("고도 M", 12))
+        self.Intro7 = Get_label.image_label_text(
+            self.Gui, "ac3.png", 722, 575,  f"속한 나라", "#472f91", ("고도 M", 12))
+        self.Intro8 = Get_label.image_label_text(
+            self.Gui, "ac4.png", 952, 575,  f"속한 리그", "#472f91", ("고도 M", 12))
+        for i in range(myteam):
+            team1 = Get_label.image_label_text(
+                self.Gui, "ac1-1.png", 302, 625+(50*i), f"{self.myteam_info[i][3]}", "#472f91", ("고도 M", 12))
+            team2 = Get_label.image_label_text(
+                self.Gui, "ac2-1.png", 572, 625+(50*i), f"{self.myteam_info[i][4]} 만원", "#472f91", ("고도 M", 12))
+            team3 = Get_label.image_label_text(
+                self.Gui, "ac3-1.png", 722, 625+(50*i), f"{self.myteam_info[i][2]}", "#472f91", ("고도 M", 12))
+            team4 = Get_label.image_label_text(
+                self.Gui, "ac4-1.png", 952, 625+(50*i), f"{self.myteam_info[i][1]}", "#472f91", ("고도 M", 10))
+        if myteam == 1:
             Team_label8 = Get_label.image_button(
-                self.Gui, "acquisition_btn2.png", 1060, 625+(50*0), self.sell1)
+                self.Gui, "acquisition_btn2.png", 222, 625+(50*0), self.sell1)
         elif myteam == 2:
-            intro_label9 = f'☆ 매각                                                                                                                        '
-            intro_label10 = '%-23s %s만원     %s - %s' % (
-                self.myteam_info[0][3], self.myteam_info[0][4], self.myteam_info[0][2], self.myteam_info[0][1])
-            intro_label11 = '%-23s %s만원     %s - %s' % (
-                self.myteam_info[1][3], self.myteam_info[1][4], self.myteam_info[1][2], self.myteam_info[1][1])
-            Intro2 = Get_label.image_label_text(
-                self.Gui, "acquisition_bg2.jpg", 212, 576, f"{intro_label9}\n\n1. {intro_label10}\n\n2. {intro_label11}\n\n", "#472f91", ("고도 M", 17))
             Team_label8 = Get_label.image_button(
-                self.Gui, "acquisition_btn2.png", 1060, 625+(50*0), self.sell1)
+                self.Gui, "acquisition_btn2.png", 222, 625+(50*0), self.sell1)
             Team_label8 = Get_label.image_button(
-                self.Gui, "acquisition_btn2.png", 1060, 625+(50*1), self.sell2)
+                self.Gui, "acquisition_btn2.png", 222, 625+(50*1), self.sell2)
         else:
-            intro_label9 = f'☆ 매각                                                                                                                        '
-            intro_label10 = '%-23s %s만원     %s - %s' % (
-                self.myteam_info[0][3], self.myteam_info[0][4], self.myteam_info[0][2], self.myteam_info[0][1])
-            intro_label11 = '%-23s %s만원     %s - %s' % (
-                self.myteam_info[1][3], self.myteam_info[1][4], self.myteam_info[1][2], self.myteam_info[1][1])
-            intro_label12 = '%-23s %s만원     %s - %s' % (
-                self.myteam_info[2][3], self.myteam_info[2][4], self.myteam_info[2][2], self.myteam_info[2][1])
-            Intro2 = Get_label.image_label_text(
-                self.Gui, "acquisition_bg2.jpg", 212, 576, f"{intro_label9}\n\n1. {intro_label10}\n\n2. {intro_label11}\n\n3. {intro_label12}", "#472f91", ("고도 M", 17))
             Team_label8 = Get_label.image_button(
-                self.Gui, "acquisition_btn2.png", 1060, 625+(50*0), self.sell1)
+                self.Gui, "acquisition_btn2.png", 222, 625+(50*0), self.sell1)
             Team_label9 = Get_label.image_button(
-                self.Gui, "acquisition_btn2.png", 1060, 625+(50*1), self.sell2)
+                self.Gui, "acquisition_btn2.png", 222, 625+(50*1), self.sell2)
             Team_label10 = Get_label.image_button(
-                self.Gui, "acquisition_btn2.png", 1060, 625+(50*2), self.sell3)
+                self.Gui, "acquisition_btn2.png", 222, 625+(50*2), self.sell3)
 
     def buy1(self):
         save_buy_team(self.acquisition_list[0])
@@ -433,6 +438,7 @@ class Screen:
             fir = self.first_player_scr()
 
     def first_player_scr(self):
+        self.destroy()
         Team_Player_Screen_background = Get_label.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0)
         game_button = self.game_buttons()
@@ -442,45 +448,47 @@ class Screen:
             self.Gui, "left.png", 900, 43, self.no_action)
         left_button.config(state='disabled')
         self.len_player = len(self.players)
+        if self.len_player < 16:
+            right_button.config(state='disabled')
         self.Intro1 = Get_label.image_button_text(
-            self.Gui, "player1.png", 222, 133, self.sort1, f"번호", "#472f91", ("고도 M", 12))
+            self.Gui, "player1.png", 222, 133, self.sortpla1, f"번호", "#472f91", ("고도 M", 12))
         self.Intro2 = Get_label.image_button_text(
-            self.Gui, "player2.png", 282, 133, self.sort2, f"이름", "#472f91", ("고도 M", 12))
+            self.Gui, "player2.png", 282, 133, self.sortpla2, f"이름", "#472f91", ("고도 M", 12))
         self.Intro3 = Get_label.image_button_text(
-            self.Gui, "player3.png", 542, 133, self.sort3, f"포지션", "#472f91", ("고도 M", 12))
+            self.Gui, "player3.png", 542, 133, self.sortpla3, f"포지션", "#472f91", ("고도 M", 12))
         self.Intro4 = Get_label.image_button_text(
-            self.Gui, "player4.png", 742, 133, self.sort4, f"나이", "#472f91", ("고도 M", 12))
+            self.Gui, "player4.png", 742, 133, self.sortpla4, f"나이", "#472f91", ("고도 M", 12))
         self.Intro5 = Get_label.image_button_text(
-            self.Gui, "player5.png", 802, 133, self.sort5, f"선수 가치", "#472f91", ("고도 M", 12))
+            self.Gui, "player5.png", 802, 133, self.sortpla5, f"선수 가치", "#472f91", ("고도 M", 12))
         self.Intro6 = Get_label.image_button_text(
-            self.Gui, "player6.png", 932, 133, self.sort6, f"능력치", "#472f91", ("고도 M", 12))
+            self.Gui, "player6.png", 932, 133, self.sortpla6, f"능력치", "#472f91", ("고도 M", 12))
         self.Intro7 = Get_label.image_button_text(
-            self.Gui, "player7.png", 992, 133, self.sort7, f"잠재력", "#472f91", ("고도 M", 12))
+            self.Gui, "player7.png", 992, 133, self.sortpla7, f"잠재력", "#472f91", ("고도 M", 12))
         self.Intro8 = Get_label.image_button_text(
-            self.Gui, "player8.png", 1052, 133, self.sort8, f"선수 주급", "#472f91", ("고도 M", 12))
+            self.Gui, "player8.png", 1052, 133, self.sortpla8, f"선수 주급", "#472f91", ("고도 M", 12))
         if self.sort_color == 1:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro1.config(fg="#B30000")
         elif self.sort_color == 2:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro2.config(fg="#B30000")
         elif self.sort_color == 3:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro3.config(fg="#B30000")
         elif self.sort_color == 4:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro4.config(fg="#B30000")
         elif self.sort_color == 5:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro5.config(fg="#B30000")
         elif self.sort_color == 6:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro6.config(fg="#B30000")
         elif self.sort_color == 7:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro7.config(fg="#B30000")
         elif self.sort_color == 8:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro8.config(fg="#B30000")
         first_len = 0
         if self.len_player > 14:
@@ -497,15 +505,16 @@ class Screen:
             pla4 = Get_label.image_label_text(
                 self.Gui, "player4-1.png", 742, 173+(40*i), f"{self.players[i][4]}", "#472f91", ("고도 M", 12))
             pla5 = Get_label.image_label_text(
-                self.Gui, "player5-1.png", 802, 173+(40*i), f"{self.players[i][5]}", "#472f91", ("고도 M", 12))
+                self.Gui, "player5-1.png", 802, 173+(40*i), f"{self.players[i][5]} 만원", "#472f91", ("고도 M", 12))
             pla6 = Get_label.image_label_text(
                 self.Gui, "player6-1.png", 932, 173+(40*i), f"{self.players[i][6]}", "#472f91", ("고도 M", 12))
             pla7 = Get_label.image_label_text(
                 self.Gui, "player7-1.png", 992, 173+(40*i), f"{self.players[i][7]}", "#472f91", ("고도 M", 12))
             pla8 = Get_label.image_label_text(
-                self.Gui, "player8-1.png", 1052, 173+(40*i), f"{self.players[i][8]}", "#472f91", ("고도 M", 12))
+                self.Gui, "player8-1.png", 1052, 173+(40*i), f"{self.players[i][8]} 만원", "#472f91", ("고도 M", 12))
 
     def second_player_scr(self):
+        self.destroy()
         Team_Player_Screen_background = Get_label.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0)
         game_button = self.game_buttons()
@@ -520,44 +529,44 @@ class Screen:
             second_len = self.len_player-15
             right_button.config(state='disabled')
         self.Intro1 = Get_label.image_button_text(
-            self.Gui, "player1.png", 222, 133, self.sort1, f"번호", "#472f91", ("고도 M", 12))
+            self.Gui, "player1.png", 222, 133, self.sortpla1, f"번호", "#472f91", ("고도 M", 12))
         self.Intro2 = Get_label.image_button_text(
-            self.Gui, "player2.png", 282, 133, self.sort2, f"이름", "#472f91", ("고도 M", 12))
+            self.Gui, "player2.png", 282, 133, self.sortpla2, f"이름", "#472f91", ("고도 M", 12))
         self.Intro3 = Get_label.image_button_text(
-            self.Gui, "player3.png", 542, 133, self.sort3, f"포지션", "#472f91", ("고도 M", 12))
+            self.Gui, "player3.png", 542, 133, self.sortpla3, f"포지션", "#472f91", ("고도 M", 12))
         self.Intro4 = Get_label.image_button_text(
-            self.Gui, "player4.png", 742, 133, self.sort4, f"나이", "#472f91", ("고도 M", 12))
+            self.Gui, "player4.png", 742, 133, self.sortpla4, f"나이", "#472f91", ("고도 M", 12))
         self.Intro5 = Get_label.image_button_text(
-            self.Gui, "player5.png", 802, 133, self.sort5, f"선수 가치", "#472f91", ("고도 M", 12))
+            self.Gui, "player5.png", 802, 133, self.sortpla5, f"선수 가치", "#472f91", ("고도 M", 12))
         self.Intro6 = Get_label.image_button_text(
-            self.Gui, "player6.png", 932, 133, self.sort6, f"능력치", "#472f91", ("고도 M", 12))
+            self.Gui, "player6.png", 932, 133, self.sortpla6, f"능력치", "#472f91", ("고도 M", 12))
         self.Intro7 = Get_label.image_button_text(
-            self.Gui, "player7.png", 992, 133, self.sort7, f"잠재력", "#472f91", ("고도 M", 12))
+            self.Gui, "player7.png", 992, 133, self.sortpla7, f"잠재력", "#472f91", ("고도 M", 12))
         self.Intro8 = Get_label.image_button_text(
-            self.Gui, "player8.png", 1052, 133, self.sort8, f"선수 주급", "#472f91", ("고도 M", 12))
+            self.Gui, "player8.png", 1052, 133, self.sortpla8, f"선수 주급", "#472f91", ("고도 M", 12))
         if self.sort_color == 1:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro1.config(fg="#B30000")
         elif self.sort_color == 2:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro2.config(fg="#B30000")
         elif self.sort_color == 3:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro3.config(fg="#B30000")
         elif self.sort_color == 4:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro4.config(fg="#B30000")
         elif self.sort_color == 5:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro5.config(fg="#B30000")
         elif self.sort_color == 6:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro6.config(fg="#B30000")
         elif self.sort_color == 7:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro7.config(fg="#B30000")
         elif self.sort_color == 8:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro8.config(fg="#B30000")
         for i in range(second_len):
             pla1 = Get_label.image_label_text(
@@ -569,15 +578,16 @@ class Screen:
             pla4 = Get_label.image_label_text(
                 self.Gui, "player4-1.png", 742, 173+(40*i), f"{self.players[i+15][4]}", "#472f91", ("고도 M", 12))
             pla5 = Get_label.image_label_text(
-                self.Gui, "player5-1.png", 802, 173+(40*i), f"{self.players[i+15][5]}", "#472f91", ("고도 M", 12))
+                self.Gui, "player5-1.png", 802, 173+(40*i), f"{self.players[i+15][5]} 만원", "#472f91", ("고도 M", 12))
             pla6 = Get_label.image_label_text(
                 self.Gui, "player6-1.png", 932, 173+(40*i), f"{self.players[i+15][6]}", "#472f91", ("고도 M", 12))
             pla7 = Get_label.image_label_text(
                 self.Gui, "player7-1.png", 992, 173+(40*i), f"{self.players[i+15][7]}", "#472f91", ("고도 M", 12))
             pla8 = Get_label.image_label_text(
-                self.Gui, "player8-1.png", 1052, 173+(40*i), f"{self.players[i+15][8]}", "#472f91", ("고도 M", 12))
+                self.Gui, "player8-1.png", 1052, 173+(40*i), f"{self.players[i+15][8]} 만원", "#472f91", ("고도 M", 12))
 
     def third_player_scr(self):
+        self.destroy()
         Team_Player_Screen_background = Get_label.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0)
         game_button = self.game_buttons()
@@ -590,44 +600,44 @@ class Screen:
         third_len = self.len_player-30
 
         self.Intro1 = Get_label.image_button_text(
-            self.Gui, "player1.png", 222, 133, self.sort1, f"번호", "#472f91", ("고도 M", 12))
+            self.Gui, "player1.png", 222, 133, self.sortpla1, f"번호", "#472f91", ("고도 M", 12))
         self.Intro2 = Get_label.image_button_text(
-            self.Gui, "player2.png", 282, 133, self.sort2, f"이름", "#472f91", ("고도 M", 12))
+            self.Gui, "player2.png", 282, 133, self.sortpla2, f"이름", "#472f91", ("고도 M", 12))
         self.Intro3 = Get_label.image_button_text(
-            self.Gui, "player3.png", 542, 133, self.sort3, f"포지션", "#472f91", ("고도 M", 12))
+            self.Gui, "player3.png", 542, 133, self.sortpla3, f"포지션", "#472f91", ("고도 M", 12))
         self.Intro4 = Get_label.image_button_text(
-            self.Gui, "player4.png", 742, 133, self.sort4, f"나이", "#472f91", ("고도 M", 12))
+            self.Gui, "player4.png", 742, 133, self.sortpla4, f"나이", "#472f91", ("고도 M", 12))
         self.Intro5 = Get_label.image_button_text(
-            self.Gui, "player5.png", 802, 133, self.sort5, f"선수 가치", "#472f91", ("고도 M", 12))
+            self.Gui, "player5.png", 802, 133, self.sortpla5, f"선수 가치", "#472f91", ("고도 M", 12))
         self.Intro6 = Get_label.image_button_text(
-            self.Gui, "player6.png", 932, 133, self.sort6, f"능력치", "#472f91", ("고도 M", 12))
+            self.Gui, "player6.png", 932, 133, self.sortpla6, f"능력치", "#472f91", ("고도 M", 12))
         self.Intro7 = Get_label.image_button_text(
-            self.Gui, "player7.png", 992, 133, self.sort7, f"잠재력", "#472f91", ("고도 M", 12))
+            self.Gui, "player7.png", 992, 133, self.sortpla7, f"잠재력", "#472f91", ("고도 M", 12))
         self.Intro8 = Get_label.image_button_text(
-            self.Gui, "player8.png", 1052, 133, self.sort8, f"선수 주급", "#472f91", ("고도 M", 12))
+            self.Gui, "player8.png", 1052, 133, self.sortpla8, f"선수 주급", "#472f91", ("고도 M", 12))
         if self.sort_color == 1:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro1.config(fg="#B30000")
         elif self.sort_color == 2:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro2.config(fg="#B30000")
         elif self.sort_color == 3:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro3.config(fg="#B30000")
         elif self.sort_color == 4:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro4.config(fg="#B30000")
         elif self.sort_color == 5:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro5.config(fg="#B30000")
         elif self.sort_color == 6:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro6.config(fg="#B30000")
         elif self.sort_color == 7:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro7.config(fg="#B30000")
         elif self.sort_color == 8:
-            fir = self.change_sortnum()
+            fir = self.change_pla_sortnum()
             self.Intro8.config(fg="#B30000")
         for i in range(third_len):
             pla1 = Get_label.image_label_text(
@@ -639,55 +649,55 @@ class Screen:
             pla4 = Get_label.image_label_text(
                 self.Gui, "player4-1.png", 742, 173+(40*i), f"{self.players[i+30][4]}", "#472f91", ("고도 M", 12))
             pla5 = Get_label.image_label_text(
-                self.Gui, "player5-1.png", 802, 173+(40*i), f"{self.players[i+30][5]}", "#472f91", ("고도 M", 12))
+                self.Gui, "player5-1.png", 802, 173+(40*i), f"{self.players[i+30][5]} 만원", "#472f91", ("고도 M", 12))
             pla6 = Get_label.image_label_text(
                 self.Gui, "player6-1.png", 932, 173+(40*i), f"{self.players[i+30][6]}", "#472f91", ("고도 M", 12))
             pla7 = Get_label.image_label_text(
                 self.Gui, "player7-1.png", 992, 173+(40*i), f"{self.players[i+30][7]}", "#472f91", ("고도 M", 12))
             pla8 = Get_label.image_label_text(
-                self.Gui, "player8-1.png", 1052, 173+(40*i), f"{self.players[i+30][8]}", "#472f91", ("고도 M", 12))
+                self.Gui, "player8-1.png", 1052, 173+(40*i), f"{self.players[i+30][8]} 만원", "#472f91", ("고도 M", 12))
 
-    def sort1(self):
+    def sortpla1(self):
         self.players = team_players('Number', self.sort_num)
         self.sort_color = 1
         fir = self.first_player_scr()
 
-    def sort2(self):
+    def sortpla2(self):
         self.players = team_players('Name', self.sort_num)
         self.sort_color = 2
         fir = self.first_player_scr()
 
-    def sort3(self):
+    def sortpla3(self):
         self.players = team_players('Position', self.sort_num)
         self.sort_color = 3
         fir = self.first_player_scr()
 
-    def sort4(self):
+    def sortpla4(self):
         self.players = team_players('Age', self.sort_num)
         self.sort_color = 4
         fir = self.first_player_scr()
 
-    def sort5(self):
+    def sortpla5(self):
         self.players = team_players('Market_Value', self.sort_num)
         self.sort_color = 5
         fir = self.first_player_scr()
 
-    def sort6(self):
+    def sortpla6(self):
         self.players = team_players('Ability', self.sort_num)
         self.sort_color = 6
         fir = self.first_player_scr()
 
-    def sort7(self):
+    def sortpla7(self):
         self.players = team_players('Potential', self.sort_num)
         self.sort_color = 7
         fir = self.first_player_scr()
 
-    def sort8(self):
+    def sortpla8(self):
         self.players = team_players('Money', self.sort_num)
         self.sort_color = 8
         fir = self.first_player_scr()
 
-    def change_sortnum(self):
+    def change_pla_sortnum(self):
         if self.sort_num == 0:
             self.sort_num = 1
         else:
@@ -700,3 +710,313 @@ class Screen:
         self.Intro6.config(fg="#472f91")
         self.Intro7.config(fg="#472f91")
         self.Intro8.config(fg="#472f91")
+
+    ############################################################################################################################################################################################
+    # 팀 코치단 화면
+    ############################################################################################################################################################################################
+
+    def Team_Coach_Screen(self):
+        team_count = check_myteam()
+        if team_count == 0:
+            Team_Coach_Screen_background = Get_label.image_label(
+                self.Gui, "cantuse_bg.png", 0, 0)
+            game_button = self.game_buttons()
+        else:
+            self.sort_num = 0
+            self.sort_color = 0
+            self.coaches = team_coaches('Position', self.sort_num)
+            fir = self.first_coach_scr()
+
+    def first_coach_scr(self):
+        self.destroy()
+        Team_Coach_Screen_background = Get_label.image_label(
+            self.Gui, "Main_Screen_bg.png", 0, 0)
+        game_button = self.game_buttons()
+        right_button = Get_label.image_button(
+            self.Gui, "right.png", 980, 43, self.second_coach_scr)
+        left_button = Get_label.image_button(
+            self.Gui, "left.png", 900, 43, self.no_action)
+        left_button.config(state='disabled')
+        self.len_coach = len(self.coaches)
+        if self.len_coach < 16:
+            right_button.config(state='disabled')
+        self.Intro1 = Get_label.image_button_text(
+            self.Gui, "coach1.png", 222, 133, self.sortcoa1, f"이름", "#472f91", ("고도 M", 12))
+        self.Intro2 = Get_label.image_button_text(
+            self.Gui, "coach2.png", 552, 133, self.sortcoa2, f"포지션", "#472f91", ("고도 M", 12))
+        self.Intro3 = Get_label.image_button_text(
+            self.Gui, "coach3.png", 832, 133, self.sortcoa3, f"나이", "#472f91", ("고도 M", 12))
+        self.Intro4 = Get_label.image_button_text(
+            self.Gui, "coach4.png", 912, 133, self.sortcoa4, f"능력치", "#472f91", ("고도 M", 12))
+        self.Intro5 = Get_label.image_button_text(
+            self.Gui, "coach5.png", 992, 133, self.sortcoa5, f"주급", "#472f91", ("고도 M", 12))
+        if self.sort_color == 1:
+            fir = self.change_coa_sortnum()
+            self.Intro1.config(fg="#B30000")
+        elif self.sort_color == 2:
+            fir = self.change_coa_sortnum()
+            self.Intro2.config(fg="#B30000")
+        elif self.sort_color == 3:
+            fir = self.change_coa_sortnum()
+            self.Intro3.config(fg="#B30000")
+        elif self.sort_color == 4:
+            fir = self.change_coa_sortnum()
+            self.Intro4.config(fg="#B30000")
+        elif self.sort_color == 5:
+            fir = self.change_coa_sortnum()
+            self.Intro5.config(fg="#B30000")
+        first_len = 0
+        if self.len_coach > 14:
+            first_len = 15
+        else:
+            first_len = self.len_coach
+        for i in range(first_len):
+            coa1 = Get_label.image_label_text(
+                self.Gui, "coach1-1.png", 222, 173+(40*i), f"{self.coaches[i][0]}", "#472f91", ("고도 M", 12))
+            coa2 = Get_label.image_label_text(
+                self.Gui, "coach2-1.png", 552, 173+(40*i), f"{self.coaches[i][2]}", "#472f91", ("고도 M", 12))
+            coa3 = Get_label.image_label_text(
+                self.Gui, "coach3-1.png", 832, 173+(40*i), f"{self.coaches[i][3]}", "#472f91", ("고도 M", 12))
+            coa4 = Get_label.image_label_text(
+                self.Gui, "coach4-1.png", 912, 173+(40*i), f"{self.coaches[i][4]}", "#472f91", ("고도 M", 12))
+            coa5 = Get_label.image_label_text(
+                self.Gui, "coach5-1.png", 992, 173+(40*i), f"{self.coaches[i][5]} 만원", "#472f91", ("고도 M", 12))
+
+    def second_coach_scr(self):
+        self.destroy()
+        Team_Coach_Screen_background = Get_label.image_label(
+            self.Gui, "Main_Screen_bg.png", 0, 0)
+        game_button = self.game_buttons()
+        right_button = Get_label.image_button(
+            self.Gui, "right.png", 980, 43, self.no_action)
+        left_button = Get_label.image_button(
+            self.Gui, "left.png", 900, 43, self.first_coach_scr)
+        second_len = self.len_coach-15
+        right_button.config(state='disabled')
+        self.Intro1 = Get_label.image_button_text(
+            self.Gui, "coach1.png", 222, 133, self.sortcoa1, f"이름", "#472f91", ("고도 M", 12))
+        self.Intro2 = Get_label.image_button_text(
+            self.Gui, "coach2.png", 552, 133, self.sortcoa2, f"포지션", "#472f91", ("고도 M", 12))
+        self.Intro3 = Get_label.image_button_text(
+            self.Gui, "coach3.png", 832, 133, self.sortcoa3, f"나이", "#472f91", ("고도 M", 12))
+        self.Intro4 = Get_label.image_button_text(
+            self.Gui, "coach4.png", 912, 133, self.sortcoa4, f"능력치", "#472f91", ("고도 M", 12))
+        self.Intro5 = Get_label.image_button_text(
+            self.Gui, "coach5.png", 992, 133, self.sortcoa5, f"주급", "#472f91", ("고도 M", 12))
+        if self.sort_color == 1:
+            fir = self.change_coa_sortnum()
+            self.Intro1.config(fg="#B30000")
+        elif self.sort_color == 2:
+            fir = self.change_coa_sortnum()
+            self.Intro2.config(fg="#B30000")
+        elif self.sort_color == 3:
+            fir = self.change_coa_sortnum()
+            self.Intro3.config(fg="#B30000")
+        elif self.sort_color == 4:
+            fir = self.change_coa_sortnum()
+            self.Intro4.config(fg="#B30000")
+        elif self.sort_color == 5:
+            fir = self.change_coa_sortnum()
+            self.Intro5.config(fg="#B30000")
+        for i in range(second_len):
+            coa1 = Get_label.image_label_text(
+                self.Gui, "coach1-1.png", 222, 173+(40*i), f"{self.coaches[i+15][0]}", "#472f91", ("고도 M", 12))
+            coa2 = Get_label.image_label_text(
+                self.Gui, "coach2-1.png", 552, 173+(40*i), f"{self.coaches[i+15][2]}", "#472f91", ("고도 M", 12))
+            coa3 = Get_label.image_label_text(
+                self.Gui, "coach3-1.png", 832, 173+(40*i), f"{self.coaches[i+15][3]}", "#472f91", ("고도 M", 12))
+            coa4 = Get_label.image_label_text(
+                self.Gui, "coach4-1.png", 912, 173+(40*i), f"{self.coaches[i+15][4]}", "#472f91", ("고도 M", 12))
+            coa5 = Get_label.image_label_text(
+                self.Gui, "coach5-1.png", 992, 173+(40*i), f"{self.coaches[i+15][5]} 만원", "#472f91", ("고도 M", 12))
+
+    def sortcoa1(self):
+        self.coaches = team_coaches('Name', self.sort_num)
+        self.sort_color = 1
+        fir = self.first_coach_scr()
+
+    def sortcoa2(self):
+        self.coaches = team_coaches('Position', self.sort_num)
+        self.sort_color = 2
+        fir = self.first_coach_scr()
+
+    def sortcoa3(self):
+        self.coaches = team_coaches('Age', self.sort_num)
+        self.sort_color = 3
+        fir = self.first_coach_scr()
+
+    def sortcoa4(self):
+        self.coaches = team_coaches('Ability', self.sort_num)
+        self.sort_color = 4
+        fir = self.first_coach_scr()
+
+    def sortcoa5(self):
+        self.coaches = team_coaches('Money', self.sort_num)
+        self.sort_color = 5
+        fir = self.first_coach_scr()
+
+    def change_coa_sortnum(self):
+        if self.sort_num == 0:
+            self.sort_num = 1
+        else:
+            self.sort_num = 0
+        self.Intro1.config(fg="#472f91")
+        self.Intro2.config(fg="#472f91")
+        self.Intro3.config(fg="#472f91")
+        self.Intro4.config(fg="#472f91")
+        self.Intro5.config(fg="#472f91")
+
+    ############################################################################################################################################################################################
+    # 팀 직원 화면
+    ############################################################################################################################################################################################
+
+    def Team_Staff_Screen(self):
+        team_count = check_myteam()
+        if team_count == 0:
+            Team_Staff_Screen_background = Get_label.image_label(
+                self.Gui, "cantuse_bg.png", 0, 0)
+            game_button = self.game_buttons()
+        else:
+            self.sort_num = 0
+            self.sort_color = 0
+            self.staffs = team_staffs('Position', self.sort_num)
+            fir = self.first_staff_scr()
+
+    def first_staff_scr(self):
+        self.destroy()
+        Team_Staff_Screen_background = Get_label.image_label(
+            self.Gui, "Main_Screen_bg.png", 0, 0)
+        game_button = self.game_buttons()
+        right_button = Get_label.image_button(
+            self.Gui, "right.png", 980, 43, self.second_staff_scr)
+        left_button = Get_label.image_button(
+            self.Gui, "left.png", 900, 43, self.no_action)
+        left_button.config(state='disabled')
+        self.len_staff = len(self.staffs)
+        if self.len_staff < 16:
+            right_button.config(state='disabled')
+        self.Intro1 = Get_label.image_button_text(
+            self.Gui, "coach1.png", 222, 133, self.sortsta1, f"이름", "#472f91", ("고도 M", 12))
+        self.Intro2 = Get_label.image_button_text(
+            self.Gui, "coach2.png", 552, 133, self.sortsta2, f"포지션", "#472f91", ("고도 M", 12))
+        self.Intro3 = Get_label.image_button_text(
+            self.Gui, "coach3.png", 832, 133, self.sortsta3, f"나이", "#472f91", ("고도 M", 12))
+        self.Intro4 = Get_label.image_button_text(
+            self.Gui, "coach4.png", 912, 133, self.sortsta4, f"능력치", "#472f91", ("고도 M", 12))
+        self.Intro5 = Get_label.image_button_text(
+            self.Gui, "coach5.png", 992, 133, self.sortsta5, f"주급", "#472f91", ("고도 M", 12))
+        if self.sort_color == 1:
+            fir = self.change_sta_sortnum()
+            self.Intro1.config(fg="#B30000")
+        elif self.sort_color == 2:
+            fir = self.change_sta_sortnum()
+            self.Intro2.config(fg="#B30000")
+        elif self.sort_color == 3:
+            fir = self.change_sta_sortnum()
+            self.Intro3.config(fg="#B30000")
+        elif self.sort_color == 4:
+            fir = self.change_sta_sortnum()
+            self.Intro4.config(fg="#B30000")
+        elif self.sort_color == 5:
+            fir = self.change_sta_sortnum()
+            self.Intro5.config(fg="#B30000")
+        first_len = 0
+        if self.len_staff > 14:
+            first_len = 15
+        else:
+            first_len = self.len_staff
+        for i in range(first_len):
+            sta1 = Get_label.image_label_text(
+                self.Gui, "coach1-1.png", 222, 173+(40*i), f"{self.staffs[i][0]}", "#472f91", ("고도 M", 12))
+            sta2 = Get_label.image_label_text(
+                self.Gui, "coach2-1.png", 552, 173+(40*i), f"{self.staffs[i][2]}", "#472f91", ("고도 M", 12))
+            sta3 = Get_label.image_label_text(
+                self.Gui, "coach3-1.png", 832, 173+(40*i), f"{self.staffs[i][3]}", "#472f91", ("고도 M", 12))
+            sta4 = Get_label.image_label_text(
+                self.Gui, "coach4-1.png", 912, 173+(40*i), f"{self.staffs[i][4]}", "#472f91", ("고도 M", 12))
+            sta5 = Get_label.image_label_text(
+                self.Gui, "coach5-1.png", 992, 173+(40*i), f"{self.staffs[i][5]} 만원", "#472f91", ("고도 M", 12))
+
+    def second_staff_scr(self):
+        self.destroy()
+        Team_Staff_Screen_background = Get_label.image_label(
+            self.Gui, "Main_Screen_bg.png", 0, 0)
+        game_button = self.game_buttons()
+        right_button = Get_label.image_button(
+            self.Gui, "right.png", 980, 43, self.no_action)
+        left_button = Get_label.image_button(
+            self.Gui, "left.png", 900, 43, self.first_staff_scr)
+        second_len = self.len_staff-15
+        right_button.config(state='disabled')
+        self.Intro1 = Get_label.image_button_text(
+            self.Gui, "coach1.png", 222, 133, self.sortsta1, f"이름", "#472f91", ("고도 M", 12))
+        self.Intro2 = Get_label.image_button_text(
+            self.Gui, "coach2.png", 552, 133, self.sortsta2, f"포지션", "#472f91", ("고도 M", 12))
+        self.Intro3 = Get_label.image_button_text(
+            self.Gui, "coach3.png", 832, 133, self.sortsta3, f"나이", "#472f91", ("고도 M", 12))
+        self.Intro4 = Get_label.image_button_text(
+            self.Gui, "coach4.png", 912, 133, self.sortsta4, f"능력치", "#472f91", ("고도 M", 12))
+        self.Intro5 = Get_label.image_button_text(
+            self.Gui, "coach5.png", 992, 133, self.sortsta5, f"주급", "#472f91", ("고도 M", 12))
+        if self.sort_color == 1:
+            fir = self.change_sta_sortnum()
+            self.Intro1.config(fg="#B30000")
+        elif self.sort_color == 2:
+            fir = self.change_sta_sortnum()
+            self.Intro2.config(fg="#B30000")
+        elif self.sort_color == 3:
+            fir = self.change_sta_sortnum()
+            self.Intro3.config(fg="#B30000")
+        elif self.sort_color == 4:
+            fir = self.change_sta_sortnum()
+            self.Intro4.config(fg="#B30000")
+        elif self.sort_color == 5:
+            fir = self.change_sta_sortnum()
+            self.Intro5.config(fg="#B30000")
+        for i in range(second_len):
+            sta1 = Get_label.image_label_text(
+                self.Gui, "coach1-1.png", 222, 173+(40*i), f"{self.staffs[i+15][0]}", "#472f91", ("고도 M", 12))
+            sta2 = Get_label.image_label_text(
+                self.Gui, "coach2-1.png", 552, 173+(40*i), f"{self.staffs[i+15][2]}", "#472f91", ("고도 M", 12))
+            sta3 = Get_label.image_label_text(
+                self.Gui, "coach3-1.png", 832, 173+(40*i), f"{self.staffs[i+15][3]}", "#472f91", ("고도 M", 12))
+            sta4 = Get_label.image_label_text(
+                self.Gui, "coach4-1.png", 912, 173+(40*i), f"{self.staffs[i+15][4]}", "#472f91", ("고도 M", 12))
+            sta5 = Get_label.image_label_text(
+                self.Gui, "coach5-1.png", 992, 173+(40*i), f"{self.staffs[i+15][5]} 만원", "#472f91", ("고도 M", 12))
+
+    def sortsta1(self):
+        self.staffs = team_staffs('Name', self.sort_num)
+        self.sort_color = 1
+        fir = self.first_staff_scr()
+
+    def sortsta2(self):
+        self.staffs = team_staffs('Position', self.sort_num)
+        self.sort_color = 2
+        fir = self.first_staff_scr()
+
+    def sortsta3(self):
+        self.staffs = team_staffs('Age', self.sort_num)
+        self.sort_color = 3
+        fir = self.first_staff_scr()
+
+    def sortsta4(self):
+        self.staffs = team_staffs('Ability', self.sort_num)
+        self.sort_color = 4
+        fir = self.first_staff_scr()
+
+    def sortsta5(self):
+        self.staffs = team_staffs('Money', self.sort_num)
+        self.sort_color = 5
+        fir = self.first_staff_scr()
+
+    def change_coa_sortnum(self):
+        if self.sort_num == 0:
+            self.sort_num = 1
+        else:
+            self.sort_num = 0
+        self.Intro1.config(fg="#472f91")
+        self.Intro2.config(fg="#472f91")
+        self.Intro3.config(fg="#472f91")
+        self.Intro4.config(fg="#472f91")
+        self.Intro5.config(fg="#472f91")

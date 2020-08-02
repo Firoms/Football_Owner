@@ -403,6 +403,52 @@ def team_players(sort, desc):
         player_list.append(player)
     return player_list
 
+
+def team_coaches(sort, desc):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT COUNT(*) FROM Coaches Where Team =="{my_team}"')
+    count_coaches = cursor.fetchone()[0]
+    coach_list = []
+    if int(desc) == 0:
+        cursor.execute(
+            f'SELECT * FROM Coaches Where Team =="{my_team}" Order By "{sort}"')
+    else:
+        cursor.execute(
+            f'SELECT * FROM Coaches Where Team =="{my_team}" Order By "{sort}" DESC')
+
+    for i in range(count_coaches):
+        coach = cursor.fetchone()[1:]
+        coach_list.append(coach)
+    return coach_list
+
+
+def team_staffs(sort, desc):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT COUNT(*) FROM Staffs Where Team =="{my_team}"')
+    count_staffs = cursor.fetchone()[0]
+    staff_list = []
+    if int(desc) == 0:
+        cursor.execute(
+            f'SELECT * FROM Staffs Where Team =="{my_team}" Order By "{sort}"')
+    else:
+        cursor.execute(
+            f'SELECT * FROM Staffs Where Team =="{my_team}" Order By "{sort}" DESC')
+
+    for i in range(count_staffs):
+        staff = cursor.fetchone()[1:]
+        staff_list.append(staff)
+    return staff_list
+
 ###############################################################################
 # 그 외
 ###############################################################################
