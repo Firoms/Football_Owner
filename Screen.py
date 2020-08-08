@@ -38,7 +38,7 @@ class Screen:
             self.Gui, "Settings_btn.png", 20, 550, self.Incomplete_Screen)
         Exit_button = Get_label.image_button(
             self.Gui, "Exit_btn.png", 20, 650, self._quit)
-        Version_label = Label(self.Gui.Gui, text="Version 0.4",
+        Version_label = Label(self.Gui.Gui, text="Version 0.5",
                               fg="yellow", bg="purple", font=("맑은 고딕", 12), height=1)
         Version_label.place(x=1100, y=5)
 
@@ -185,7 +185,7 @@ class Screen:
         self.menu3_button = Get_label.image_button(
             self.Gui, "menu3.png", 34, 280, self.acquisition)
         self.menu4_button = Get_label.image_button(
-            self.Gui, "menu4.png", 34, 350, self.no_action)
+            self.Gui, "menu4.png", 34, 350, self.financial)
         self.menu5_button = Get_label.image_button(
             self.Gui, "menu5.png", 34, 420, self.Team_Player_Screen)
         self.menu6_button = Get_label.image_button(
@@ -420,6 +420,81 @@ class Screen:
     def sell3(self):
         save_sell_team(self.myteam_info[2])
         self.acquisition()
+    ############################################################################################################################################################################################
+    # 재정 관리 화면
+    ############################################################################################################################################################################################
+
+    def financial(self):
+        self.destroy()
+        financial_Screen_background = Get_label.image_label(
+            self.Gui, "financial_bg.png", 0, 0)
+        self.game_buttons()
+        self.Intro1 = Get_label.image_label_text(
+            self.Gui, "fi1.png", 232, 148, f"구단주 이름", "#472f91", ("고도 M", 12))
+        self.Intro2 = Get_label.image_label_text(
+            self.Gui, "fi1.png", 232, 218,  f"구단 이름", "#472f91", ("고도 M", 12))
+        self.Intro3 = Get_label.image_label_text(
+            self.Gui, "fi1.png", 232, 288,  f"현재 자금", "#472f91", ("고도 M", 12))
+        self.con1 = Get_label.image_label_text(
+            self.Gui, "fi1-1.png", 402, 148, f"", "#472f91", ("고도 M", 12))
+        self.con2 = Get_label.image_label_text(
+            self.Gui, "fi1-1.png", 402, 218,  f"", "#472f91", ("고도 M", 12))
+        self.con3 = Get_label.image_label_text(
+            self.Gui, "fi1-1.png", 402, 288,  f"", "#472f91", ("고도 M", 12))
+
+        self.Intro4 = Get_label.image_label_text(
+            self.Gui, "fi2.png", 232, 398, f"선수 주급", "#472f91", ("고도 M", 12))
+        self.Intro5 = Get_label.image_label_text(
+            self.Gui, "fi2.png", 232, 468,  f"코치 주급", "#472f91", ("고도 M", 12))
+        self.Intro6 = Get_label.image_label_text(
+            self.Gui, "fi2.png", 232, 538,  f"직원 주급", "#472f91", ("고도 M", 12))
+        self.Intro7 = Get_label.image_label_text(
+            self.Gui, "fi2.png", 232, 608,  f"이적료 지출", "#472f91", ("고도 M", 12))
+        self.con4 = Get_label.image_label_text(
+            self.Gui, "fi1-2.png", 402, 398, f"", "#472f91", ("고도 M", 12))
+        self.con5 = Get_label.image_label_text(
+            self.Gui, "fi1-2.png", 402, 468,  f"", "#472f91", ("고도 M", 12))
+        self.con6 = Get_label.image_label_text(
+            self.Gui, "fi1-2.png", 402, 538,  f"", "#472f91", ("고도 M", 12))
+        self.con7 = Get_label.image_label_text(
+            self.Gui, "fi1-2.png", 402, 608,  f"", "#472f91", ("고도 M", 12))
+
+        self.Intro1 = Get_label.image_label_text(
+            self.Gui, "fi5.png", 782, 148, f"팀 명성", "#472f91", ("고도 M", 12))
+        self.Intro2 = Get_label.image_label_text(
+            self.Gui, "fi5.png", 782, 218,  f"팀 내 평가", "#472f91", ("고도 M", 12))
+        self.Intro3 = Get_label.image_label_text(
+            self.Gui, "fi5.png", 782, 288,  f"팬 평가", "#472f91", ("고도 M", 12))
+        self.con1 = Get_label.image_label_text(
+            self.Gui, "fi5-1.png", 922, 148, f"", "#472f91", ("고도 M", 12))
+        self.con2 = Get_label.image_label_text(
+            self.Gui, "fi5-1.png", 922, 218,  f"", "#472f91", ("고도 M", 12))
+        self.con3 = Get_label.image_label_text(
+            self.Gui, "fi5-1.png", 922, 288,  f"", "#472f91", ("고도 M", 12))
+        
+        
+
+        self.Intro4 = Get_label.image_label_text(
+            self.Gui, "fi3.png", 712, 398, f"경기당 수익", "#472f91", ("고도 M", 12))
+        self.Intro5 = Get_label.image_label_text(
+            self.Gui, "fi3.png", 712, 468,  f"대회 수익", "#472f91", ("고도 M", 12))
+        self.Intro6 = Get_label.image_label_text(
+            self.Gui, "fi3.png", 712, 538,  f"스폰서 수익", "#472f91", ("고도 M", 12))
+        self.Intro7 = Get_label.image_label_text(
+            self.Gui, "fi3.png", 712, 608,  f"이적료 수익", "#472f91", ("고도 M", 12))
+        self.con4 = Get_label.image_label_text(
+            self.Gui, "fi1-2.png", 882, 398, f"", "#472f91", ("고도 M", 12))
+        self.con5 = Get_label.image_label_text(
+            self.Gui, "fi1-2.png", 882, 468,  f"", "#472f91", ("고도 M", 12))
+        self.con6 = Get_label.image_label_text(
+            self.Gui, "fi1-2.png", 882, 538,  f"", "#472f91", ("고도 M", 12))
+        self.con7 = Get_label.image_label_text(
+            self.Gui, "fi1-2.png", 882, 608,  f"", "#472f91", ("고도 M", 12))
+
+        self.Intro8 = Get_label.image_label_text(
+            self.Gui, "fi1.png", 232, 688,  f"넷 스펜딩", "#472f91", ("고도 M", 12))
+        self.con8 = Get_label.image_label_text(
+            self.Gui, "fi1-3.png", 402, 688, f"", "#472f91", ("고도 M", 12))
 
     ############################################################################################################################################################################################
     # 팀 선수단 화면
