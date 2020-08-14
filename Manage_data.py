@@ -348,4 +348,14 @@ def make_money():
         db.commit()
 
 
-make_money()
+def make_contract():
+    db = sqlite3.connect(f"DB/FO_datafile.db")
+    cursor = db.cursor()
+    for i in range(56297):
+        contract = random.randrange(1, 6)
+        cursor.execute(
+            f'UPDATE Coaches Set Contract="{int(contract)}" Where Seq=="{i+1}"')
+        db.commit()
+
+
+make_contract()
