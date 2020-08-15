@@ -232,6 +232,8 @@ def reset_datas():
                 cursor.execute(f"DELETE FROM {table}")
             cursor.execute("DELETE FROM Gamer")
             db.commit()
+    reset_message = tkinter.messagebox.showinfo(
+        "리셋 완료", f"정보를 모두 리셋했습니다.")
 
 
 ###############################################################################

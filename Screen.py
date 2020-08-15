@@ -2,6 +2,7 @@ from Make_label import Get_label
 from Use_data import *
 from tkinter import *
 import time
+import random
 
 
 class Screen:
@@ -124,15 +125,17 @@ class Screen:
 
         def first():
             name_save = input_Names1()
-            data = Auto_save_get_data(1)
-            load = load1_data()
-            MainScreen = self.Main_Screen()
+            if name_save != 'No':
+                data = Auto_save_get_data(1)
+                load = load1_data()
+                MainScreen = self.Main_Screen()
 
         def second():
             name_save = input_Names2()
-            data = Auto_save_get_data(2)
-            load = load2_data()
-            MainScreen = self.Main_Screen()
+            if name_save != 'No':
+                data = Auto_save_get_data(2)
+                load = load2_data()
+                MainScreen = self.Main_Screen()
 
         Savefiles_Screen_background = Get_label.image_label(
             self.Gui, "Loadfiles_bg.png", 0, 0)
@@ -177,7 +180,7 @@ class Screen:
         Save_button = Get_label.image_button(
             self.Gui, "save_btn.png", 121, 33, self.Savefiles_Screen)
         Go_button = Get_label.image_button(
-            self.Gui, "go_btn.png", 1090, 33, self.no_action)
+            self.Gui, "go_btn.png", 1090, 33, self.continue_btn)
         self.menu1_button = Get_label.image_button(
             self.Gui, "menu1.png", 34, 140, self.message)
         self.menu2_button = Get_label.image_button(
@@ -202,12 +205,71 @@ class Screen:
         answer = messagebox.askyesno("확인", "정말 메인화면으로 돌아가시겠습니까?")
         if answer == True:
             screen = self.Menu_Screen()
+    ############################################################################################################################################################################################
+    # 게임 진행 버튼
+    ############################################################################################################################################################################################
+
+    def continue_btn(self):
+        event = random.randrange(0, 100)
+        if event < 20:
+            self.match_play()
+        elif 20 <= event < 25:
+            self.injury()
+        elif 25 <= event < 35:
+            self.buy_player()
+        elif 35 <= event < 45:
+            self.sell_player()
+        elif 45 <= event < 47:
+            self.sell_team()
+        elif 47 <= event < 67:
+            self.secretary()
+        elif 67 <= event < 77:
+            self.contract()
+        elif 77 <= event < 90:
+            self.ability_change()
+        elif 90 <= event < 95:
+            self.fan_res()
+        elif 95 <= event < 100:
+            self.player_res()
+
+    def match_play(self):
+        print("경기 진행")
+
+    def injury(self):
+        print("부상")
+
+    def buy_player(self):
+        print("선수 구입")
+
+    def sell_player(self):
+        print("선수 매각")
+
+    def sell_team(self):
+        print("구단 매각")
+
+    def secretary(self):
+        print("비서")
+
+    def contract(self):
+        print("재계약")
+
+    def ability_change(self):
+        print("능력치 변동")
+
+    def fan_res(self):
+        print("팬 반응")
+
+    def player_res(self):
+        print("선수 반응")
 
     ############################################################################################################################################################################################
     # 메세지 화면
     ############################################################################################################################################################################################
     def message(self):
         self.destroy()
+        Menu_Screen_background = Get_label.image_label(
+            self.Gui, "Main_Screen_bg.png", 0, 0)
+        game_btn = self.game_buttons()
         check_mon = check_money()
         if check_mon == '-':
             self.menu1_button.config(state='disabled')
@@ -263,9 +325,9 @@ class Screen:
 
     def select1(self):
         self.bg1 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n선수가치 : {self.first_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 26))
+            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n선수가치 : {self.first_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 23))
         self.bg2 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n선수가치 : {self.second_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 26))
+            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n선수가치 : {self.second_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 23))
 
         if self.first_value >= self.second_value:
             self.bg2.after(2000, self.wait_answer)
@@ -276,9 +338,9 @@ class Screen:
 
     def select2(self):
         self.bg1 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n선수가치 : {self.first_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 26))
+            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n선수가치 : {self.first_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 23))
         self.bg2 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n선수가치 : {self.second_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 26))
+            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n선수가치 : {self.second_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 23))
 
         if self.first_value <= self.second_value:
             self.bg2.after(3000, self.wait_answer)
@@ -471,8 +533,6 @@ class Screen:
             self.Gui, "fi5-1.png", 922, 218,  f"", "#472f91", ("고도 M", 12))
         self.con3 = Get_label.image_label_text(
             self.Gui, "fi5-1.png", 922, 288,  f"", "#472f91", ("고도 M", 12))
-        
-        
 
         self.Intro4 = Get_label.image_label_text(
             self.Gui, "fi3.png", 712, 398, f"경기당 수익", "#472f91", ("고도 M", 12))
