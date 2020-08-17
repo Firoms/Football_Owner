@@ -6,7 +6,7 @@ from tkinter.messagebox import showinfo
 import time
 import random
 
-table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team']
+table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team', 'Leauge_Calander', 'League_Calander', 'League_table', 'Message_box', 'Player_Stat']
 
 ###############################################################################
 # 게이머 생성
@@ -450,6 +450,44 @@ def team_staffs(sort, desc):
         staff = cursor.fetchone()[1:]
         staff_list.append(staff)
     return staff_list
+
+
+def team_manager_ability():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT Ability FROM Coaches Where Name =="Manager" AND Team =="{my_team}"')
+    Ability = cursor.fetchone()[0]
+    return int(Ability)
+
+def team_keeper_ability():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT Ability FROM Players Where Position =="Goalkeeper" AND Team =="{my_team}" ORDER By Ability')
+    Ability = []
+    for i in range(1):
+        Ability.append(cursor.fetchone()[0])
+    return list(Ability)
+
+def team_keeper_ability():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT Ability FROM Players Where Position =="Goalkeeper" AND Team =="{my_team}" ORDER By Ability')
+    Ability = []
+    for i in range(1):
+        Ability.append(cursor.fetchone()[0])
+    return list(Ability)
 
 ###############################################################################
 # 그 외
