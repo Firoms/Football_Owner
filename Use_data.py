@@ -6,7 +6,8 @@ from tkinter.messagebox import showinfo
 import time
 import random
 
-table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team', 'Leauge_Calander', 'League_Calander', 'League_table', 'Message_box', 'Player_Stat']
+table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team',
+              'League_Calander', 'League_table', 'Message_box', 'Player_Stat']
 
 ###############################################################################
 # 게이머 생성
@@ -137,6 +138,7 @@ def Auto_save_get_data(num):
                 f"INSERT INTO {table} VALUES{Save_list}")
     db_load.commit()
     db_save.commit()
+    print("완료")
 
 
 def time_auto_save():
@@ -274,6 +276,15 @@ def give_money(money):
     cursor = db.cursor()
     cursor.execute(
         f"UPDATE Gamer SET Money ='{money}'")
+    db.commit()
+    return 0
+
+
+def no_injury():
+    db = sqlite3.connect(f"DB/FO_datafile.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"UPDATE Players SET Injury ='0'")
     db.commit()
     return 0
 
@@ -459,9 +470,10 @@ def team_manager_ability():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT Ability FROM Coaches Where Name =="Manager" AND Team =="{my_team}"')
-    Ability = cursor.fetchone()[0]
-    return int(Ability)
+        f'SELECT * FROM Coaches Where Position =="Manager" AND Team =="{my_team}"')
+    Ability = cursor.fetchone()
+    return list(Ability)
+
 
 def team_keeper_ability():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
@@ -470,24 +482,66 @@ def team_keeper_ability():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT Ability FROM Players Where Position =="Goalkeeper" AND Team =="{my_team}" ORDER By Ability')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position =="Goalkeeper" ORDER By Ability DESC')
+    count = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}") Where Position =="Goalkeeper" ORDER By Ability DESC')
     Ability = []
-    for i in range(1):
-        Ability.append(cursor.fetchone()[0])
+    for i in range(count):
+        Ability.append(cursor.fetchone())
     return list(Ability)
 
-def team_keeper_ability():
+
+def team_defender_ability():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT Ability FROM Players Where Position =="Goalkeeper" AND Team =="{my_team}" ORDER By Ability')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
+    count = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
     Ability = []
-    for i in range(1):
-        Ability.append(cursor.fetchone()[0])
+    for i in range(count):
+        Ability.append(cursor.fetchone())
     return list(Ability)
+
+
+def team_midfielder_ability():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
+    count = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
+    Ability = []
+    for i in range(count):
+        Ability.append(cursor.fetchone())
+    return list(Ability)
+
+
+def team_forward_ability():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
+    count = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
+    Ability = []
+    for i in range(count):
+        Ability.append(cursor.fetchone())
+    return list(Ability)
+
 
 ###############################################################################
 # 그 외
