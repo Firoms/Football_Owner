@@ -358,4 +358,10 @@ def make_contract():
         db.commit()
 
 
-make_contract()
+def no_injury():
+    db = sqlite3.connect(f"DB/FO_datafile.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"UPDATE Players SET Injury ='0'")
+    db.commit()
+    return 0

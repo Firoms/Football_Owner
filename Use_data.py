@@ -280,15 +280,6 @@ def give_money(money):
     return 0
 
 
-def no_injury():
-    db = sqlite3.connect(f"DB/FO_datafile.db")
-    cursor = db.cursor()
-    cursor.execute(
-        f"UPDATE Players SET Injury ='0'")
-    db.commit()
-    return 0
-
-
 def save_buy_team(Team):
     Warning_message = tkinter.messagebox.askokcancel(
         "인수", "정말 팀을 인수하시겠습니까?")
@@ -546,3 +537,42 @@ def team_forward_ability():
 ###############################################################################
 # 그 외
 ###############################################################################
+def make_calander():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT League, Country From Teams Where Team == "{my_team}"')
+    my_league = cursor.fetchone()
+    cursor.execute(
+        f'SELECT count(*) From Teams Where League == "{my_league[0]}" AND Country == "{my_league[1]}"')
+    count = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT Team From Teams WHERE League == "{my_league[0]}" AND Country == "{my_league[1]}"')
+    Team_list = []
+    for i in range(count):
+        Team_list.append(cursor.fetchone()[0])
+    calander_list = []
+    for i in range(len(Team_list)):
+        for j in range(1, len(Team_list)):
+            inter = i + j
+            if inter > len(Team_list)-1:
+                inter -= len(Team_list)
+            calander_list.append((Team_list[i], Team_list[inter]))
+    print(len(calander_list))
+    print(len(list(set(calander_list))))
+    calander_sort_list = []
+    for i in range(len(Team_list)-1):
+        ran_num = [i+1 for i in range(len(Team_list))]
+        for j in range(len(Team_list)):
+            choicenum = random.choice(ran_num)
+            ran_num.remove(choicenum)
+            result = choicenum*(len(Team_list)-1)-len(Team_list)+i-1
+            calander_sort_list.append(calander_list[result])
+
+    print(calander_sort_list, len(calander_sort_list))
+
+
+make_calander()
