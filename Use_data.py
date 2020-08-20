@@ -454,11 +454,8 @@ def team_staffs(sort, desc):
     return staff_list
 
 
-def team_manager_ability():
+def team_manager_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
-    cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
         f'SELECT * FROM Coaches Where Position =="Manager" AND Team =="{my_team}"')
@@ -466,12 +463,9 @@ def team_manager_ability():
     return list(Ability)
 
 
-def team_keeper_ability():
+def team_keeper_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
-    my_team = cursor.fetchone()[0]
     cursor.execute(
         f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position =="Goalkeeper" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
@@ -483,12 +477,9 @@ def team_keeper_ability():
     return list(Ability)
 
 
-def team_defender_ability():
+def team_defender_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
-    my_team = cursor.fetchone()[0]
     cursor.execute(
         f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
@@ -500,12 +491,9 @@ def team_defender_ability():
     return list(Ability)
 
 
-def team_midfielder_ability():
+def team_midfielder_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
-    my_team = cursor.fetchone()[0]
     cursor.execute(
         f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
@@ -517,12 +505,9 @@ def team_midfielder_ability():
     return list(Ability)
 
 
-def team_forward_ability():
+def team_forward_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
-    my_team = cursor.fetchone()[0]
     cursor.execute(
         f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
@@ -561,8 +546,6 @@ def make_calander():
             if inter > len(Team_list)-1:
                 inter -= len(Team_list)
             calander_list.append((Team_list[i], Team_list[inter]))
-    print(len(calander_list))
-    print(len(list(set(calander_list))))
     calander_sort_list = []
     for i in range(len(Team_list)-1):
         ran_num = [i+1 for i in range(len(Team_list))]
@@ -571,8 +554,39 @@ def make_calander():
             ran_num.remove(choicenum)
             result = choicenum*(len(Team_list)-1)-len(Team_list)+i-1
             calander_sort_list.append(calander_list[result])
+    for i in range(len(calander_sort_list)):
+        cursor.execute(
+            f'INSERT INTO League_Calander VALUES("{i+1}","{calander_sort_list[i][0]}","{calander_sort_list[i][1]}","0")')
+    db.commit()
 
-    print(calander_sort_list, len(calander_sort_list))
 
-
-make_calander()
+def make_player_stats():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT League, Country From Teams Where Team == "{my_team}"')
+    my_league = cursor.fetchone()
+    cursor.execute(
+        f'SELECT count(*) From Teams Where League == "{my_league[0]}" AND Country == "{my_league[1]}"')
+    count = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT Team From Teams WHERE League == "{my_league[0]}" AND Country == "{my_league[1]}"')
+    Team_list = []
+    for i in range(count):
+        Team_list.append(cursor.fetchone()[0])
+    player_list = []
+    for i in range(len(Team_list)):
+        cursor.execute(
+            f'SELECT count(*) From Players WHERE Team == "{Team_list[i]}"')
+        player_cnt = cursor.fetchone()[0]
+        cursor.execute(
+            f'SELECT Team, Name From Players WHERE Team == "{Team_list[i]}"')
+        for i in range(player_cnt):
+            player_list.append(cursor.fetchone())
+    for i in range(len(player_list)):
+        cursor.execute(
+            f'INSERT INTO Player_Stat VALUES("{i+1}","{player_list[i][0]}","{player_list[i][1]}","0","0","0","0")')
+    db.commit()
