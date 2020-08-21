@@ -138,7 +138,6 @@ def Auto_save_get_data(num):
                 f"INSERT INTO {table} VALUES{Save_list}")
     db_load.commit()
     db_save.commit()
-    print("완료")
 
 
 def time_auto_save():
@@ -525,68 +524,88 @@ def team_forward_ability(my_team):
 def make_calander():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
-    my_team = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT League, Country From Teams Where Team == "{my_team}"')
-    my_league = cursor.fetchone()
-    cursor.execute(
-        f'SELECT count(*) From Teams Where League == "{my_league[0]}" AND Country == "{my_league[1]}"')
-    count = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT Team From Teams WHERE League == "{my_league[0]}" AND Country == "{my_league[1]}"')
-    Team_list = []
-    for i in range(count):
-        Team_list.append(cursor.fetchone()[0])
-    calander_list = []
-    for i in range(len(Team_list)):
-        for j in range(1, len(Team_list)):
-            inter = i + j
-            if inter > len(Team_list)-1:
-                inter -= len(Team_list)
-            calander_list.append((Team_list[i], Team_list[inter]))
-    calander_sort_list = []
-    for i in range(len(Team_list)-1):
-        ran_num = [i+1 for i in range(len(Team_list))]
-        for j in range(len(Team_list)):
-            choicenum = random.choice(ran_num)
-            ran_num.remove(choicenum)
-            result = choicenum*(len(Team_list)-1)-len(Team_list)+i-1
-            calander_sort_list.append(calander_list[result])
-    for i in range(len(calander_sort_list)):
-        cursor.execute(
-            f'INSERT INTO League_Calander VALUES("{i+1}","{calander_sort_list[i][0]}","{calander_sort_list[i][1]}","0")')
+    cursor.execute("DELETE FROM League_Calander")
     db.commit()
+    cursor.execute(
+        f'SELECT count(*) From Leagues')
+    league_count = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT Name, Country From Leagues')
+    league_list = []
+    for i in range(league_count):
+        league_list.append(cursor.fetchone())
+    seq = 0
+    for k in range(league_count):
+        cursor.execute(
+            f'SELECT count(*) From Teams Where League == "{league_list[k][0]}" AND Country == "{league_list[k][1]}"')
+        count = cursor.fetchone()[0]
+        cursor.execute(
+            f'SELECT Team From Teams WHERE League == "{league_list[k][0]}" AND Country == "{league_list[k][1]}"')
+        Team_list = []
+        for i in range(count):
+            Team_list.append(cursor.fetchone()[0])
+        calander_list = []
+        for i in range(len(Team_list)):
+            for j in range(1, len(Team_list)):
+                inter = i + j
+                if inter > len(Team_list)-1:
+                    inter -= len(Team_list)
+                calander_list.append((Team_list[i], Team_list[inter]))
+        calander_sort_list = []
+        for i in range(len(Team_list)-1):
+            ran_num = [i+1 for i in range(len(Team_list))]
+            for j in range(len(Team_list)):
+                choicenum = random.choice(ran_num)
+                ran_num.remove(choicenum)
+                result = choicenum*(len(Team_list)-1)-len(Team_list)+i-1
+                calander_sort_list.append(calander_list[result])
+        for i in range(len(calander_sort_list)):
+            seq += 1
+            cursor.execute(
+                f'INSERT INTO League_Calander VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}", "{i+1}", "{calander_sort_list[i][0]}", "{calander_sort_list[i][1]}","0")')
+        db.commit()
 
 
 def make_player_stats():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
-    my_team = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT League, Country From Teams Where Team == "{my_team}"')
-    my_league = cursor.fetchone()
-    cursor.execute(
-        f'SELECT count(*) From Teams Where League == "{my_league[0]}" AND Country == "{my_league[1]}"')
-    count = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT Team From Teams WHERE League == "{my_league[0]}" AND Country == "{my_league[1]}"')
-    Team_list = []
-    for i in range(count):
-        Team_list.append(cursor.fetchone()[0])
-    player_list = []
-    for i in range(len(Team_list)):
-        cursor.execute(
-            f'SELECT count(*) From Players WHERE Team == "{Team_list[i]}"')
-        player_cnt = cursor.fetchone()[0]
-        cursor.execute(
-            f'SELECT Team, Name From Players WHERE Team == "{Team_list[i]}"')
-        for i in range(player_cnt):
-            player_list.append(cursor.fetchone())
-    for i in range(len(player_list)):
-        cursor.execute(
-            f'INSERT INTO Player_Stat VALUES("{i+1}","{player_list[i][0]}","{player_list[i][1]}","0","0","0","0")')
+    cursor.execute("DELETE FROM Player_Stat")
     db.commit()
+    cursor.execute(
+        f'SELECT count(*) From Leagues')
+    league_count = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT Name, Country From Leagues')
+    league_list = []
+    for i in range(league_count):
+        league_list.append(cursor.fetchone())
+    seq = 0
+    all_team = []
+    for k in range(league_count):
+        cursor.execute(
+            f'SELECT count(*) From Teams Where League == "{league_list[k][0]}" AND Country == "{league_list[k][1]}"')
+        count = cursor.fetchone()[0]
+        cursor.execute(
+            f'SELECT Team From Teams WHERE League == "{league_list[k][0]}" AND Country == "{league_list[k][1]}"')
+        Team_list = []
+        for i in range(count):
+            Team_list.append(cursor.fetchone()[0])
+        all_team += Team_list
+        player_list = []
+        for i in range(len(Team_list)):
+            cursor.execute(
+                f'SELECT count(*) From Players WHERE Team == "{Team_list[i]}"')
+            player_cnt = cursor.fetchone()[0]
+            cursor.execute(
+                f'SELECT Team, Name From Players WHERE Team == "{Team_list[i]}"')
+            for i in range(player_cnt):
+                player_list.append(cursor.fetchone())
+        for i in range(len(player_list)):
+            seq += 1
+            cursor.execute(
+                f'INSERT INTO Player_Stat VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}","{player_list[i][0]}","{player_list[i][1]}","0","0","0","0")')
+        db.commit()
+
+
+make_player_stats()
+make_calander()

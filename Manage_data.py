@@ -102,25 +102,6 @@ def delete_same():
         db.commit()
 
 
-def make_row_num():
-    db = sqlite3.connect(f"DB/FO_datafile1.db")
-    cursor = db.cursor()
-    cursor1 = db.cursor()
-    cursor.execute(
-        f"SELECT * FROM Staffs")
-    for i in range(5761):
-
-        a = cursor.fetchone()
-        league = a[1]
-        country = a[2]
-        team = a[3]
-        value = a[4]
-
-        cursor1.execute(
-            f'UPDATE Staffs SET Seq = {i+1} Where Name = "{league}" AND Team = "{country}" AND Position = "{team}" AND Age = "{value}"')
-        db.commit()
-
-
 def make_ablity():
     Ability_data = []
     Value_data = []
@@ -365,3 +346,66 @@ def no_injury():
         f"UPDATE Players SET Injury ='0'")
     db.commit()
     return 0
+
+
+def missed_leagues():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    data_db = sqlite3.connect(f"DB/FO_datafile.db")
+    d_cursor = data_db.cursor()
+    cursor.execute(
+        f'SELECT League, Country, sum(Value), count(*) From Teams Group By League')
+    lost = []
+    seq = 142
+    for i in range(12):
+        lost.append(cursor.fetchone())
+    for i in range(12):
+        d_cursor.execute(
+            f'INSERT INTO Leagues VALUES("{seq+i}", "{lost[i][0]}", "{lost[i][1]}","{lost[i][3]}","{lost[i][2]}")')
+        data_db.commit()
+
+
+def make_row_num():
+    db = sqlite3.connect(f"DB/FO_datafile.db")
+    cursor = db.cursor()
+    cursor1 = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM Leagues")
+    for i in range(2088):
+
+        a = cursor.fetchone()
+        league = a[1]
+        country = a[2]
+        team = a[3]
+        value = a[4]
+
+        cursor1.execute(
+            f'UPDATE Leagues SET Seq = {i+1} Where Name = "{league}" AND Country = "{country}" AND Clubs = "{team}" AND Value = "{value}"')
+        db.commit()
+
+def missed_players():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f'SELECT Team, Name From Player_Stat')
+    lost = []
+    for i in range(53516):
+        lost.append(cursor.fetchone())
+    for i in range(53516):
+        cursor.execute(
+            f'DELETE FROM Players WHERE Team = "{lost[i][0]}" AND Name = "{lost[i][1]}"')
+        db.commit()
+
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    data_db = sqlite3.connect(f"DB/FO_datafile.db")
+    d_cursor = data_db.cursor()
+    cursor.execute(
+        f'SELECT Team From Players Group By Team')
+    lost = []
+    for i in range(105):
+        lost.append(cursor.fetchone()[0])
+    for i in range(105):
+        d_cursor.execute(
+            f'DELETE FROM Players WHERE Team =="{lost[i]}"')
+        data_db.commit()
