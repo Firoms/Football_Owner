@@ -340,6 +340,51 @@ def save_sell_team(Team):
                 f'UPDATE Gamer SET Team ="{team_name}"')
         db.commit()
 
+
+def get_injury():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f'UPDATE Players SET Injury ="0"')
+    db.commit()
+    cursor.execute(
+        f"SELECT Seq, Market_Value FROM Players WHERE Injury =='0' ORDER BY random()")
+    ran_length = random.randrange(5, 3000)
+    injury_list = []
+    for i in range(ran_length):
+        injury_list.append(cursor.fetchone())
+    for i in range(ran_length):
+        ran_injury = random.randrange(1, 50)
+        for j in range(7):
+            new_injury = random.randrange(1, 50)
+            if ran_injury > new_injury:
+                ran_injury = new_injury
+        cursor.execute(
+            f'UPDATE Players SET Injury ="{ran_injury}" WHERE Seq == "{injury_list[i][0]}"')
+        db.commit()
+    player_Data = []
+    famous = 0
+    for j in range(5):
+        num = 0
+        famous = 0
+        for i in range(len(injury_list)):
+            if famous < int(injury_list[i][1]):
+                famous = int(injury_list[i][1])
+                num = i
+        player_Data.append(injury_list[num][0])
+        injury_list.pop(num)
+    return_list = []
+    for i in player_Data:
+        cursor.execute(
+            f"SELECT * FROM Players WHERE Seq =='{i}'")
+        return_list.append(cursor.fetchone())
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f"SELECT * FROM Players WHERE Team = '{my_team}' AND Injury != '0'")
+    return_list += cursor.fetchall()
+
 ###############################################################################
 # 데이터 SELECT
 ###############################################################################
@@ -607,5 +652,4 @@ def make_player_stats():
         db.commit()
 
 
-make_player_stats()
-make_calander()
+get_injury()
