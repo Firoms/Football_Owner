@@ -563,6 +563,34 @@ def team_forward_ability(my_team):
     return list(Ability)
 
 
+def team_coaches_ability():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT COUNT(*) AVG(Ablility) FROM Coaches Where Team =="{my_team}"')
+    Data = cursor.fetchone()
+    count_coaches = int(Data[0])
+    avg_ability = int(Data[1])
+    return int(count_coaches + avg_ability)
+
+
+def team_staffs_ability():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT COUNT(*) AVG(Ablility) FROM Staffs Where Team =="{my_team}"')
+    Data = cursor.fetchone()
+    count_staffs = int(Data[0])
+    avg_ability = int(Data[1])
+    return int(count_staffs + avg_ability)
+
+
 ###############################################################################
 # 그 외
 ###############################################################################
