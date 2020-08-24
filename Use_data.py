@@ -591,9 +591,69 @@ def team_staffs_ability():
     return int(count_staffs + avg_ability)
 
 
+def rec_players(ability):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM Players WHERE Potential <= '{ability}' ORDER BY random()")
+    Data = []
+    for i in range(3):
+        Data.append(cursor.fetchone())
+    return Data
+
+
+def rec_coaches(ability):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM Coaches WHERE Ability <= '{ability}' ORDER BY random()")
+    Data = []
+    for i in range(3):
+        Data.append(cursor.fetchone())
+    return Data
+
+
+def rec_staffs(ability):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM Staffs WHERE Ability <= '{ability}' ORDER BY random()")
+    Data = []
+    for i in range(3):
+        Data.append(cursor.fetchone())
+    return Data
+
+
+def ran_sell_player():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM Players ORDER BY random()")
+    Data = cursor.fetchone()
+    return Data
+
+def ran_sell_coach():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM Coaches ORDER BY random()")
+    Data = cursor.fetchone()
+    return Data
+    
+def ran_sell_staff():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM Staffs ORDER BY random()")
+    Data = cursor.fetchone()
+    return Data
+
+
 ###############################################################################
 # 그 외
 ###############################################################################
+
+
 def make_calander():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
