@@ -632,6 +632,7 @@ def ran_sell_player():
     Data = cursor.fetchone()
     return Data
 
+
 def ran_sell_coach():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
@@ -639,7 +640,8 @@ def ran_sell_coach():
         f"SELECT * FROM Coaches ORDER BY random()")
     Data = cursor.fetchone()
     return Data
-    
+
+
 def ran_sell_staff():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
@@ -648,6 +650,33 @@ def ran_sell_staff():
     Data = cursor.fetchone()
     return Data
 
+
+def sell_my_team():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT Value FROM Teams Where Team =="{my_team}"')
+    Team_value = int(cursor.fetchone()[0])
+    minus_value = int(Team_value*(0.5))
+    plus_value = int(Team_value(0.3))
+    result = random.randrange(Team_value-minus_value, Team_value+plus_value)
+    return result
+
+
+def ability_ran_change():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT * FROM Teams Where Team =="{my_team}" ORDER BY random()')
+    player = cursor.fetchone()
+    random = random.randrange(-2, 2)
+    return player, random
 
 ###############################################################################
 # 그 외
@@ -738,6 +767,3 @@ def make_player_stats():
             cursor.execute(
                 f'INSERT INTO Player_Stat VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}","{player_list[i][0]}","{player_list[i][1]}","0","0","0","0")')
         db.commit()
-
-
-get_injury()
