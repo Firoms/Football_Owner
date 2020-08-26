@@ -673,10 +673,73 @@ def ability_ran_change():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Teams Where Team =="{my_team}" ORDER BY random()')
+        f'SELECT * FROM Players Where Team =="{my_team}" ORDER BY random()')
+    player_list = []
+    random_list = []
     player = cursor.fetchone()
+    player_seq = player[0]
+    player_ability = player[7]
+    player_potential = player[8]
     random = random.randrange(-2, 2)
-    return player, random
+    if player_ability+random > player_potential:
+        cursor.execute(
+            f'UPDATE Players SET ability ="{player_potential}" Where Seq =="{player_seq}"')
+    else:
+        cursor.execute(
+            f'UPDATE Players SET ability ="{player_ability+random}" Where Seq =="{player_seq}"')
+    db.commit()
+    player_list.append(player)
+    random_list.append(random)
+
+    cursor.execute(
+        f'SELECT * FROM Players Where Team !="{my_team}" ORDER BY random()')
+    for i in range(1000):
+        player = cursor.fetchone()
+        player_seq = player[0]
+        player_ability = player[7]
+        player_potential = player[8]
+        random = random.randrange(-2, 2)
+        if player_ability+random > player_potential:
+            cursor.execute(
+                f'UPDATE Players SET ability ="{player_potential}" Where Seq =="{player_seq}"')
+        else:
+            cursor.execute(
+                f'UPDATE Players SET ability ="{player_ability+random}" Where Seq =="{player_seq}"')
+        db.commit()
+        player_list.append(player)
+        random_list.append(random)
+    return (player_list, random_list)
+
+
+def fan_res():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT count(*) FROM (SELECT * FROM League_Calander Where result != "0") WHERE Home == "{my_team}" OR Away == "{my_team}"')
+    count = int(cursor.fetchone()[0])
+    if count < 5:
+        return False
+    else:
+        cursor.execute(
+            f'SELECT * FROM (SELECT * FROM League_Calander Where result != "0") WHERE Home == "{my_team}" OR Away == "{my_team}" ORDER BY Seq DESC')
+        score = 0
+        for i in range(5):
+            Data = cursor.fetchone()
+            Home = str(Data[4])
+            Away = str(Data[5])
+            result = int(Data[6])
+            if result == 3:
+                score += 1
+            elif result == 1:
+                if Home == my_team:
+                    score += 3
+            elif result == 2:
+                if Away == my_team:
+                    score += 3
+        return score
 
 ###############################################################################
 # 그 외
