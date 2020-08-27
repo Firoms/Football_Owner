@@ -500,21 +500,21 @@ def team_staffs(sort, desc):
 
 def team_manager_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
-    my_team = cursor.fetchone()[0]
+    cursor = db.cursor()
     cursor.execute(
         f'SELECT * FROM Coaches Where Position =="Manager" AND Team =="{my_team}"')
     Ability = cursor.fetchone()
-    return list(Ability)
+    return Ability
 
 
 def team_keeper_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position =="Goalkeeper" ORDER By Ability DESC')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position =="Goalkeeper" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}") Where Position =="Goalkeeper" ORDER By Ability DESC')
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position =="Goalkeeper" ORDER By Ability DESC')
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -525,10 +525,10 @@ def team_defender_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -539,10 +539,10 @@ def team_midfielder_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -553,10 +553,10 @@ def team_forward_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -741,6 +741,37 @@ def fan_res():
                     score += 3
         return score
 
+
+def pla_Res():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT count(*) FROM (SELECT * FROM League_Calander Where result != "0") WHERE Home == "{my_team}" OR Away == "{my_team}"')
+    count = int(cursor.fetchone()[0])
+    if count < 5:
+        return False
+    else:
+        cursor.execute(
+            f'SELECT * FROM (SELECT * FROM League_Calander Where result != "0") WHERE Home == "{my_team}" OR Away == "{my_team}" ORDER BY Seq DESC')
+        score = 0
+        for i in range(5):
+            Data = cursor.fetchone()
+            Home = str(Data[4])
+            Away = str(Data[5])
+            result = int(Data[6])
+            if result == 3:
+                score += 1
+            elif result == 1:
+                if Home == my_team:
+                    score += 3
+            elif result == 2:
+                if Away == my_team:
+                    score += 3
+        return score
+
 ###############################################################################
 # 그 외
 ###############################################################################
@@ -830,3 +861,27 @@ def make_player_stats():
             cursor.execute(
                 f'INSERT INTO Player_Stat VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}","{player_list[i][0]}","{player_list[i][1]}","0","0","0","0")')
         db.commit()
+
+
+def play_game(Home, Away):
+    Home_Team_manger = team_manager_ability(Home)
+    Away_Team_manager = team_manager_ability(Away)
+    H_manger_ability = int(Home_Team_manger[5])
+    A_manger_ability = int(Away_Team_manager[5])
+    H_try = H_manger_ability-Away_manager_ability+20
+    A_try = A_manger_ability-Home_manager_ability+20
+    if H_try < 5:
+        H_try = 5
+    if A_try < 5:
+        A_try = 5
+    order = []
+    for i in range(H_try):
+        order.append('H')
+    for i in range(A_try):
+        order.append('A')
+    random.shuffle(order)
+    for i in order:
+        if i == 'H':
+            pass
+        else:
+            pass
