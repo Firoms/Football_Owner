@@ -511,10 +511,10 @@ def team_keeper_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position =="Goalkeeper" ORDER By Ability DESC')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position =="Goalkeeper" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position =="Goalkeeper" ORDER By Ability DESC')
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position =="Goalkeeper" ORDER By Ability DESC')
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -525,10 +525,10 @@ def team_defender_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -539,10 +539,10 @@ def team_midfielder_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -553,10 +553,10 @@ def team_forward_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
+        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury !="0") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
+        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -866,22 +866,134 @@ def make_player_stats():
 def play_game(Home, Away):
     Home_Team_manger = team_manager_ability(Home)
     Away_Team_manager = team_manager_ability(Away)
-    H_manger_ability = int(Home_Team_manger[5])
-    A_manger_ability = int(Away_Team_manager[5])
-    H_try = H_manger_ability-Away_manager_ability+20
-    A_try = A_manger_ability-Home_manager_ability+20
-    if H_try < 5:
-        H_try = 5
-    if A_try < 5:
-        A_try = 5
+    H_manager_ability = int(Home_Team_manger[5])
+    A_manager_ability = int(Away_Team_manager[5])
+    H_try = H_manager_ability-A_manager_ability+20
+    A_try = A_manager_ability-H_manager_ability+20
+    H_keeper = team_keeper_ability(Home)
+    A_keeper = team_keeper_ability(Away)
+    H_defender = team_defender_ability(Home)
+    A_defender = team_defender_ability(Away)
+    H_midfielder = team_midfielder_ability(Home)
+    A_midfielder = team_midfielder_ability(Away)
+    H_forward = team_forward_ability(Home)
+    A_forward = team_forward_ability(Away)
+    H1_k_abil = H_keeper[0][7]
+    A1_k_abil = A_keeper[0][7]
+    H4_d_abil = H_defender[0][7] + H_defender[1][7] + \
+        H_defender[2][7] + H_defender[3][7]
+    A4_d_abil = A_defender[0][7] + A_defender[1][7] + \
+        A_defender[2][7] + A_defender[3][7]
+    H3_m_abil = H_midfielder[0][7] + H_midfielder[1][7] + H_midfielder[2][7]
+    A3_m_abil = A_midfielder[0][7] + A_midfielder[1][7] + A_midfielder[2][7]
+    H3_f_abil = H_forward[0][7] + H_forward[1][7] + H_midfielder[2][7]
+    A3_f_abil = A_forward[0][7] + A_forward[1][7] + A_forward[2][7]
+    if H_try < 10:
+        H_try = 10
+    if A_try < 10:
+        A_try = 10
+    if H_try > 30:
+        H_try = 30
+    if A_try > 30:
+        A_try = 30
     order = []
     for i in range(H_try):
         order.append('H')
     for i in range(A_try):
         order.append('A')
     random.shuffle(order)
+    goal1 = 0
+    goal1per = 101
+    goal2 = 0
+    goal2per = 101
     for i in order:
+        print("////////////////////////")
         if i == 'H':
-            pass
+            chance_dif = int((H3_m_abil-A3_m_abil)/4)
+            if chance_dif < 0:
+                chance_dif = int(chance_dif/2)
+            ran = random.randrange(1, goal1per)
+            print(60+chance_dif)
+            if 60+chance_dif < ran:
+                print("찬스메이킹 실패1")
+                continue
+            pk_chance = int(H3_f_abil/100)
+            ran = random.randrange(1, goal1per)
+            if 1+pk_chance >= ran:
+                print("pk chance1")
+                ran = random.randrange(1, goal1per)
+                if ran <= 70:
+                    print("pk 성공1")
+                    goal1per += 15
+                    goal1 += 1
+                    continue
+                else:
+                    print("pk 실패1")
+                    continue
+            supersave_chance = int(A1_k_abil/10)
+            ran = random.randrange(1, goal1per)
+            if 1+supersave_chance >= ran:
+                print("슈퍼세이브2")
+                continue
+            goal_dif = int(((H3_f_abil + H3_m_abil) -
+                            (A4_d_abil + (A1_k_abil)))/16)
+            ran = random.randrange(1, goal1per)
+            if goal_dif + 20 >= ran:
+                print("골1")
+                goal1per += 15
+                goal1 += 1
+            else:
+                print("아 슛팅이 빗나갑니다!1")
+                continue
+            ran = random.randrange(1, goal1per)
+            if ran <= 2:
+                goal1per -= 15
+                goal1 -= 1
+                print("VAR 취소...")
         else:
-            pass
+            chance_dif = int((A3_m_abil - H3_m_abil)/4)
+            if chance_dif < 0:
+                chance_dif = int(chance_dif/2)
+            ran = random.randrange(1, goal2per)
+            print(50+chance_dif)
+            if 50+chance_dif < ran:
+                print("찬스메이킹 실패2")
+                continue
+            pk_chance = int(A3_f_abil/100)
+            ran = random.randrange(1, goal2per)
+            if 1+pk_chance >= ran:
+                print("pk chance2")
+                ran = random.randrange(1, goal2per)
+                if ran <= 70:
+                    print("pk 성공2")
+                    goal2per += 15
+                    goal2 += 1
+                else:
+                    print("pk 실패2")
+            supersave_chance = int(H1_k_abil/10)
+            ran = random.randrange(1, goal2per)
+            if 1+supersave_chance >= ran:
+                print("슈퍼세이브1")
+                continue
+            goal_dif = int(((A3_f_abil + A3_m_abil) -
+                            (H4_d_abil + (H1_k_abil)))/16)
+            ran = random.randrange(1, goal2per)
+            if goal_dif + 10 >= ran:
+                print("골2")
+                goal2per += 15
+                goal2 += 1
+            else:
+                print("아 슛팅이 빗나갑니다!2")
+                continue
+            ran = random.randrange(1, goal2per)
+            if ran <= 2:
+                goal1per -= 15
+                goal2 -= 1
+                print("VAR 취소...")
+    print(f"{goal1} : {goal2}")
+
+
+# play_game('Norwich City', 'Liverpool FC')
+# play_game('Liverpool FC', 'Norwich City')
+# play_game('Liverpool FC', 'Manchester City')
+play_game('Manchester City', 'Liverpool FC')
