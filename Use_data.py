@@ -907,93 +907,105 @@ def play_game(Home, Away):
     goal2 = 0
     goal2per = 101
     for i in order:
-        print("////////////////////////")
         if i == 'H':
             chance_dif = int((H3_m_abil-A3_m_abil)/4)
             if chance_dif < 0:
                 chance_dif = int(chance_dif/2)
             ran = random.randrange(1, goal1per)
-            print(60+chance_dif)
             if 60+chance_dif < ran:
-                print("찬스메이킹 실패1")
+                # print("찬스메이킹 실패1")
                 continue
             pk_chance = int(H3_f_abil/100)
             ran = random.randrange(1, goal1per)
             if 1+pk_chance >= ran:
-                print("pk chance1")
+                # print("pk chance1")
                 ran = random.randrange(1, goal1per)
                 if ran <= 70:
-                    print("pk 성공1")
+                    # print("pk 성공1")
                     goal1per += 15
                     goal1 += 1
                     continue
                 else:
-                    print("pk 실패1")
+                    # print("pk 실패1")
                     continue
             supersave_chance = int(A1_k_abil/10)
             ran = random.randrange(1, goal1per)
             if 1+supersave_chance >= ran:
-                print("슈퍼세이브2")
+                # print("슈퍼세이브2")
                 continue
             goal_dif = int(((H3_f_abil + H3_m_abil) -
                             (A4_d_abil + (A1_k_abil)))/16)
             ran = random.randrange(1, goal1per)
             if goal_dif + 20 >= ran:
-                print("골1")
+                # print("골1")
                 goal1per += 15
                 goal1 += 1
             else:
-                print("아 슛팅이 빗나갑니다!1")
+                # print("아 슛팅이 빗나갑니다!1")
                 continue
             ran = random.randrange(1, goal1per)
             if ran <= 2:
                 goal1per -= 15
                 goal1 -= 1
-                print("VAR 취소...")
+                # print("VAR 취소...")
         else:
             chance_dif = int((A3_m_abil - H3_m_abil)/4)
             if chance_dif < 0:
                 chance_dif = int(chance_dif/2)
             ran = random.randrange(1, goal2per)
-            print(50+chance_dif)
             if 50+chance_dif < ran:
-                print("찬스메이킹 실패2")
+                # print("찬스메이킹 실패2")
                 continue
             pk_chance = int(A3_f_abil/100)
             ran = random.randrange(1, goal2per)
             if 1+pk_chance >= ran:
-                print("pk chance2")
+                # print("pk chance2")
                 ran = random.randrange(1, goal2per)
                 if ran <= 70:
-                    print("pk 성공2")
+                    # print("pk 성공2")
                     goal2per += 15
                     goal2 += 1
                 else:
-                    print("pk 실패2")
+                    # print("pk 실패2")
+                    continue
             supersave_chance = int(H1_k_abil/10)
             ran = random.randrange(1, goal2per)
             if 1+supersave_chance >= ran:
-                print("슈퍼세이브1")
+                # print("슈퍼세이브1")
                 continue
             goal_dif = int(((A3_f_abil + A3_m_abil) -
                             (H4_d_abil + (H1_k_abil)))/16)
             ran = random.randrange(1, goal2per)
             if goal_dif + 10 >= ran:
-                print("골2")
+                # print("골2")
                 goal2per += 15
                 goal2 += 1
             else:
-                print("아 슛팅이 빗나갑니다!2")
+                # print("아 슛팅이 빗나갑니다!2")
                 continue
             ran = random.randrange(1, goal2per)
             if ran <= 2:
                 goal1per -= 15
                 goal2 -= 1
-                print("VAR 취소...")
-    print(f"{goal1} : {goal2}")
+                # print("VAR 취소...")
+    return (goal1, goal2)
 
 
-# play_game('Norwich City', 'Liverpool FC')
-# play_game('Liverpool FC', 'Norwich City')
-# play_game('Liverpool FC', 'Manchester City')
-play_game('Manchester City', 'Liverpool FC')
+#
+#
+#
+w = 0
+d = 0
+l = 0
+for i in range(1000):
+    print(i)
+    match = play_game('Liverpool FC', 'Norwich City')
+    h = match[0]
+    a = match[1]
+    if h > a:
+        w += 1
+    elif h == a:
+        d += 1
+    else:
+        l += 1
+print("//////////////////////////\n", w, d, l)
