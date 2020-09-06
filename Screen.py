@@ -234,6 +234,7 @@ class Screen:
 
     def match_play(self):
         print("경기 진행")
+        print(search_calander())
 
     def injury(self):
         print("부상")
@@ -359,8 +360,8 @@ class Screen:
         restart = self.MINI_Game()
 
     def finished(self):
-        if self.money <= 30000:
-            self.money = 30000
+        if self.money <= 40000:
+            self.money = 40000
         update_money = give_money(self.money)
 
         self.bg2.after(4000, self.Main_Screen)

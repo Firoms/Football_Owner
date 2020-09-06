@@ -5,6 +5,7 @@ from tkinter.simpledialog import askstring
 from tkinter.messagebox import showinfo
 import time
 import random
+import threading
 
 table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team',
               'League_Calander', 'League_table', 'Message_box', 'Player_Stat']
@@ -29,6 +30,14 @@ def input_Names1():
         cursor.execute(insert_query)
         db.commit()
 
+    def makethread():
+        time.sleep(1)
+        make_calander(1)
+        make_player_stats(1)
+    make_thread = threading.Thread(target=makethread)
+    make_thread.daemon = True
+    make_thread.start()
+
 
 def input_Names2():
     name = askstring('구단주 생성', '구단주 이름을 입력하세요.')
@@ -44,6 +53,14 @@ def input_Names2():
             f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}','-')"
         cursor.execute(insert_query)
         db.commit()
+
+    def makethread():
+        time.sleep(1)
+        make_calander(2)
+        make_player_stats(2)
+    make_thread = threading.Thread(target=makethread)
+    make_thread.daemon = True
+    make_thread.start()
 
 
 ###############################################################################
@@ -154,6 +171,7 @@ def time_auto_save():
 # 데이터 불러오기
 ###############################################################################
 def load1_data():
+    time.sleep(1)
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     for table in table_list:
@@ -187,6 +205,7 @@ def load1_data():
 
 
 def load2_data():
+    time.sleep(1)
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     for table in table_list:
@@ -777,8 +796,8 @@ def pla_Res():
 ###############################################################################
 
 
-def make_calander():
-    db = sqlite3.connect(f"DB/FO_savefile3.db")
+def make_calander(num):
+    db = sqlite3.connect(f"DB/FO_savefile{num}.db")
     cursor = db.cursor()
     cursor.execute("DELETE FROM League_Calander")
     db.commit()
@@ -820,10 +839,11 @@ def make_calander():
             cursor.execute(
                 f'INSERT INTO League_Calander VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}", "{i+1}", "{calander_sort_list[i][0]}", "{calander_sort_list[i][1]}","0")')
         db.commit()
+    print("111")
 
 
-def make_player_stats():
-    db = sqlite3.connect(f"DB/FO_savefile3.db")
+def make_player_stats(num):
+    db = sqlite3.connect(f"DB/FO_savefile{num}.db")
     cursor = db.cursor()
     cursor.execute("DELETE FROM Player_Stat")
     db.commit()
@@ -991,21 +1011,15 @@ def play_game(Home, Away):
     return (goal1, goal2)
 
 
-#
-#
-#
-w = 0
-d = 0
-l = 0
-for i in range(1000):
-    print(i)
-    match = play_game('Liverpool FC', 'Norwich City')
-    h = match[0]
-    a = match[1]
-    if h > a:
-        w += 1
-    elif h == a:
-        d += 1
-    else:
-        l += 1
-print("//////////////////////////\n", w, d, l)
+def search_calander():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f'SELECT * FROM(SELECT * From League_Calander WHERE result=="0") WHERE Home =="{my_team}" or Away =="{my_team}"')
+    return cursor.fetchone()
+
+
+make_calander(3)
