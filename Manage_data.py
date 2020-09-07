@@ -370,7 +370,7 @@ def make_row_num():
     cursor = db.cursor()
     cursor1 = db.cursor()
     cursor.execute(
-        f"SELECT * FROM Leagues")
+        f"SELECT * FROM Teams")
     for i in range(2088):
 
         a = cursor.fetchone()
@@ -380,8 +380,9 @@ def make_row_num():
         value = a[4]
 
         cursor1.execute(
-            f'UPDATE Leagues SET Seq = {i+1} Where Name = "{league}" AND Country = "{country}" AND Clubs = "{team}" AND Value = "{value}"')
+            f'UPDATE Teams SET Seq = {i+1} Where League = "{league}" AND Country = "{country}" AND Team = "{team}" AND Value = "{value}"')
         db.commit()
+
 
 def missed_players():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
@@ -409,3 +410,27 @@ def missed_players():
         d_cursor.execute(
             f'DELETE FROM Players WHERE Team =="{lost[i]}"')
         data_db.commit()
+
+
+def del_ghost_team():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f'SELECT Team From Players GROUP BY Team')
+    a = cursor.fetchall()
+    for i in range(len(a)):
+        cursor.execute(
+            f'DELETE FROM Teams WHERE Team = "{a[i][0]}"')
+        db.commit()
+    cursor.execute(
+        f'SELECT Team From Teams')
+    b = cursor.fetchall()
+    db = sqlite3.connect(f"DB/FO_datafile.db")
+    cursor = db.cursor()
+    for i in range(len(b)):
+        cursor.execute(
+            f'DELETE FROM Teams WHERE Team = "{b[i][0]}"')
+        db.commit()
+
+
+make_row_num()

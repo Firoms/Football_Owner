@@ -30,14 +30,6 @@ def input_Names1():
         cursor.execute(insert_query)
         db.commit()
 
-    def makethread():
-        time.sleep(1)
-        make_calander(1)
-        make_player_stats(1)
-    make_thread = threading.Thread(target=makethread)
-    make_thread.daemon = True
-    make_thread.start()
-
 
 def input_Names2():
     name = askstring('구단주 생성', '구단주 이름을 입력하세요.')
@@ -53,14 +45,6 @@ def input_Names2():
             f"INSERT INTO Gamer VALUES('{name}',  '무직', '{Date}','-')"
         cursor.execute(insert_query)
         db.commit()
-
-    def makethread():
-        time.sleep(1)
-        make_calander(2)
-        make_player_stats(2)
-    make_thread = threading.Thread(target=makethread)
-    make_thread.daemon = True
-    make_thread.start()
 
 
 ###############################################################################
@@ -156,6 +140,13 @@ def Auto_save_get_data(num):
     db_load.commit()
     db_save.commit()
 
+    def makethread():
+        make_calander(num)
+        make_player_stats(num)
+    make_thread = threading.Thread(target=makethread)
+    make_thread.daemon = True
+    make_thread.start()
+
 
 def time_auto_save():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
@@ -171,7 +162,6 @@ def time_auto_save():
 # 데이터 불러오기
 ###############################################################################
 def load1_data():
-    time.sleep(1)
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     for table in table_list:
@@ -205,7 +195,6 @@ def load1_data():
 
 
 def load2_data():
-    time.sleep(1)
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     for table in table_list:
@@ -839,7 +828,6 @@ def make_calander(num):
             cursor.execute(
                 f'INSERT INTO League_Calander VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}", "{i+1}", "{calander_sort_list[i][0]}", "{calander_sort_list[i][1]}","0")')
         db.commit()
-    print("111")
 
 
 def make_player_stats(num):
@@ -884,10 +872,17 @@ def make_player_stats(num):
 
 
 def play_game(Home, Away):
-    Home_Team_manger = team_manager_ability(Home)
+    Home_Team_manager = team_manager_ability(Home)
     Away_Team_manager = team_manager_ability(Away)
-    H_manager_ability = int(Home_Team_manger[5])
-    A_manager_ability = int(Away_Team_manager[5])
+    print(Home_Team_manager, Away_Team_manager)
+    if Home_Team_manager == None:
+        H_manager_ability = 50
+    else:
+        H_manager_ability = int(Home_Team_manager[5])
+    if Away_Team_manager == None:
+        A_manager_ability = 50
+    else:
+        A_manager_ability = int(Away_Team_manager[5])
     H_try = H_manager_ability-A_manager_ability+20
     A_try = A_manager_ability-H_manager_ability+20
     H_keeper = team_keeper_ability(Home)
@@ -912,10 +907,10 @@ def play_game(Home, Away):
         H_try = 10
     if A_try < 10:
         A_try = 10
-    if H_try > 30:
-        H_try = 30
-    if A_try > 30:
-        A_try = 30
+    if H_try > 27:
+        H_try = 27
+    if A_try > 27:
+        A_try = 27
     order = []
     for i in range(H_try):
         order.append('H')
@@ -1008,7 +1003,22 @@ def play_game(Home, Away):
                 goal1per -= 15
                 goal2 -= 1
                 # print("VAR 취소...")
-    return (goal1, goal2)
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f'UPDATE League_Calander SET result="{goal1}:{goal2}" WHERE Home == "{Home}" AND Away == "{Away}"')
+    db.commit()
+
+
+def match_progress(num):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f'SELECT Home, Away FROM League_Calander WHERE Date <= {num}')
+    li = cursor.fetchall()
+    for i in range(len(li)):
+        print(i)
+        play_game(li[i][0], li[i][1])
 
 
 def search_calander():
@@ -1020,6 +1030,3 @@ def search_calander():
     cursor.execute(
         f'SELECT * FROM(SELECT * From League_Calander WHERE result=="0") WHERE Home =="{my_team}" or Away =="{my_team}"')
     return cursor.fetchone()
-
-
-make_calander(3)

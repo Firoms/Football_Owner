@@ -234,7 +234,8 @@ class Screen:
 
     def match_play(self):
         print("경기 진행")
-        print(search_calander())
+        next_match = search_calander()
+        simulation = match_progress(next_match[3])
 
     def injury(self):
         print("부상")
@@ -320,15 +321,15 @@ class Screen:
         self.second_player = mini_game()
         self.second_value = int(self.second_player[6])
         self.bg1 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 250, 445, self.select1, f"\n이름 : {self.first_player[1]}\n팀 : {self.first_player[2]}\n등번호 : {self.first_player[3]}\n포지션 {self.first_player[4]}\n나이 : {self.first_player[5]}\n", "#472f91", ("타이포_헬로피오피 테두리B", 20))
+            self.Gui, "bg1.png", 250, 445, self.select1, f"\n이름 : {self.first_player[1]}\n팀 : {self.first_player[2]}\n등번호 : {self.first_player[3]}\n포지션 {self.first_player[4]}\n나이 : {self.first_player[5]}\n", "#472f91", ("타이포_헬로피오피 테두리B", 19))
         self.bg2 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 720, 445, self.select2, f"\n이름 : {self.second_player[1]}\n팀 : {self.second_player[2]}\n등번호 : {self.second_player[3]}\n포지션 {self.second_player[4]}\n나이 : {self.second_player[5]}\n", "#472f91", ("타이포_헬로피오피 테두리B", 20))
+            self.Gui, "bg1.png", 720, 445, self.select2, f"\n이름 : {self.second_player[1]}\n팀 : {self.second_player[2]}\n등번호 : {self.second_player[3]}\n포지션 {self.second_player[4]}\n나이 : {self.second_player[5]}\n", "#472f91", ("타이포_헬로피오피 테두리B", 19))
 
     def select1(self):
         self.bg1 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n선수가치 : {self.first_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 23))
+            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n선수가치 : {self.first_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 21))
         self.bg2 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n선수가치 : {self.second_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 23))
+            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n선수가치 : {self.second_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 21))
 
         if self.first_value >= self.second_value:
             self.bg2.after(2000, self.wait_answer)
@@ -339,9 +340,9 @@ class Screen:
 
     def select2(self):
         self.bg1 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n선수가치 : {self.first_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 23))
+            self.Gui, "bg1.png", 250, 445, self.no_action, f"\n이름 : {self.first_player[1]}\n\n선수가치 : {self.first_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 21))
         self.bg2 = Get_label.image_button_text(
-            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n선수가치 : {self.second_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 23))
+            self.Gui, "bg1.png", 720, 445, self.no_action, f"\n이름 : {self.second_player[1]}\n\n선수가치 : {self.second_value}\n", "#28a44a", ("타이포_헬로피오피 테두리B", 21))
 
         if self.first_value <= self.second_value:
             self.bg2.after(3000, self.wait_answer)
