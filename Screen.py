@@ -233,9 +233,12 @@ class Screen:
             self.player_res()
 
     def match_play(self):
+        Match_Play_background = Get_label.image_label(
+            self.Gui, "simulation_bg.png", 0, 0)
         print("경기 진행")
         next_match = search_calander()
         simulation = match_progress(next_match[3])
+        self.Main_Screen()
 
     def injury(self):
         print("부상")

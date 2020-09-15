@@ -874,7 +874,6 @@ def make_player_stats(num):
 def play_game(Home, Away):
     Home_Team_manager = team_manager_ability(Home)
     Away_Team_manager = team_manager_ability(Away)
-    print(Home_Team_manager, Away_Team_manager)
     if Home_Team_manager == None:
         H_manager_ability = 50
     else:
@@ -893,16 +892,43 @@ def play_game(Home, Away):
     A_midfielder = team_midfielder_ability(Away)
     H_forward = team_forward_ability(Home)
     A_forward = team_forward_ability(Away)
-    H1_k_abil = H_keeper[0][7]
-    A1_k_abil = A_keeper[0][7]
-    H4_d_abil = H_defender[0][7] + H_defender[1][7] + \
-        H_defender[2][7] + H_defender[3][7]
-    A4_d_abil = A_defender[0][7] + A_defender[1][7] + \
-        A_defender[2][7] + A_defender[3][7]
-    H3_m_abil = H_midfielder[0][7] + H_midfielder[1][7] + H_midfielder[2][7]
-    A3_m_abil = A_midfielder[0][7] + A_midfielder[1][7] + A_midfielder[2][7]
-    H3_f_abil = H_forward[0][7] + H_forward[1][7] + H_midfielder[2][7]
-    A3_f_abil = A_forward[0][7] + A_forward[1][7] + A_forward[2][7]
+    try:
+        H1_k_abil = H_keeper[0][7]
+    except:
+        H1_k_abil = 48
+    try:
+        A1_k_abil = A_keeper[0][7]
+    except:
+        A1_k_abil = 48
+    try:
+        H4_d_abil = H_defender[0][7] + H_defender[1][7] + \
+            H_defender[2][7] + H_defender[3][7]
+    except:
+        H4_d_abil = 200
+    try:
+        A4_d_abil = A_defender[0][7] + A_defender[1][7] + \
+            A_defender[2][7] + A_defender[3][7]
+    except:
+        A4_d_abil = 200
+    try:
+        H3_m_abil = H_midfielder[0][7] + \
+            H_midfielder[1][7] + H_midfielder[2][7]
+    except:
+        H3_m_abil = 150
+    try:
+        A3_m_abil = A_midfielder[0][7] + \
+            A_midfielder[1][7] + A_midfielder[2][7]
+    except:
+        A3_m_abil = 150
+    try:
+        H3_f_abil = H_forward[0][7] + H_forward[1][7] + H_midfielder[2][7]
+    except:
+        H3_f_abil = 150
+    try:
+        A3_f_abil = A_forward[0][7] + A_forward[1][7] + A_forward[2][7]
+    except:
+        A3_f_abil = 150
+
     if H_try < 10:
         H_try = 10
     if A_try < 10:
