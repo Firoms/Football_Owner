@@ -1040,7 +1040,7 @@ def match_progress(num):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT Home, Away FROM League_Calander WHERE Date <= {num}')
+        f'SELECT Home, Away FROM League_Calander WHERE Date < {num}')
     li = cursor.fetchall()
     for i in range(len(li)):
         print(i)
