@@ -1037,14 +1037,24 @@ def play_game(Home, Away):
 
 
 def match_progress(num):
-    db = sqlite3.connect(f"DB/FO_savefile3.db")
-    cursor = db.cursor()
-    cursor.execute(
-        f'SELECT Home, Away FROM League_Calander WHERE Date < {num}')
-    li = cursor.fetchall()
-    for i in range(len(li)):
-        print(i)
-        play_game(li[i][0], li[i][1])
+    print(num)
+    print("여기까진 옴")
+
+    def makethread():
+        print(date)
+        db = sqlite3.connect(f"DB/FO_savefile3.db")
+        cursor = db.cursor()
+        cursor.execute(
+            f'SELECT Home, Away FROM League_Calander WHERE Date == "{date}" AND result=="0"')
+        li = cursor.fetchall()
+        for i in range(len(li)):
+            play_game(li[i][0], li[i][1])
+        print(f"{data} 쓰레드 끝")
+    for i in range(1,num+1):
+        date = i
+        make_thread = threading.Thread(target=makethread)
+        make_thread.daemon = True
+        make_thread.start()
 
 
 def search_calander():
