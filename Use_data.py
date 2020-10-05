@@ -6,6 +6,7 @@ from tkinter.messagebox import showinfo
 import time
 import random
 import threading
+import queue
 
 table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team',
               'League_Calander', 'League_table', 'Message_box', 'Player_Stat']
@@ -1037,20 +1038,26 @@ def play_game(Home, Away):
 
 
 def match_progress(num):
-    print(num)
-    print("여기까진 옴")
-
     def makethread():
-        print(date)
+        print(f"{date} 쓰레드 시작")
         db = sqlite3.connect(f"DB/FO_savefile3.db")
         cursor = db.cursor()
-        cursor.execute(
-            f'SELECT Home, Away FROM League_Calander WHERE Date == "{date}" AND result=="0"')
+        lock.acquire()
+        try:
+            cursor = db.cursor()
+            cursor.execute(
+                f'SELECT Home, Away FROM League_Calander WHERE Date == "{date}" AND result=="0"')
+        finally:
+            lock.release()
         li = cursor.fetchall()
         for i in range(len(li)):
             play_game(li[i][0], li[i][1])
-        print(f"{data} 쓰레드 끝")
-    for i in range(1,num+1):
+            
+
+        print(f"{date} 쓰레드 끝")
+
+    lock = threading.Lock()
+    for i in range(1, num+1):
         date = i
         make_thread = threading.Thread(target=makethread)
         make_thread.daemon = True
