@@ -802,10 +802,10 @@ def make_calander(num):
     seq = 0
     for k in range(league_count):
         cursor.execute(
-            f'SELECT count(*) From Teams Where League == "{league_list[k][0]}" AND Country == "{league_list[k][1]}"')
+            f'SELECT count(*) From Teams Where League == (?) AND Country == (?)', (league_list[k][0], league_list[k][1],))
         count = cursor.fetchone()[0]
         cursor.execute(
-            f'SELECT Team From Teams WHERE League == "{league_list[k][0]}" AND Country == "{league_list[k][1]}"')
+            f'SELECT Team From Teams WHERE League == (?) AND Country == (?)', (league_list[k][0], league_list[k][1],))
         Team_list = []
         for i in range(count):
             Team_list.append(cursor.fetchone()[0])
@@ -848,10 +848,10 @@ def make_player_stats(num):
     all_team = []
     for k in range(league_count):
         cursor.execute(
-            f'SELECT count(*) From Teams Where League == "{league_list[k][0]}" AND Country == "{league_list[k][1]}"')
+            f'SELECT count(*) From Teams Where League == (?) AND Country == (?)', (league_list[k][0], league_list[k][1],))
         count = cursor.fetchone()[0]
         cursor.execute(
-            f'SELECT Team From Teams WHERE League == "{league_list[k][0]}" AND Country == "{league_list[k][1]}"')
+            f'SELECT Team From Teams WHERE League == (?) AND Country == (?)', (league_list[k][0], league_list[k][1],))
         Team_list = []
         for i in range(count):
             Team_list.append(cursor.fetchone()[0])
@@ -1033,7 +1033,7 @@ def play_game(Home, Away):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'UPDATE League_Calander SET result="{goal1}:{goal2}" WHERE Home == "{Home}" AND Away == "{Away}"')
+        f'UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)', (f"{goal1}:{goal2}", Home, Away))
     db.commit()
 
 
@@ -1043,16 +1043,16 @@ def match_progress(num):
         print(f"{lodate} 쓰레드 시작")
         db = sqlite3.connect(f"DB/FO_savefile3.db")
         cursor = db.cursor()
-        # insert_query = 'SELECT Home, Away FROM League_Calander WHERE Date == %s AND result=="0"'
-        # cursor.execute(insert_query, lodate)
+        # prepared sql python sqlite
         cursor.execute(
-            f'SELECT Home, Away FROM League_Calander WHERE Date == "{lodate}" AND result=="0"')
+            'SELECT Home, Away FROM League_Calander WHERE Date == (?) AND result=="0"', (lodate,))
+        # cursor.execute(
+        #     f'SELECT Home, Away FROM League_Calander WHERE Date == "{lodate}" AND result=="0"')
         li = cursor.fetchall()
         for i in range(len(li)):
             play_game(li[i][0], li[i][1])
         print(f"{lodate} 쓰레드 끝")
 
-    
     for i in range(1, num+1):
         date = i
         make_thread = threading.Thread(target=makethread)
@@ -1068,5 +1068,5 @@ def search_calander():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From League_Calander WHERE result=="0") WHERE Home =="{my_team}" or Away =="{my_team}"')
+        f'SELECT * FROM League_Calander WHERE result=="0" AND (Home ==(?) or Away ==(?))', (my_team, my_team,))
     return cursor.fetchone()
