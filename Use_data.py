@@ -579,7 +579,7 @@ def team_coaches_ability():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT COUNT(*) AVG(Ablility) FROM Coaches Where Team =="{my_team}"')
+        f'SELECT COUNT(*) AVG(Ablility) FROM Coaches Where Team ==(?)', (my_team,))
     Data = cursor.fetchone()
     count_coaches = int(Data[0])
     avg_ability = int(Data[1])
@@ -593,7 +593,7 @@ def team_staffs_ability():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT COUNT(*) AVG(Ablility) FROM Staffs Where Team =="{my_team}"')
+        f'SELECT COUNT(*) AVG(Ablility) FROM Staffs Where Team ==(?)', (my_team,))
     Data = cursor.fetchone()
     count_staffs = int(Data[0])
     avg_ability = int(Data[1])
@@ -604,7 +604,7 @@ def rec_players(ability):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f"SELECT * FROM Players WHERE Potential <= '{ability}' ORDER BY random()")
+        f"SELECT * FROM Players WHERE Potential <= (?) ORDER BY random()", (ability,))
     Data = []
     for i in range(3):
         Data.append(cursor.fetchone())
@@ -615,7 +615,7 @@ def rec_coaches(ability):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f"SELECT * FROM Coaches WHERE Ability <= '{ability}' ORDER BY random()")
+        f"SELECT * FROM Coaches WHERE Ability <= (?) ORDER BY random()", (ability,))
     Data = []
     for i in range(3):
         Data.append(cursor.fetchone())
@@ -626,7 +626,7 @@ def rec_staffs(ability):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f"SELECT * FROM Staffs WHERE Ability <= '{ability}' ORDER BY random()")
+        f"SELECT * FROM Staffs WHERE Ability <= (?) ORDER BY random()", (ability,))
     Data = []
     for i in range(3):
         Data.append(cursor.fetchone())
@@ -667,7 +667,7 @@ def sell_my_team():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT Value FROM Teams Where Team =="{my_team}"')
+        f'SELECT Value FROM Teams Where Team ==(?)', (my_team))
     Team_value = int(cursor.fetchone()[0])
     minus_value = int(Team_value*(0.5))
     plus_value = int(Team_value(0.3))
@@ -682,7 +682,7 @@ def ability_ran_change():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where Team =="{my_team}" ORDER BY random()')
+        f'SELECT * FROM Players Where Team ==(?) ORDER BY random()', (my_team,))
     player_list = []
     random_list = []
     player = cursor.fetchone()
@@ -692,10 +692,10 @@ def ability_ran_change():
     random = random.randrange(-2, 2)
     if player_ability+random > player_potential:
         cursor.execute(
-            f'UPDATE Players SET ability ="{player_potential}" Where Seq =="{player_seq}"')
+            f'UPDATE Players SET ability = (?) Where Seq == (?)', (player_potential, player_seq))
     else:
         cursor.execute(
-            f'UPDATE Players SET ability ="{player_ability+random}" Where Seq =="{player_seq}"')
+            f'UPDATE Players SET ability = (?) Where Seq == (?)', (player_ability+random, player_seq))
     db.commit()
     player_list.append(player)
     random_list.append(random)
@@ -710,10 +710,10 @@ def ability_ran_change():
         random = random.randrange(-2, 2)
         if player_ability+random > player_potential:
             cursor.execute(
-                f'UPDATE Players SET ability ="{player_potential}" Where Seq =="{player_seq}"')
+                f'UPDATE Players SET ability = (?) Where Seq == (?)', (player_potential, player_seq))
         else:
             cursor.execute(
-                f'UPDATE Players SET ability ="{player_ability+random}" Where Seq =="{player_seq}"')
+                f'UPDATE Players SET ability = (?) Where Seq == (?)', (player_ability+random, player_seq))
         db.commit()
         player_list.append(player)
         random_list.append(random)
@@ -727,13 +727,13 @@ def fan_res():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT count(*) FROM (SELECT * FROM League_Calander Where result != "0") WHERE Home == "{my_team}" OR Away == "{my_team}"')
+        f'SELECT count(*) FROM League_Calander Where result != "0" AND (Home == (?) OR Away == (?))', (my_team, my_team))
     count = int(cursor.fetchone()[0])
     if count < 5:
         return False
     else:
         cursor.execute(
-            f'SELECT * FROM (SELECT * FROM League_Calander Where result != "0") WHERE Home == "{my_team}" OR Away == "{my_team}" ORDER BY Seq DESC')
+            f'SELECT * FROM League_Calander Where result != "0" AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC', (my_team, my_team))
         score = 0
         for i in range(5):
             Data = cursor.fetchone()
@@ -758,13 +758,13 @@ def pla_Res():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT count(*) FROM (SELECT * FROM League_Calander Where result != "0") WHERE Home == "{my_team}" OR Away == "{my_team}"')
+        f'SELECT count(*) From League_Calander Where result != "0" AND (Home == (?) OR Away == (?))', (my_team, my_team))
     count = int(cursor.fetchone()[0])
     if count < 5:
         return False
     else:
         cursor.execute(
-            f'SELECT * FROM (SELECT * FROM League_Calander Where result != "0") WHERE Home == "{my_team}" OR Away == "{my_team}" ORDER BY Seq DESC')
+            f'SELECT * FROM League_Calander Where result != "0" AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC', (my_team, my_team))
         score = 0
         for i in range(5):
             Data = cursor.fetchone()
@@ -859,10 +859,10 @@ def make_player_stats(num):
         player_list = []
         for i in range(len(Team_list)):
             cursor.execute(
-                f'SELECT count(*) From Players WHERE Team == "{Team_list[i]}"')
+                f'SELECT count(*) From Players WHERE Team == (?)', (Team_list[i]))
             player_cnt = cursor.fetchone()[0]
             cursor.execute(
-                f'SELECT Team, Name From Players WHERE Team == "{Team_list[i]}"')
+                f'SELECT Team, Name From Players WHERE Team == (?)', (Team_list[i]))
             for i in range(player_cnt):
                 player_list.append(cursor.fetchone())
         for i in range(len(player_list)):
