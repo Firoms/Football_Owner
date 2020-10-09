@@ -551,7 +551,7 @@ def team_midfielder_ability(my_team):
         f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
+        f'SELECT * FROM(SELECT * From Players Where (Team ==(?) AND Injury =="0") AND Position like "%Midfield" OR Position == "Midfielder" ORDER By Ability DESC', (my_team,))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -562,10 +562,10 @@ def team_forward_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
+        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury =="0") AND Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC', (my_team,))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC')
+        f'SELECT * FROM Players Where (Team ==(?) AND Injury =="0") AND Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC', (my_team,))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -1070,3 +1070,20 @@ def search_calander():
     cursor.execute(
         f'SELECT * FROM League_Calander WHERE result=="0" AND (Home ==(?) or Away ==(?))', (my_team, my_team,))
     return cursor.fetchone()
+
+
+def one_position():
+    db = sqlite3.connect(f"DB/FO_datafile.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f'UPDATE Players Set Position= "Defender" Where Position like "%Back" OR Position =="Defender"')
+    db.commit()
+    cursor.execute(
+        f'UPDATE Players Set Position= "Midfielder" Where Position like "%Midfield" OR Position == "Midfielder"')
+    db.commit()
+    cursor.execute(
+        f'UPDATE Players Set Position= "Forward" Where Position like "Second%" OR Position like "%Forward"')
+    db.commit()
+    cursor.execute(
+        f'SELECT * FROM Players Group by Position')
+    print(cursor.fetchall())
