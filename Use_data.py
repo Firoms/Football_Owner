@@ -511,7 +511,7 @@ def team_manager_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT * FROM Coaches Where Position =="Manager" AND Team =="{my_team}"')
+        f'SELECT * FROM Coaches Where Position =="Manager" AND Team ==(?)', (my_team,))
     Ability = cursor.fetchone()
     return Ability
 
@@ -520,10 +520,10 @@ def team_keeper_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position =="Goalkeeper" ORDER By Ability DESC')
+        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Midfielder" ORDER By Ability DESC', (my_team, "0"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position =="Goalkeeper" ORDER By Ability DESC')
+        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Goalkeeper" ORDER By Ability DESC', (my_team, "0"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -534,10 +534,10 @@ def team_defender_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
+        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Defender" ORDER By Ability DESC', (my_team, "0"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Back" OR Position =="Defender" ORDER By Ability DESC')
+        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Defender" ORDER By Ability DESC', (my_team, "0"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -548,10 +548,10 @@ def team_midfielder_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM(SELECT * From Players Where Team =="{my_team}" AND Injury =="0") Where Position like "%Midfield" OR Position =="Midfielder" ORDER By Ability DESC')
+        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Midfielder" ORDER By Ability DESC', (my_team, "0"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM(SELECT * From Players Where (Team ==(?) AND Injury =="0") AND Position like "%Midfield" OR Position == "Midfielder" ORDER By Ability DESC', (my_team,))
+        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Midfielder" ORDER By Ability DESC', (my_team, "0"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -562,10 +562,10 @@ def team_forward_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury =="0") AND Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC', (my_team,))
+        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Forward" ORDER By Ability DESC', (my_team, "0"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where (Team ==(?) AND Injury =="0") AND Position like "%Winger" OR Position like "%Forward" ORDER By Ability DESC', (my_team,))
+        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Forward" ORDER By Ability DESC', (my_team, "0"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -701,7 +701,7 @@ def ability_ran_change():
     random_list.append(random)
 
     cursor.execute(
-        f'SELECT * FROM Players Where Team !="{my_team}" ORDER BY random()')
+        f'SELECT * FROM Players Where Team !=(?) ORDER BY random()', (my_team,))
     for i in range(1000):
         player = cursor.fetchone()
         player_seq = player[0]
@@ -727,13 +727,13 @@ def fan_res():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT count(*) FROM League_Calander Where result != "0" AND (Home == (?) OR Away == (?))', (my_team, my_team))
+        f'SELECT count(*) FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?))', ("0", my_team, my_team))
     count = int(cursor.fetchone()[0])
     if count < 5:
         return False
     else:
         cursor.execute(
-            f'SELECT * FROM League_Calander Where result != "0" AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC', (my_team, my_team))
+            f'SELECT * FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC', ("0", my_team, my_team))
         score = 0
         for i in range(5):
             Data = cursor.fetchone()
@@ -758,13 +758,13 @@ def pla_Res():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT count(*) From League_Calander Where result != "0" AND (Home == (?) OR Away == (?))', (my_team, my_team))
+        f'SELECT count(*) From League_Calander Where result != (?) AND (Home == (?) OR Away == (?))', ("0", my_team, my_team))
     count = int(cursor.fetchone()[0])
     if count < 5:
         return False
     else:
         cursor.execute(
-            f'SELECT * FROM League_Calander Where result != "0" AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC', (my_team, my_team))
+            f'SELECT * FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC', ("0", my_team, my_team))
         score = 0
         for i in range(5):
             Data = cursor.fetchone()
@@ -1068,7 +1068,7 @@ def search_calander():
         f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM League_Calander WHERE result=="0" AND (Home ==(?) or Away ==(?))', (my_team, my_team,))
+        f'SELECT * FROM League_Calander WHERE result==(?) AND (Home ==(?) or Away ==(?))', ("0", my_team, my_team,))
     return cursor.fetchone()
 
 
