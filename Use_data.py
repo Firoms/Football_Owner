@@ -511,7 +511,7 @@ def team_manager_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT * FROM Coaches Where Position =="Manager" AND Team ==(?)', (my_team,))
+        f'SELECT * FROM Coaches Where Position ==(?) AND Team ==(?)', ("Manager", my_team))
     Ability = cursor.fetchone()
     return Ability
 
@@ -520,10 +520,10 @@ def team_keeper_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Midfielder" ORDER By Ability DESC', (my_team, "0"))
+        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Goalkeeper"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Goalkeeper" ORDER By Ability DESC', (my_team, "0"))
+        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Goalkeeper"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -534,10 +534,10 @@ def team_defender_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Defender" ORDER By Ability DESC', (my_team, "0"))
+        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Defender"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Defender" ORDER By Ability DESC', (my_team, "0"))
+        f'SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Defender"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -548,10 +548,10 @@ def team_midfielder_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Midfielder" ORDER By Ability DESC', (my_team, "0"))
+        f'SELECT count(*) FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Midfielder"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Midfielder" ORDER By Ability DESC', (my_team, "0"))
+        f'SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Midfielder"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -562,10 +562,10 @@ def team_forward_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Forward" ORDER By Ability DESC', (my_team, "0"))
+        f'SELECT count(*) FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Forward"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == "Forward" ORDER By Ability DESC', (my_team, "0"))
+        f'SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Forward"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
