@@ -143,7 +143,9 @@ def Auto_save_get_data(num):
 
     def makethread():
         make_calander(num)
+        make_calander(3)
         make_player_stats(num)
+        make_player_stats(3)
     make_thread = threading.Thread(target=makethread)
     make_thread.daemon = True
     make_thread.start()
@@ -857,12 +859,13 @@ def make_player_stats(num):
             Team_list.append(cursor.fetchone()[0])
         all_team += Team_list
         player_list = []
+        # print(Team_list[0])
         for i in range(len(Team_list)):
             cursor.execute(
-                f'SELECT count(*) From Players WHERE Team == (?)', (Team_list[i]))
+                f'SELECT count(*) From Players WHERE Team == (?)', (Team_list[i],))
             player_cnt = cursor.fetchone()[0]
             cursor.execute(
-                f'SELECT Team, Name From Players WHERE Team == (?)', (Team_list[i]))
+                f'SELECT Team, Name From Players WHERE Team == (?)', (Team_list[i],))
             for i in range(player_cnt):
                 player_list.append(cursor.fetchone())
         for i in range(len(player_list)):
@@ -1086,4 +1089,17 @@ def one_position():
     db.commit()
     cursor.execute(
         f'SELECT * FROM Players Group by Position')
-    print(cursor.fetchall())
+
+
+def make_league_table():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(f'SELECT * FROM Teams')
+    pla_list = cursor.fetchall()
+    for i in range(len(pla_list)):
+        insert_query = \
+            f'INSERT INTO League_table VALUES("{pla_list[i][0]}", "{pla_list[i][2]}", "{pla_list[i][1]}", "{pla_list[i][3]}","0","0","0","0","0","0","0","0")'
+        cursor.execute(insert_query)
+    db.commit()
+
+make_league_table()
