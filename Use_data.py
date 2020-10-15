@@ -146,6 +146,8 @@ def Auto_save_get_data(num):
         make_calander(3)
         make_player_stats(num)
         make_player_stats(3)
+        make_league_table(num)
+        make_league_table(3)
     make_thread = threading.Thread(target=makethread)
     make_thread.daemon = True
     make_thread.start()
@@ -1091,8 +1093,8 @@ def one_position():
         f'SELECT * FROM Players Group by Position')
 
 
-def make_league_table():
-    db = sqlite3.connect(f"DB/FO_savefile3.db")
+def make_league_table(num):
+    db = sqlite3.connect(f"DB/FO_savefile{num}.db")
     cursor = db.cursor()
     cursor.execute(f'SELECT * FROM Teams')
     pla_list = cursor.fetchall()
@@ -1102,4 +1104,16 @@ def make_league_table():
         cursor.execute(insert_query)
     db.commit()
 
-make_league_table()
+def update_league_table():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(f'SELECT * FROM League_Calander WHERE result != (?) AND update !=(?)',("0","0"))
+    update_list = cursor.fetchall()
+    for i in update_list:
+        Seq = i[0]
+        Country = i[1]
+        League = i[2]
+        Home = i[4]
+        Away = i[5]
+        result = i[6].split(":")
+        cursor.execute(f'UPDATE League_Calander SET update = (?) WHERE Seq ==(?)',("1",Seq))
