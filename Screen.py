@@ -325,6 +325,7 @@ class Screen:
         self.first_value = int(self.first_player[6])
         self.second_player = mini_game()
         self.second_value = int(self.second_player[6])
+        print(self.first_value-self.second_value>0)
         self.bg1 = Get_label.image_button_text(
             self.Gui, "bg1.png", 250, 445, self.select1, f"\n이름 : {self.first_player[1]}\n팀 : {self.first_player[2]}\n등번호 : {self.first_player[3]}\n포지션 {self.first_player[4]}\n나이 : {self.first_player[5]}\n", "#472f91", ("타이포_헬로피오피 테두리B", 19))
         self.bg2 = Get_label.image_button_text(

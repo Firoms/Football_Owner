@@ -831,7 +831,7 @@ def make_calander(num):
         for i in range(len(calander_sort_list)):
             seq += 1
             cursor.execute(
-                f'INSERT INTO League_Calander VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}", "{i+1}", "{calander_sort_list[i][0]}", "{calander_sort_list[i][1]}","0")')
+                f'INSERT INTO League_Calander VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}", "{i+1}", "{calander_sort_list[i][0]}", "{calander_sort_list[i][1]}","0","0")')
         db.commit()
 
 
@@ -1104,10 +1104,12 @@ def make_league_table(num):
         cursor.execute(insert_query)
     db.commit()
 
+
 def update_league_table():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(f'SELECT * FROM League_Calander WHERE result != (?) AND update !=(?)',("0","0"))
+    cursor.execute(
+        f'SELECT * FROM League_Calander WHERE upd ==(?) AND result != (?)', ("0", "0"))
     update_list = cursor.fetchall()
     for i in update_list:
         Seq = i[0]
@@ -1116,4 +1118,37 @@ def update_league_table():
         Home = i[4]
         Away = i[5]
         result = i[6].split(":")
-        cursor.execute(f'UPDATE League_Calander SET update = (?) WHERE Seq ==(?)',("1",Seq))
+        cursor.execute(
+            f'UPDATE League_Calander SET upd = (?) WHERE Seq ==(?)', ("1", Seq))
+        cursor.execute(
+            f'SELECT * FROM League_table WHERE Country==(?) AND League ==(?) AND Team==(?)', (Country, League, Home))
+        Home_table = cursor.fetchone()
+        print(Home_table)
+        cursor.execute(
+            f'SELECT * FROM League_table WHERE Country==(?) AND League ==(?) AND Team==(?)', (Country, League, Away))
+        Away_table = cursor.fetchone()
+        print(Away_table)
+        print(result[0], result[1])
+        if int(result[0]) > int(result[1]):
+            print("Home 승")
+
+            cursor.execute(
+                f'UPDATE League_table SET Match=(?) AND Win=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)', (f"{Home_table[4]+1}", Home_table[5]+1, Home_table[6]+int(result[0]), Home_table[7] + int(result[1]), Home_table[8]+int(result[0])-int(result[1]), Home_table[9]+3, Home_table[0]))
+            cursor.execute(
+                f'UPDATE League_table SET Match=(?) AND Lose=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) WHERE Seq = (?)', (Away_table[4]+1, Away_table[5]+1, Away_table[6]+int(result[1]), Away_table[7] + int(result[0]), Away_table[8]+int(result[1])-int(result[0]), Away_table[0]))
+        elif int(result[0]) == int(result[1]):
+            print("무승부")
+            cursor.execute(
+                f'UPDATE League_table SET Match=(?) AND Draw=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)', (Home_table[4]+1, Home_table[5]+1, Home_table[6]+int(result[0]), Home_table[7] + int(result[1]), Home_table[8]+int(result[0])-int(result[1]), Home_table[9]+1, Home_table[0]))
+            cursor.execute(
+                f'UPDATE League_table SET Match=(?) AND Draw=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)', (Away_table[4]+1, Away_table[5]+1, Away_table[6]+int(result[1]), Away_table[7] + int(result[0]), Away_table[8]+int(result[1])-int(result[0]), Away_table[9]+1, Away_table[0]))
+        else:
+            print("Away 승")
+            cursor.execute(
+                f'UPDATE League_table SET Match=(?) AND Lose=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) WHERE Seq = (?)', (Home_table[4]+1, Home_table[5]+1, Home_table[6]+int(result[0]), Home_table[7] + int(result[1]), Home_table[8]+int(result[0])-int(result[1]), Home_table[0]))
+            cursor.execute(
+                f'UPDATE League_table SET Match=(?) AND Win=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)', (Away_table[4]+1, Away_table[5]+1, Away_table[6]+int(result[1]), Away_table[7] + int(result[0]), Away_table[8]+int(result[1])-int(result[0]), Away_table[9]+3, Away_table[0]))
+        db.commit()
+
+
+update_league_table()
