@@ -8,8 +8,10 @@ import random
 import threading
 import queue
 
-table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team',
-              'League_Calander', 'League_table', 'Message_box', 'Player_Stat']
+table_list = [
+    'Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team',
+    'League_Calander', 'League_table', 'Message_box', 'Player_Stat'
+]
 
 ###############################################################################
 # 게이머 생성
@@ -19,8 +21,9 @@ table_list = ['Coaches', 'Leagues', 'Players', 'Staffs', 'Teams', 'Gamer_Team',
 def input_Names1():
     name = askstring('구단주 생성', '구단주 이름을 입력하세요.')
     now = time.localtime()
-    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
-                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" %
+            (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min,
+             now.tm_sec))
     if name == None:
         return 'No'
     else:
@@ -35,8 +38,9 @@ def input_Names1():
 def input_Names2():
     name = askstring('구단주 생성', '구단주 이름을 입력하세요.')
     now = time.localtime()
-    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
-                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" %
+            (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min,
+             now.tm_sec))
     if name == None:
         return 'No'
     else:
@@ -52,8 +56,8 @@ def input_Names2():
 # 데이터 저장
 ###############################################################################
 def Save1_data():
-    Warning_message = tkinter.messagebox.askokcancel(
-        "경고", "정말 데이터 파일을 덮어씌우시겠습니까?")
+    Warning_message = tkinter.messagebox.askokcancel("경고",
+                                                     "정말 데이터 파일을 덮어씌우시겠습니까?")
     if Warning_message == True:
         db = sqlite3.connect(f"DB/FO_savefile1.db")
         cursor = db.cursor()
@@ -66,30 +70,28 @@ def Save1_data():
         db_save = sqlite3.connect(f"DB/FO_savefile1.db")
         s_cursor = db_save.cursor()
         for table in table_list:
-            l_cursor.execute(
-                f"SELECT COUNT(*) FROM {table}")
+            l_cursor.execute(f"SELECT COUNT(*) FROM {table}")
             count = l_cursor.fetchone()[0]
-            l_cursor.execute(
-                f"SELECT * FROM {table}")
+            l_cursor.execute(f"SELECT * FROM {table}")
             for i in range(count):
                 Save_list = l_cursor.fetchone()
-                s_cursor.execute(
-                    f"INSERT INTO {table} VALUES{Save_list}")
+                s_cursor.execute(f"INSERT INTO {table} VALUES{Save_list}")
         l_cursor.execute(f"SELECT * FROM Gamer")
         Save_list = l_cursor.fetchone()
         now = time.localtime()
-        Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
-                                                         now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+        Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" %
+                (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min,
+                 now.tm_sec))
         s_cursor.execute(
-            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
+            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')"
+        )
         db_save.commit()
-        Save_message = tkinter.messagebox.showinfo(
-            "저장 완료", "데이터 파일을 저장했습니다.")
+        Save_message = tkinter.messagebox.showinfo("저장 완료", "데이터 파일을 저장했습니다.")
 
 
 def Save2_data():
-    Warning_message = tkinter.messagebox.askokcancel(
-        "경고", "정말 데이터 파일을 덮어씌우시겠습니까?")
+    Warning_message = tkinter.messagebox.askokcancel("경고",
+                                                     "정말 데이터 파일을 덮어씌우시겠습니까?")
     if Warning_message == True:
         db = sqlite3.connect(f"DB/FO_savefile2.db")
         cursor = db.cursor()
@@ -102,25 +104,23 @@ def Save2_data():
         db_save = sqlite3.connect(f"DB/FO_savefile2.db")
         s_cursor = db_save.cursor()
         for table in table_list:
-            l_cursor.execute(
-                f"SELECT COUNT(*) FROM {table}")
+            l_cursor.execute(f"SELECT COUNT(*) FROM {table}")
             count = l_cursor.fetchone()[0]
-            l_cursor.execute(
-                f"SELECT * FROM {table}")
+            l_cursor.execute(f"SELECT * FROM {table}")
             for i in range(count):
                 Save_list = l_cursor.fetchone()
-                s_cursor.execute(
-                    f"INSERT INTO {table} VALUES{Save_list}")
+                s_cursor.execute(f"INSERT INTO {table} VALUES{Save_list}")
         l_cursor.execute(f"SELECT * FROM Gamer")
         Save_list = l_cursor.fetchone()
         now = time.localtime()
-        Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
-                                                         now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+        Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" %
+                (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min,
+                 now.tm_sec))
         s_cursor.execute(
-            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
+            f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')"
+        )
         db_save.commit()
-        Save_message = tkinter.messagebox.showinfo(
-            "저장 완료", "데이터 파일을 저장했습니다.")
+        Save_message = tkinter.messagebox.showinfo("저장 완료", "데이터 파일을 저장했습니다.")
 
 
 def Auto_save_get_data(num):
@@ -129,15 +129,12 @@ def Auto_save_get_data(num):
     db_save = sqlite3.connect(f"DB/FO_savefile{num}.db")
     s_cursor = db_save.cursor()
     for table in table_list[0:5]:
-        l_cursor.execute(
-            f"SELECT COUNT(*) FROM {table}")
+        l_cursor.execute(f"SELECT COUNT(*) FROM {table}")
         count = l_cursor.fetchone()[0]
-        l_cursor.execute(
-            f"SELECT * FROM {table}")
+        l_cursor.execute(f"SELECT * FROM {table}")
         for i in range(count):
             Save_list = l_cursor.fetchone()
-            s_cursor.execute(
-                f"INSERT INTO {table} VALUES{Save_list}")
+            s_cursor.execute(f"INSERT INTO {table} VALUES{Save_list}")
     db_load.commit()
     db_save.commit()
 
@@ -148,6 +145,7 @@ def Auto_save_get_data(num):
         make_player_stats(3)
         make_league_table(num)
         make_league_table(3)
+
     make_thread = threading.Thread(target=makethread)
     make_thread.daemon = True
     make_thread.start()
@@ -157,8 +155,9 @@ def time_auto_save():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     now = time.localtime()
-    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
-                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" %
+            (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min,
+             now.tm_sec))
     cursor.execute(f"UPDATE Gamer Set Date= '{Date}'")
     db.commit()
 
@@ -178,22 +177,21 @@ def load1_data():
     db_save = sqlite3.connect(f"DB/FO_savefile3.db")
     s_cursor = db_save.cursor()
     for table in table_list:
-        l_cursor.execute(
-            f"SELECT COUNT(*) FROM {table}")
+        l_cursor.execute(f"SELECT COUNT(*) FROM {table}")
         count = l_cursor.fetchone()[0]
-        l_cursor.execute(
-            f"SELECT * FROM {table}")
+        l_cursor.execute(f"SELECT * FROM {table}")
         for i in range(count):
             Save_list = l_cursor.fetchone()
-            s_cursor.execute(
-                f"INSERT INTO {table} VALUES{Save_list}")
+            s_cursor.execute(f"INSERT INTO {table} VALUES{Save_list}")
     l_cursor.execute(f"SELECT * FROM Gamer")
     Save_list = l_cursor.fetchone()
     now = time.localtime()
-    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
-                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" %
+            (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min,
+             now.tm_sec))
     s_cursor.execute(
-        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
+        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')"
+    )
     db.commit()
     db_load.commit()
     db_save.commit()
@@ -211,22 +209,21 @@ def load2_data():
     db_save = sqlite3.connect(f"DB/FO_savefile3.db")
     s_cursor = db_save.cursor()
     for table in table_list:
-        l_cursor.execute(
-            f"SELECT COUNT(*) FROM {table}")
+        l_cursor.execute(f"SELECT COUNT(*) FROM {table}")
         count = l_cursor.fetchone()[0]
-        l_cursor.execute(
-            f"SELECT * FROM {table}")
+        l_cursor.execute(f"SELECT * FROM {table}")
         for i in range(count):
             Save_list = l_cursor.fetchone()
-            s_cursor.execute(
-                f"INSERT INTO {table} VALUES{Save_list}")
+            s_cursor.execute(f"INSERT INTO {table} VALUES{Save_list}")
     l_cursor.execute(f"SELECT * FROM Gamer")
     Save_list = l_cursor.fetchone()
     now = time.localtime()
-    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" % (now.tm_year, now.tm_mon,
-                                                     now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+    Date = ("%04d년 %02d월 %02d일 %02d시 %02d분 %02d초" %
+            (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min,
+             now.tm_sec))
     s_cursor.execute(
-        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')")
+        f"INSERT INTO Gamer VALUES('{Save_list[0]}','{Save_list[1]}','{Date}','{Save_list[3]}')"
+    )
     db.commit()
     db_load.commit()
     db_save.commit()
@@ -246,8 +243,7 @@ def reset_datas():
                 cursor.execute(f"DELETE FROM {table}")
             cursor.execute("DELETE FROM Gamer")
             db.commit()
-    reset_message = tkinter.messagebox.showinfo(
-        "리셋 완료", f"정보를 모두 리셋했습니다.")
+    reset_message = tkinter.messagebox.showinfo("리셋 완료", f"정보를 모두 리셋했습니다.")
 
 
 ###############################################################################
@@ -256,8 +252,7 @@ def reset_datas():
 def Check_Savefiles(savefile):
     db = sqlite3.connect(f"DB/FO_savefile{savefile}.db")
     cursor = db.cursor()
-    cursor.execute(
-        "SELECT * FROM Gamer ORDER BY Date DESC")
+    cursor.execute("SELECT * FROM Gamer ORDER BY Date DESC")
     Save_list = cursor.fetchone()
     return Save_list
 
@@ -265,8 +260,7 @@ def Check_Savefiles(savefile):
 def check_money():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        "SELECT * FROM Gamer")
+    cursor.execute("SELECT * FROM Gamer")
     Save_list = cursor.fetchone()[3]
     return Save_list
 
@@ -274,8 +268,7 @@ def check_money():
 def check_myteam():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT COUNT(*) FROM Gamer_Team")
+    cursor.execute(f"SELECT COUNT(*) FROM Gamer_Team")
     count = cursor.fetchone()[0]
     return int(count)
 
@@ -286,35 +279,28 @@ def check_myteam():
 def give_money(money):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"UPDATE Gamer SET Money ='{money}'")
+    cursor.execute(f"UPDATE Gamer SET Money ='{money}'")
     db.commit()
     return 0
 
 
 def save_buy_team(Team):
-    Warning_message = tkinter.messagebox.askokcancel(
-        "인수", "정말 팀을 인수하시겠습니까?")
+    Warning_message = tkinter.messagebox.askokcancel("인수", "정말 팀을 인수하시겠습니까?")
     if Warning_message == True:
         db = sqlite3.connect(f"DB/FO_savefile3.db")
         cursor = db.cursor()
-        cursor.execute(
-            f"SELECT COUNT(*) FROM Gamer_Team")
+        cursor.execute(f"SELECT COUNT(*) FROM Gamer_Team")
         count = cursor.fetchone()[0]
-        cursor.execute(
-            f"SELECT Money From Gamer")
+        cursor.execute(f"SELECT Money From Gamer")
         money = cursor.fetchone()[0]
         sale = int(Team[4])
         if count < 1 and money > sale:
-            cursor.execute(
-                f"INSERT INTO Gamer_Team VALUES{Team}")
+            cursor.execute(f"INSERT INTO Gamer_Team VALUES{Team}")
             db.commit()
             Save_message = tkinter.messagebox.showinfo(
                 "인수 완료", f"{Team[3]} 팀을 인수했습니다.")
-            cursor.execute(
-                f'UPDATE Gamer SET Money ="{money-sale}"')
-            cursor.execute(
-                f'UPDATE Gamer SET Team ="{Team[3]}"')
+            cursor.execute(f'UPDATE Gamer SET Money ="{money-sale}"')
+            cursor.execute(f'UPDATE Gamer SET Team ="{Team[3]}"')
             db.commit()
         else:
             no_message = tkinter.messagebox.showinfo(
@@ -322,46 +308,38 @@ def save_buy_team(Team):
 
 
 def save_sell_team(Team):
-    Warning_message = tkinter.messagebox.askokcancel(
-        "매각", "정말 팀을 매각하시겠습니까?")
+    Warning_message = tkinter.messagebox.askokcancel("매각", "정말 팀을 매각하시겠습니까?")
     if Warning_message == True:
         db = sqlite3.connect(f"DB/FO_savefile3.db")
         cursor = db.cursor()
-        cursor.execute(
-            f"SELECT COUNT(*) FROM Gamer_Team")
+        cursor.execute(f"SELECT COUNT(*) FROM Gamer_Team")
         count = cursor.fetchone()[0]
-        cursor.execute(
-            f"SELECT Money From Gamer")
+        cursor.execute(f"SELECT Money From Gamer")
         money = cursor.fetchone()[0]
         sale = int(Team[4])
         Seq = int(Team[0])
-        cursor.execute(
-            f'DELETE FROM Gamer_Team WHERE Seq=="{Seq}"')
+        cursor.execute(f'DELETE FROM Gamer_Team WHERE Seq=="{Seq}"')
         db.commit()
-        Save_message = tkinter.messagebox.showinfo(
-            "매각 완료", f"{Team[3]} 팀을 매각했습니다.")
-        cursor.execute(
-            f'UPDATE Gamer SET Money ="{money+sale}"')
+        Save_message = tkinter.messagebox.showinfo("매각 완료",
+                                                   f"{Team[3]} 팀을 매각했습니다.")
+        cursor.execute(f'UPDATE Gamer SET Money ="{money+sale}"')
         if count == 1:
-            cursor.execute(
-                f'UPDATE Gamer SET Team ="무직"')
+            cursor.execute(f'UPDATE Gamer SET Team ="무직"')
         else:
-            cursor.execute(
-                f'SELECT Team From Gamer_Team')
+            cursor.execute(f'SELECT Team From Gamer_Team')
             team_name = cursor.fetchone()[0]
-            cursor.execute(
-                f'UPDATE Gamer SET Team ="{team_name}"')
+            cursor.execute(f'UPDATE Gamer SET Team ="{team_name}"')
         db.commit()
 
 
 def get_injury():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f'UPDATE Players SET Injury ="0"')
+    cursor.execute(f'UPDATE Players SET Injury ="0"')
     db.commit()
     cursor.execute(
-        f"SELECT Seq, Market_Value FROM Players WHERE Injury =='0' ORDER BY random()")
+        f"SELECT Seq, Market_Value FROM Players WHERE Injury =='0' ORDER BY random()"
+    )
     ran_length = random.randrange(5, 3000)
     injury_list = []
     for i in range(ran_length):
@@ -373,7 +351,8 @@ def get_injury():
             if ran_injury > new_injury:
                 ran_injury = new_injury
         cursor.execute(
-            f'UPDATE Players SET Injury ="{ran_injury}" WHERE Seq == "{injury_list[i][0]}"')
+            f'UPDATE Players SET Injury ="{ran_injury}" WHERE Seq == "{injury_list[i][0]}"'
+        )
         db.commit()
     player_Data = []
     famous = 0
@@ -388,15 +367,14 @@ def get_injury():
         injury_list.pop(num)
     return_list = []
     for i in player_Data:
-        cursor.execute(
-            f"SELECT * FROM Players WHERE Seq =='{i}'")
+        cursor.execute(f"SELECT * FROM Players WHERE Seq =='{i}'")
         return_list.append(cursor.fetchone())
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
         f"SELECT * FROM Players WHERE Team = '{my_team}' AND Injury != '0'")
     return_list += cursor.fetchall()
+
 
 ###############################################################################
 # 데이터 SELECT
@@ -407,8 +385,7 @@ def mini_game():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     ran = random.randrange(1, 3001)
-    cursor.execute(
-        f"SELECT * FROM Players Where Seq = '{ran}'")
+    cursor.execute(f"SELECT * FROM Players Where Seq = '{ran}'")
     a = cursor.fetchone()
     return a
 
@@ -431,11 +408,9 @@ def ran_team_ac(money):
 def my_team_ac():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT COUNT(*) FROM Gamer_Team")
+    cursor.execute(f"SELECT COUNT(*) FROM Gamer_Team")
     count = cursor.fetchone()[0]
-    cursor.execute(
-        f"SELECT * FROM Gamer_Team")
+    cursor.execute(f"SELECT * FROM Gamer_Team")
     acquistion_list = []
     for i in range(count):
         acquistion_list.append(cursor.fetchone())
@@ -445,19 +420,19 @@ def my_team_ac():
 def team_players(sort, desc):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT COUNT(*) FROM Players Where Team =="{my_team}"')
+    cursor.execute(f'SELECT COUNT(*) FROM Players Where Team =="{my_team}"')
     count_player = cursor.fetchone()[0]
     player_list = []
     if int(desc) == 0:
         cursor.execute(
-            f'SELECT * FROM Players Where Team =="{my_team}" Order By "{sort}"')
+            f'SELECT * FROM Players Where Team =="{my_team}" Order By "{sort}"'
+        )
     else:
         cursor.execute(
-            f'SELECT * FROM Players Where Team =="{my_team}" Order By "{sort}" DESC')
+            f'SELECT * FROM Players Where Team =="{my_team}" Order By "{sort}" DESC'
+        )
 
     for i in range(count_player):
         player = cursor.fetchone()[1:]
@@ -468,19 +443,19 @@ def team_players(sort, desc):
 def team_coaches(sort, desc):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT COUNT(*) FROM Coaches Where Team =="{my_team}"')
+    cursor.execute(f'SELECT COUNT(*) FROM Coaches Where Team =="{my_team}"')
     count_coaches = cursor.fetchone()[0]
     coach_list = []
     if int(desc) == 0:
         cursor.execute(
-            f'SELECT * FROM Coaches Where Team =="{my_team}" Order By "{sort}"')
+            f'SELECT * FROM Coaches Where Team =="{my_team}" Order By "{sort}"'
+        )
     else:
         cursor.execute(
-            f'SELECT * FROM Coaches Where Team =="{my_team}" Order By "{sort}" DESC')
+            f'SELECT * FROM Coaches Where Team =="{my_team}" Order By "{sort}" DESC'
+        )
 
     for i in range(count_coaches):
         coach = cursor.fetchone()[1:]
@@ -491,11 +466,9 @@ def team_coaches(sort, desc):
 def team_staffs(sort, desc):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT COUNT(*) FROM Staffs Where Team =="{my_team}"')
+    cursor.execute(f'SELECT COUNT(*) FROM Staffs Where Team =="{my_team}"')
     count_staffs = cursor.fetchone()[0]
     staff_list = []
     if int(desc) == 0:
@@ -503,7 +476,8 @@ def team_staffs(sort, desc):
             f'SELECT * FROM Staffs Where Team =="{my_team}" Order By "{sort}"')
     else:
         cursor.execute(
-            f'SELECT * FROM Staffs Where Team =="{my_team}" Order By "{sort}" DESC')
+            f'SELECT * FROM Staffs Where Team =="{my_team}" Order By "{sort}" DESC'
+        )
 
     for i in range(count_staffs):
         staff = cursor.fetchone()[1:]
@@ -515,7 +489,8 @@ def team_manager_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT * FROM Coaches Where Position ==(?) AND Team ==(?)', ("Manager", my_team))
+        f'SELECT * FROM Coaches Where Position ==(?) AND Team ==(?)',
+        ("Manager", my_team))
     Ability = cursor.fetchone()
     return Ability
 
@@ -524,10 +499,12 @@ def team_keeper_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Goalkeeper"))
+        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC',
+        (my_team, "0", "Goalkeeper"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Goalkeeper"))
+        f'SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC',
+        (my_team, "0", "Goalkeeper"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -538,10 +515,12 @@ def team_defender_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Defender"))
+        f'SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC',
+        (my_team, "0", "Defender"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Defender"))
+        f'SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC',
+        (my_team, "0", "Defender"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -552,10 +531,12 @@ def team_midfielder_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Midfielder"))
+        f'SELECT count(*) FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC',
+        (my_team, "0", "Midfielder"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Midfielder"))
+        f'SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC',
+        (my_team, "0", "Midfielder"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -566,10 +547,12 @@ def team_forward_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT count(*) FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Forward"))
+        f'SELECT count(*) FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC',
+        (my_team, "0", "Forward"))
     count = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC', (my_team, "0", "Forward"))
+        f'SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC',
+        (my_team, "0", "Forward"))
     Ability = []
     for i in range(count):
         Ability.append(cursor.fetchone())
@@ -579,11 +562,11 @@ def team_forward_ability(my_team):
 def team_coaches_ability():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT COUNT(*) AVG(Ablility) FROM Coaches Where Team ==(?)', (my_team,))
+        f'SELECT COUNT(*) AVG(Ablility) FROM Coaches Where Team ==(?)',
+        (my_team, ))
     Data = cursor.fetchone()
     count_coaches = int(Data[0])
     avg_ability = int(Data[1])
@@ -593,11 +576,11 @@ def team_coaches_ability():
 def team_staffs_ability():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT COUNT(*) AVG(Ablility) FROM Staffs Where Team ==(?)', (my_team,))
+        f'SELECT COUNT(*) AVG(Ablility) FROM Staffs Where Team ==(?)',
+        (my_team, ))
     Data = cursor.fetchone()
     count_staffs = int(Data[0])
     avg_ability = int(Data[1])
@@ -608,7 +591,8 @@ def rec_players(ability):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f"SELECT * FROM Players WHERE Potential <= (?) ORDER BY random()", (ability,))
+        f"SELECT * FROM Players WHERE Potential <= (?) ORDER BY random()",
+        (ability, ))
     Data = []
     for i in range(3):
         Data.append(cursor.fetchone())
@@ -619,7 +603,8 @@ def rec_coaches(ability):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f"SELECT * FROM Coaches WHERE Ability <= (?) ORDER BY random()", (ability,))
+        f"SELECT * FROM Coaches WHERE Ability <= (?) ORDER BY random()",
+        (ability, ))
     Data = []
     for i in range(3):
         Data.append(cursor.fetchone())
@@ -630,7 +615,8 @@ def rec_staffs(ability):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f"SELECT * FROM Staffs WHERE Ability <= (?) ORDER BY random()", (ability,))
+        f"SELECT * FROM Staffs WHERE Ability <= (?) ORDER BY random()",
+        (ability, ))
     Data = []
     for i in range(3):
         Data.append(cursor.fetchone())
@@ -640,8 +626,7 @@ def rec_staffs(ability):
 def ran_sell_player():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT * FROM Players ORDER BY random()")
+    cursor.execute(f"SELECT * FROM Players ORDER BY random()")
     Data = cursor.fetchone()
     return Data
 
@@ -649,8 +634,7 @@ def ran_sell_player():
 def ran_sell_coach():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT * FROM Coaches ORDER BY random()")
+    cursor.execute(f"SELECT * FROM Coaches ORDER BY random()")
     Data = cursor.fetchone()
     return Data
 
@@ -658,8 +642,7 @@ def ran_sell_coach():
 def ran_sell_staff():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT * FROM Staffs ORDER BY random()")
+    cursor.execute(f"SELECT * FROM Staffs ORDER BY random()")
     Data = cursor.fetchone()
     return Data
 
@@ -667,26 +650,24 @@ def ran_sell_staff():
 def sell_my_team():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT Value FROM Teams Where Team ==(?)', (my_team))
+    cursor.execute(f'SELECT Value FROM Teams Where Team ==(?)', (my_team))
     Team_value = int(cursor.fetchone()[0])
-    minus_value = int(Team_value*(0.5))
+    minus_value = int(Team_value * (0.5))
     plus_value = int(Team_value(0.3))
-    result = random.randrange(Team_value-minus_value, Team_value+plus_value)
+    result = random.randrange(Team_value - minus_value,
+                              Team_value + plus_value)
     return result
 
 
 def ability_ran_change():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT * FROM Players Where Team ==(?) ORDER BY random()', (my_team,))
+    cursor.execute(f'SELECT * FROM Players Where Team ==(?) ORDER BY random()',
+                   (my_team, ))
     player_list = []
     random_list = []
     player = cursor.fetchone()
@@ -694,30 +675,32 @@ def ability_ran_change():
     player_ability = player[7]
     player_potential = player[8]
     random = random.randrange(-2, 2)
-    if player_ability+random > player_potential:
-        cursor.execute(
-            f'UPDATE Players SET ability = (?) Where Seq == (?)', (player_potential, player_seq))
+    if player_ability + random > player_potential:
+        cursor.execute(f'UPDATE Players SET ability = (?) Where Seq == (?)',
+                       (player_potential, player_seq))
     else:
-        cursor.execute(
-            f'UPDATE Players SET ability = (?) Where Seq == (?)', (player_ability+random, player_seq))
+        cursor.execute(f'UPDATE Players SET ability = (?) Where Seq == (?)',
+                       (player_ability + random, player_seq))
     db.commit()
     player_list.append(player)
     random_list.append(random)
 
-    cursor.execute(
-        f'SELECT * FROM Players Where Team !=(?) ORDER BY random()', (my_team,))
+    cursor.execute(f'SELECT * FROM Players Where Team !=(?) ORDER BY random()',
+                   (my_team, ))
     for i in range(1000):
         player = cursor.fetchone()
         player_seq = player[0]
         player_ability = player[7]
         player_potential = player[8]
         random = random.randrange(-2, 2)
-        if player_ability+random > player_potential:
+        if player_ability + random > player_potential:
             cursor.execute(
-                f'UPDATE Players SET ability = (?) Where Seq == (?)', (player_potential, player_seq))
+                f'UPDATE Players SET ability = (?) Where Seq == (?)',
+                (player_potential, player_seq))
         else:
             cursor.execute(
-                f'UPDATE Players SET ability = (?) Where Seq == (?)', (player_ability+random, player_seq))
+                f'UPDATE Players SET ability = (?) Where Seq == (?)',
+                (player_ability + random, player_seq))
         db.commit()
         player_list.append(player)
         random_list.append(random)
@@ -727,17 +710,18 @@ def ability_ran_change():
 def fan_res():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT count(*) FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?))', ("0", my_team, my_team))
+        f'SELECT count(*) FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?))',
+        ("0", my_team, my_team))
     count = int(cursor.fetchone()[0])
     if count < 5:
         return False
     else:
         cursor.execute(
-            f'SELECT * FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC', ("0", my_team, my_team))
+            f'SELECT * FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC',
+            ("0", my_team, my_team))
         score = 0
         for i in range(5):
             Data = cursor.fetchone()
@@ -758,17 +742,18 @@ def fan_res():
 def pla_Res():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT count(*) From League_Calander Where result != (?) AND (Home == (?) OR Away == (?))', ("0", my_team, my_team))
+        f'SELECT count(*) From League_Calander Where result != (?) AND (Home == (?) OR Away == (?))',
+        ("0", my_team, my_team))
     count = int(cursor.fetchone()[0])
     if count < 5:
         return False
     else:
         cursor.execute(
-            f'SELECT * FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC', ("0", my_team, my_team))
+            f'SELECT * FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC',
+            ("0", my_team, my_team))
         score = 0
         for i in range(5):
             Data = cursor.fetchone()
@@ -785,6 +770,7 @@ def pla_Res():
                     score += 3
         return score
 
+
 ###############################################################################
 # 그 외
 ###############################################################################
@@ -795,21 +781,26 @@ def make_calander(num):
     cursor = db.cursor()
     cursor.execute("DELETE FROM League_Calander")
     db.commit()
-    cursor.execute(
-        f'SELECT count(*) From Leagues')
+    cursor.execute(f'SELECT count(*) From Leagues')
     league_count = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT Name, Country From Leagues')
+    cursor.execute(f'SELECT Name, Country From Leagues')
     league_list = []
     for i in range(league_count):
         league_list.append(cursor.fetchone())
     seq = 0
     for k in range(league_count):
         cursor.execute(
-            f'SELECT count(*) From Teams Where League == (?) AND Country == (?)', (league_list[k][0], league_list[k][1],))
+            f'SELECT count(*) From Teams Where League == (?) AND Country == (?)',
+            (
+                league_list[k][0],
+                league_list[k][1],
+            ))
         count = cursor.fetchone()[0]
         cursor.execute(
-            f'SELECT Team From Teams WHERE League == (?) AND Country == (?)', (league_list[k][0], league_list[k][1],))
+            f'SELECT Team From Teams WHERE League == (?) AND Country == (?)', (
+                league_list[k][0],
+                league_list[k][1],
+            ))
         Team_list = []
         for i in range(count):
             Team_list.append(cursor.fetchone()[0])
@@ -817,21 +808,23 @@ def make_calander(num):
         for i in range(len(Team_list)):
             for j in range(1, len(Team_list)):
                 inter = i + j
-                if inter > len(Team_list)-1:
+                if inter > len(Team_list) - 1:
                     inter -= len(Team_list)
                 calander_list.append((Team_list[i], Team_list[inter]))
         calander_sort_list = []
-        for i in range(len(Team_list)-1):
-            ran_num = [i+1 for i in range(len(Team_list))]
+        for i in range(len(Team_list) - 1):
+            ran_num = [i + 1 for i in range(len(Team_list))]
             for j in range(len(Team_list)):
                 choicenum = random.choice(ran_num)
                 ran_num.remove(choicenum)
-                result = choicenum*(len(Team_list)-1)-len(Team_list)+i-1
+                result = choicenum * (len(Team_list) -
+                                      1) - len(Team_list) + i - 1
                 calander_sort_list.append(calander_list[result])
         for i in range(len(calander_sort_list)):
             seq += 1
             cursor.execute(
-                f'INSERT INTO League_Calander VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}", "{i+1}", "{calander_sort_list[i][0]}", "{calander_sort_list[i][1]}","0","0")')
+                f'INSERT INTO League_Calander VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}", "{i+1}", "{calander_sort_list[i][0]}", "{calander_sort_list[i][1]}","0","0")'
+            )
         db.commit()
 
 
@@ -840,11 +833,9 @@ def make_player_stats(num):
     cursor = db.cursor()
     cursor.execute("DELETE FROM Player_Stat")
     db.commit()
-    cursor.execute(
-        f'SELECT count(*) From Leagues')
+    cursor.execute(f'SELECT count(*) From Leagues')
     league_count = cursor.fetchone()[0]
-    cursor.execute(
-        f'SELECT Name, Country From Leagues')
+    cursor.execute(f'SELECT Name, Country From Leagues')
     league_list = []
     for i in range(league_count):
         league_list.append(cursor.fetchone())
@@ -852,10 +843,17 @@ def make_player_stats(num):
     all_team = []
     for k in range(league_count):
         cursor.execute(
-            f'SELECT count(*) From Teams Where League == (?) AND Country == (?)', (league_list[k][0], league_list[k][1],))
+            f'SELECT count(*) From Teams Where League == (?) AND Country == (?)',
+            (
+                league_list[k][0],
+                league_list[k][1],
+            ))
         count = cursor.fetchone()[0]
         cursor.execute(
-            f'SELECT Team From Teams WHERE League == (?) AND Country == (?)', (league_list[k][0], league_list[k][1],))
+            f'SELECT Team From Teams WHERE League == (?) AND Country == (?)', (
+                league_list[k][0],
+                league_list[k][1],
+            ))
         Team_list = []
         for i in range(count):
             Team_list.append(cursor.fetchone()[0])
@@ -863,17 +861,18 @@ def make_player_stats(num):
         player_list = []
         # print(Team_list[0])
         for i in range(len(Team_list)):
-            cursor.execute(
-                f'SELECT count(*) From Players WHERE Team == (?)', (Team_list[i],))
+            cursor.execute(f'SELECT count(*) From Players WHERE Team == (?)',
+                           (Team_list[i], ))
             player_cnt = cursor.fetchone()[0]
-            cursor.execute(
-                f'SELECT Team, Name From Players WHERE Team == (?)', (Team_list[i],))
+            cursor.execute(f'SELECT Team, Name From Players WHERE Team == (?)',
+                           (Team_list[i], ))
             for i in range(player_cnt):
                 player_list.append(cursor.fetchone())
         for i in range(len(player_list)):
             seq += 1
             cursor.execute(
-                f'INSERT INTO Player_Stat VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}","{player_list[i][0]}","{player_list[i][1]}","0","0","0","0")')
+                f'INSERT INTO Player_Stat VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}","{player_list[i][0]}","{player_list[i][1]}","0","0","0","0")'
+            )
         db.commit()
 
 
@@ -888,8 +887,8 @@ def play_game(Home, Away):
         A_manager_ability = 50
     else:
         A_manager_ability = int(Away_Team_manager[5])
-    H_try = H_manager_ability-A_manager_ability+20
-    A_try = A_manager_ability-H_manager_ability+20
+    H_try = H_manager_ability - A_manager_ability + 20
+    A_try = A_manager_ability - H_manager_ability + 20
     H_keeper = team_keeper_ability(Home)
     A_keeper = team_keeper_ability(Away)
     H_defender = team_defender_ability(Home)
@@ -955,16 +954,16 @@ def play_game(Home, Away):
     goal2per = 101
     for i in order:
         if i == 'H':
-            chance_dif = int((H3_m_abil-A3_m_abil)/4)
+            chance_dif = int((H3_m_abil - A3_m_abil) / 4)
             if chance_dif < 0:
-                chance_dif = int(chance_dif/2)
+                chance_dif = int(chance_dif / 2)
             ran = random.randrange(1, goal1per)
-            if 60+chance_dif < ran:
+            if 60 + chance_dif < ran:
                 # print("찬스메이킹 실패1")
                 continue
-            pk_chance = int(H3_f_abil/100)
+            pk_chance = int(H3_f_abil / 100)
             ran = random.randrange(1, goal1per)
-            if 1+pk_chance >= ran:
+            if 1 + pk_chance >= ran:
                 # print("pk chance1")
                 ran = random.randrange(1, goal1per)
                 if ran <= 70:
@@ -975,13 +974,13 @@ def play_game(Home, Away):
                 else:
                     # print("pk 실패1")
                     continue
-            supersave_chance = int(A1_k_abil/10)
+            supersave_chance = int(A1_k_abil / 10)
             ran = random.randrange(1, goal1per)
-            if 1+supersave_chance >= ran:
+            if 1 + supersave_chance >= ran:
                 # print("슈퍼세이브2")
                 continue
-            goal_dif = int(((H3_f_abil + H3_m_abil) -
-                            (A4_d_abil + (A1_k_abil)))/16)
+            goal_dif = int(
+                ((H3_f_abil + H3_m_abil) - (A4_d_abil + (A1_k_abil))) / 16)
             ran = random.randrange(1, goal1per)
             if goal_dif + 20 >= ran:
                 # print("골1")
@@ -996,16 +995,16 @@ def play_game(Home, Away):
                 goal1 -= 1
                 # print("VAR 취소...")
         else:
-            chance_dif = int((A3_m_abil - H3_m_abil)/4)
+            chance_dif = int((A3_m_abil - H3_m_abil) / 4)
             if chance_dif < 0:
-                chance_dif = int(chance_dif/2)
+                chance_dif = int(chance_dif / 2)
             ran = random.randrange(1, goal2per)
-            if 50+chance_dif < ran:
+            if 50 + chance_dif < ran:
                 # print("찬스메이킹 실패2")
                 continue
-            pk_chance = int(A3_f_abil/100)
+            pk_chance = int(A3_f_abil / 100)
             ran = random.randrange(1, goal2per)
-            if 1+pk_chance >= ran:
+            if 1 + pk_chance >= ran:
                 # print("pk chance2")
                 ran = random.randrange(1, goal2per)
                 if ran <= 70:
@@ -1015,13 +1014,13 @@ def play_game(Home, Away):
                 else:
                     # print("pk 실패2")
                     continue
-            supersave_chance = int(H1_k_abil/10)
+            supersave_chance = int(H1_k_abil / 10)
             ran = random.randrange(1, goal2per)
-            if 1+supersave_chance >= ran:
+            if 1 + supersave_chance >= ran:
                 # print("슈퍼세이브1")
                 continue
-            goal_dif = int(((A3_f_abil + A3_m_abil) -
-                            (H4_d_abil + (H1_k_abil)))/16)
+            goal_dif = int(
+                ((A3_f_abil + A3_m_abil) - (H4_d_abil + (H1_k_abil))) / 16)
             ran = random.randrange(1, goal2per)
             if goal_dif + 10 >= ran:
                 # print("골2")
@@ -1038,7 +1037,8 @@ def play_game(Home, Away):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)', (f"{goal1}:{goal2}", Home, Away))
+        f'UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)',
+        (f"{goal1}:{goal2}", Home, Away))
     db.commit()
 
 
@@ -1050,7 +1050,8 @@ def match_progress(num):
         cursor = db.cursor()
         # prepared sql python sqlite
         cursor.execute(
-            'SELECT Home, Away FROM League_Calander WHERE Date == (?) AND result=="0"', (lodate,))
+            'SELECT Home, Away FROM League_Calander WHERE Date == (?) AND result=="0"',
+            (lodate, ))
         # cursor.execute(
         #     f'SELECT Home, Away FROM League_Calander WHERE Date == "{lodate}" AND result=="0"')
         li = cursor.fetchall()
@@ -1058,7 +1059,7 @@ def match_progress(num):
             play_game(li[i][0], li[i][1])
         print(f"{lodate} 쓰레드 끝")
 
-    for i in range(1, num+1):
+    for i in range(1, num + 1):
         date = i
         make_thread = threading.Thread(target=makethread)
         make_thread.daemon = True
@@ -1069,11 +1070,15 @@ def match_progress(num):
 def search_calander():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"SELECT Team FROM Gamer_Team")
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f'SELECT * FROM League_Calander WHERE result==(?) AND (Home ==(?) or Away ==(?))', ("0", my_team, my_team,))
+        f'SELECT * FROM League_Calander WHERE result==(?) AND (Home ==(?) or Away ==(?))',
+        (
+            "0",
+            my_team,
+            my_team,
+        ))
     return cursor.fetchone()
 
 
@@ -1081,16 +1086,18 @@ def one_position():
     db = sqlite3.connect(f"DB/FO_datafile.db")
     cursor = db.cursor()
     cursor.execute(
-        f'UPDATE Players Set Position= "Defender" Where Position like "%Back" OR Position =="Defender"')
+        f'UPDATE Players Set Position= "Defender" Where Position like "%Back" OR Position =="Defender"'
+    )
     db.commit()
     cursor.execute(
-        f'UPDATE Players Set Position= "Midfielder" Where Position like "%Midfield" OR Position == "Midfielder"')
+        f'UPDATE Players Set Position= "Midfielder" Where Position like "%Midfield" OR Position == "Midfielder"'
+    )
     db.commit()
     cursor.execute(
-        f'UPDATE Players Set Position= "Forward" Where Position like "Second%" OR Position like "%Forward"')
+        f'UPDATE Players Set Position= "Forward" Where Position like "Second%" OR Position like "%Forward"'
+    )
     db.commit()
-    cursor.execute(
-        f'SELECT * FROM Players Group by Position')
+    cursor.execute(f'SELECT * FROM Players Group by Position')
 
 
 def make_league_table(num):
@@ -1109,7 +1116,8 @@ def update_league_table():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f'SELECT * FROM League_Calander WHERE upd ==(?) AND result != (?)', ("0", "0"))
+        f'SELECT * FROM League_Calander WHERE upd ==(?) AND result != (?)',
+        ("0", "0"))
     update_list = cursor.fetchall()
     for i in update_list:
         Seq = i[0]
@@ -1118,36 +1126,70 @@ def update_league_table():
         Home = i[4]
         Away = i[5]
         result = i[6].split(":")
+        # cursor.execute(
+        # f'UPDATE League_Calander SET upd = (?) WHERE Seq ==(?)', ("1", Seq))
         cursor.execute(
-            f'UPDATE League_Calander SET upd = (?) WHERE Seq ==(?)', ("1", Seq))
-        cursor.execute(
-            f'SELECT * FROM League_table WHERE Country==(?) AND League ==(?) AND Team==(?)', (Country, League, Home))
+            f'SELECT * FROM League_table WHERE Country==(?) AND League ==(?) AND Team==(?)',
+            (Country, League, Home))
         Home_table = cursor.fetchone()
         print(Home_table)
         cursor.execute(
-            f'SELECT * FROM League_table WHERE Country==(?) AND League ==(?) AND Team==(?)', (Country, League, Away))
+            f'SELECT * FROM League_table WHERE Country==(?) AND League ==(?) AND Team==(?)',
+            (Country, League, Away))
         Away_table = cursor.fetchone()
+        db.commit()
         print(Away_table)
         print(result[0], result[1])
         if int(result[0]) > int(result[1]):
             print("Home 승")
-
+            print(Away_table[4] + 1, Away_table[5] + 1,
+                  Away_table[6] + int(result[1]),
+                  Away_table[7] + int(result[0]),
+                  Away_table[8] + int(result[1]) - int(result[0]),
+                  Away_table[0])
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Win=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)', (f"{Home_table[4]+1}", Home_table[5]+1, Home_table[6]+int(result[0]), Home_table[7] + int(result[1]), Home_table[8]+int(result[0])-int(result[1]), Home_table[9]+3, Home_table[0]))
+                f'UPDATE League_table SET Match=(?), Win=(?), Score=(?), Conceded = (?), GD = (?), Point = (?) WHERE Seq = (?)',
+                (f"{Home_table[4]+1}", f"{Home_table[5]+1}",
+                 f"{Home_table[6]+int(result[0])}", Home_table[7] +
+                 int(result[1]), Home_table[8] + int(result[0]) -
+                 int(result[1]), Home_table[9] + 3, Home_table[0]))
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Lose=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) WHERE Seq = (?)', (Away_table[4]+1, Away_table[5]+1, Away_table[6]+int(result[1]), Away_table[7] + int(result[0]), Away_table[8]+int(result[1])-int(result[0]), Away_table[0]))
+                f'UPDATE League_table SET Match=(?) AND Lose=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) WHERE Seq = (?)',
+                (Away_table[4] + 1, Away_table[5] + 1, Away_table[6] +
+                 int(result[1]), Away_table[7] + int(result[0]),
+                 Away_table[8] + int(result[1]) - int(result[0]),
+                 Away_table[0]))
+            db.commit()
         elif int(result[0]) == int(result[1]):
             print("무승부")
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Draw=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)', (Home_table[4]+1, Home_table[5]+1, Home_table[6]+int(result[0]), Home_table[7] + int(result[1]), Home_table[8]+int(result[0])-int(result[1]), Home_table[9]+1, Home_table[0]))
+                f'UPDATE League_table SET Match=(?) AND Draw=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)',
+                (Home_table[4] + 1, Home_table[5] + 1, Home_table[6] +
+                 int(result[0]), Home_table[7] + int(result[1]),
+                 Home_table[8] + int(result[0]) - int(result[1]),
+                 Home_table[9] + 1, Home_table[0]))
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Draw=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)', (Away_table[4]+1, Away_table[5]+1, Away_table[6]+int(result[1]), Away_table[7] + int(result[0]), Away_table[8]+int(result[1])-int(result[0]), Away_table[9]+1, Away_table[0]))
+                f'UPDATE League_table SET Match=(?) AND Draw=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)',
+                (Away_table[4] + 1, Away_table[5] + 1, Away_table[6] +
+                 int(result[1]), Away_table[7] + int(result[0]),
+                 Away_table[8] + int(result[1]) - int(result[0]),
+                 Away_table[9] + 1, Away_table[0]))
+            db.commit()
         else:
             print("Away 승")
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Lose=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) WHERE Seq = (?)', (Home_table[4]+1, Home_table[5]+1, Home_table[6]+int(result[0]), Home_table[7] + int(result[1]), Home_table[8]+int(result[0])-int(result[1]), Home_table[0]))
+                f'UPDATE League_table SET Match=(?) AND Lose=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) WHERE Seq = (?)',
+                (Home_table[4] + 1, Home_table[5] + 1, Home_table[6] +
+                 int(result[0]), Home_table[7] + int(result[1]),
+                 Home_table[8] + int(result[0]) - int(result[1]),
+                 Home_table[0]))
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Win=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)', (Away_table[4]+1, Away_table[5]+1, Away_table[6]+int(result[1]), Away_table[7] + int(result[0]), Away_table[8]+int(result[1])-int(result[0]), Away_table[9]+3, Away_table[0]))
+                f'UPDATE League_table SET Match=(?) AND Win=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)',
+                (Away_table[4] + 1, Away_table[5] + 1, Away_table[6] +
+                 int(result[1]), Away_table[7] + int(result[0]),
+                 Away_table[8] + int(result[1]) - int(result[0]),
+                 Away_table[9] + 3, Away_table[0]))
+            db.commit()
         db.commit()
 
 
