@@ -1059,7 +1059,7 @@ def match_progress(num):
             play_game(li[i][0], li[i][1])
         print(f"{lodate} 쓰레드 끝")
 
-    for i in range(1, num + 1):
+    for i in range(num - 26, num + 1):
         date = i
         make_thread = threading.Thread(target=makethread)
         make_thread.daemon = True
@@ -1126,27 +1126,18 @@ def update_league_table():
         Home = i[4]
         Away = i[5]
         result = i[6].split(":")
-        # cursor.execute(
-        # f'UPDATE League_Calander SET upd = (?) WHERE Seq ==(?)', ("1", Seq))
+        cursor.execute(f'UPDATE League_Calander SET upd = (?) WHERE Seq ==(?)',
+                       ("1", Seq))
         cursor.execute(
             f'SELECT * FROM League_table WHERE Country==(?) AND League ==(?) AND Team==(?)',
             (Country, League, Home))
         Home_table = cursor.fetchone()
-        print(Home_table)
         cursor.execute(
             f'SELECT * FROM League_table WHERE Country==(?) AND League ==(?) AND Team==(?)',
             (Country, League, Away))
         Away_table = cursor.fetchone()
         db.commit()
-        print(Away_table)
-        print(result[0], result[1])
         if int(result[0]) > int(result[1]):
-            print("Home 승")
-            print(Away_table[4] + 1, Away_table[5] + 1,
-                  Away_table[6] + int(result[1]),
-                  Away_table[7] + int(result[0]),
-                  Away_table[8] + int(result[1]) - int(result[0]),
-                  Away_table[0])
             cursor.execute(
                 f'UPDATE League_table SET Match=(?), Win=(?), Score=(?), Conceded = (?), GD = (?), Point = (?) WHERE Seq = (?)',
                 (f"{Home_table[4]+1}", f"{Home_table[5]+1}",
@@ -1154,37 +1145,35 @@ def update_league_table():
                  int(result[1]), Home_table[8] + int(result[0]) -
                  int(result[1]), Home_table[9] + 3, Home_table[0]))
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Lose=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) WHERE Seq = (?)',
+                f'UPDATE League_table SET Match=(?), Lose=(?), Score=(?), Conceded = (?), GD = (?) WHERE Seq = (?)',
                 (Away_table[4] + 1, Away_table[5] + 1, Away_table[6] +
                  int(result[1]), Away_table[7] + int(result[0]),
                  Away_table[8] + int(result[1]) - int(result[0]),
                  Away_table[0]))
             db.commit()
         elif int(result[0]) == int(result[1]):
-            print("무승부")
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Draw=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)',
+                f'UPDATE League_table SET Match=(?), Draw=(?), Score=(?), Conceded = (?),GD = (?), Point = (?) WHERE Seq = (?)',
                 (Home_table[4] + 1, Home_table[5] + 1, Home_table[6] +
                  int(result[0]), Home_table[7] + int(result[1]),
                  Home_table[8] + int(result[0]) - int(result[1]),
                  Home_table[9] + 1, Home_table[0]))
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Draw=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)',
+                f'UPDATE League_table SET Match=(?), Draw=(?), Score=(?), Conceded = (?), GD = (?), Point = (?) WHERE Seq = (?)',
                 (Away_table[4] + 1, Away_table[5] + 1, Away_table[6] +
                  int(result[1]), Away_table[7] + int(result[0]),
                  Away_table[8] + int(result[1]) - int(result[0]),
                  Away_table[9] + 1, Away_table[0]))
             db.commit()
         else:
-            print("Away 승")
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Lose=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) WHERE Seq = (?)',
+                f'UPDATE League_table SET Match=(?), Lose=(?), Score=(?), Conceded = (?), GD = (?) WHERE Seq = (?)',
                 (Home_table[4] + 1, Home_table[5] + 1, Home_table[6] +
                  int(result[0]), Home_table[7] + int(result[1]),
                  Home_table[8] + int(result[0]) - int(result[1]),
                  Home_table[0]))
             cursor.execute(
-                f'UPDATE League_table SET Match=(?) AND Win=(?) AND Score=(?) AND Conceded = (?) AND GD = (?) AND Point = (?) WHERE Seq = (?)',
+                f'UPDATE League_table SET Match=(?), Win=(?), Score=(?), Conceded = (?), GD = (?), Point = (?) WHERE Seq = (?)',
                 (Away_table[4] + 1, Away_table[5] + 1, Away_table[6] +
                  int(result[1]), Away_table[7] + int(result[0]),
                  Away_table[8] + int(result[1]) - int(result[0]),
