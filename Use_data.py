@@ -1066,6 +1066,8 @@ def match_progress(num):
         make_thread.start()
         time.sleep(0.05)
 
+    return update_league_table()
+
 
 def search_calander():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
@@ -1136,14 +1138,13 @@ def update_league_table():
             f'SELECT * FROM League_table WHERE Country==(?) AND League ==(?) AND Team==(?)',
             (Country, League, Away))
         Away_table = cursor.fetchone()
-        db.commit()
         if int(result[0]) > int(result[1]):
             cursor.execute(
                 f'UPDATE League_table SET Match=(?), Win=(?), Score=(?), Conceded = (?), GD = (?), Point = (?) WHERE Seq = (?)',
-                (f"{Home_table[4]+1}", f"{Home_table[5]+1}",
-                 f"{Home_table[6]+int(result[0])}", Home_table[7] +
-                 int(result[1]), Home_table[8] + int(result[0]) -
-                 int(result[1]), Home_table[9] + 3, Home_table[0]))
+                (Home_table[4] + 1, Home_table[5] + 1, Home_table[6] +
+                 int(result[0]), Home_table[7] + int(result[1]),
+                 Home_table[8] + int(result[0]) - int(result[1]),
+                 Home_table[9] + 3, Home_table[0]))
             cursor.execute(
                 f'UPDATE League_table SET Match=(?), Lose=(?), Score=(?), Conceded = (?), GD = (?) WHERE Seq = (?)',
                 (Away_table[4] + 1, Away_table[5] + 1, Away_table[6] +
@@ -1179,7 +1180,3 @@ def update_league_table():
                  Away_table[8] + int(result[1]) - int(result[0]),
                  Away_table[9] + 3, Away_table[0]))
             db.commit()
-        db.commit()
-
-
-update_league_table()
