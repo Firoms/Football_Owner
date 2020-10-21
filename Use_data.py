@@ -1066,8 +1066,6 @@ def match_progress(num):
         make_thread.start()
         time.sleep(0.05)
 
-    return update_league_table()
-
 
 def search_calander():
     db = sqlite3.connect(f"DB/FO_savefile3.db")

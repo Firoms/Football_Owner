@@ -277,7 +277,10 @@ class Screen:
         self.Main_Screen()
         next_match = search_calander()
         simulation = match_progress(next_match[3])
-        
+        # update = self.update()
+
+    def update(self):
+        update_league_table()
 
     def injury(self):
         print("부상")
