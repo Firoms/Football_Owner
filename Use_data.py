@@ -876,7 +876,7 @@ def make_player_stats(num):
         db.commit()
 
 
-def play_game(Home, Away):
+def play_game(Home, Away, db):
     Home_Team_manager = team_manager_ability(Home)
     Away_Team_manager = team_manager_ability(Away)
     if Home_Team_manager == None:
@@ -1034,7 +1034,6 @@ def play_game(Home, Away):
                 goal1per -= 15
                 goal2 -= 1
                 # print("VAR 취소...")
-    db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
         f'UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)',
@@ -1043,11 +1042,11 @@ def play_game(Home, Away):
 
 
 def match_progress(num):
-    def makethread():
-        lodate = date
-        print(f"{lodate} 쓰레드 시작")
+    def makethread(i):
         db = sqlite3.connect(f"DB/FO_savefile3.db")
         cursor = db.cursor()
+        lodate = i
+        print(f"{lodate} 쓰레드 시작")
         # prepared sql python sqlite
         cursor.execute(
             'SELECT Home, Away FROM League_Calander WHERE Date == (?) AND result=="0"',
@@ -1056,15 +1055,30 @@ def match_progress(num):
         #     f'SELECT Home, Away FROM League_Calander WHERE Date == "{lodate}" AND result=="0"')
         li = cursor.fetchall()
         for i in range(len(li)):
-            play_game(li[i][0], li[i][1])
+            play_game(li[i][0], li[i][1], db)
         print(f"{lodate} 쓰레드 끝")
 
-    for i in range(num - 26, num + 1):
-        date = i
-        make_thread = threading.Thread(target=makethread)
+    for i in range(num - 26, num):
+        make_thread = threading.Thread(target=lambda: makethread(i))
         make_thread.daemon = True
         make_thread.start()
         time.sleep(0.05)
+
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    lodate = num
+    print(f"{lodate} 쓰레드 시작")
+    # prepared sql python sqlite
+    cursor.execute(
+        'SELECT Home, Away FROM League_Calander WHERE Date == (?) AND result=="0"',
+        (lodate, ))
+    # cursor.execute(
+    #     f'SELECT Home, Away FROM League_Calander WHERE Date == "{lodate}" AND result=="0"')
+    li = cursor.fetchall()
+    for i in range(len(li)):
+        play_game(li[i][0], li[i][1], db)
+    print(f"{lodate} 쓰레드 끝")
+    return update_league_table()
 
 
 def search_calander():
