@@ -277,6 +277,7 @@ class Screen:
         self.Main_Screen()
         next_match = search_calander()
         simulation = match_progress(next_match[3])
+        update = update_league_table()
 
 
     def injury(self):
