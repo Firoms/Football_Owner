@@ -1058,26 +1058,15 @@ def match_progress(num):
             play_game(li[i][0], li[i][1], db)
         print(f"{lodate} 쓰레드 끝")
 
-    for i in range(num - 26, num):
-        make_thread = threading.Thread(target=lambda: makethread(i))
-        make_thread.daemon = True
-        make_thread.start()
+    thr_li = [i for i in range(27)]
+    for i in range(num - 26, num + 1):
+        thr_li[i - num + 26] = threading.Thread(target=lambda: makethread(i))
+        thr_li[i - num + 26].daemon = True
+        thr_li[i - num + 26].start()
         time.sleep(0.05)
-    time.sleep(0.3)
-    db = sqlite3.connect(f"DB/FO_savefile3.db")
-    cursor = db.cursor()
-    lodate = num
-    print(f"main 쓰레드 시작")
-    # prepared sql python sqlite
-    cursor.execute(
-        'SELECT Home, Away FROM League_Calander WHERE Date == (?) AND result=="0"',
-        (lodate, ))
-    # cursor.execute(
-    #     f'SELECT Home, Away FROM League_Calander WHERE Date == "{lodate}" AND result=="0"')
-    li = cursor.fetchall()
-    for i in range(len(li)):
-        play_game(li[i][0], li[i][1], db)
-    print(f"main 쓰레드 끝")
+    for i in range(27):
+        thr_li[i].join()
+    print("다음 진행")
 
 
 def search_calander():
