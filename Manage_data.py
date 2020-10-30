@@ -6,16 +6,14 @@ def change_ages():
     db = sqlite3.connect(f"DB/FO_datafile1.db")
     cursor = db.cursor()
     cursor1 = db.cursor()
-    cursor.execute(
-        "SELECT Seq, Age From Staffs")
+    cursor.execute("SELECT Seq, Age From Staffs")
     for i in range(56297):
         a = cursor.fetchone()
         Seq = a[0]
         Age = str(a[1])
         ran = random.randrange(30, 70)
         if len(Age) != 2:
-            cursor1.execute(
-                f"UPDATE Staffs SET Age='{ran}'  WHERE Seq == '{Seq}'")
+            cursor1.execute(f"UPDATE Staffs SET Age='{ran}'  WHERE Seq == '{Seq}'")
             db.commit()
 
 
@@ -23,8 +21,7 @@ def change_values():
     db = sqlite3.connect(f"DB/FO_datafile1.db")
     cursor = db.cursor()
     cursor1 = db.cursor()
-    cursor1.execute(
-        f'UPDATE Leagues SET Value="0"')
+    cursor1.execute(f'UPDATE Leagues SET Value="0"')
     db.commit()
     # cursor.execute(
     #     "SELECT Seq, Age, Ability, Potential From Players")
@@ -51,8 +48,7 @@ def change_values():
     #         f'UPDATE Teams SET Value="{Value}" WHERE Team=="{Team}"')
     #     db.commit()
 
-    cursor.execute(
-        "SELECT League,Country, sum(Value) Value FROM Teams GROUP By League")
+    cursor.execute("SELECT League,Country, sum(Value) Value FROM Teams GROUP By League")
     for i in range(2093):
         a = cursor.fetchone()
         League = a[0]
@@ -60,7 +56,8 @@ def change_values():
         Value = a[2]
         print(League, Value)
         cursor1.execute(
-            f'UPDATE Leagues SET Value="{Value}" WHERE Name=="{League}" AND Country=="{Country}"')
+            f'UPDATE Leagues SET Value="{Value}" WHERE Name=="{League}" AND Country=="{Country}"'
+        )
         db.commit()
 
 
@@ -82,7 +79,8 @@ def delete_same():
     db = sqlite3.connect(f"DB/FO_datafile1.db")
     cursor = db.cursor()
     cursor.execute(
-        "SELECT * FROM(SELECT Name, Team, Position, Age, Count(*) Cnt	FROM Staffs GROUP by Name, Team) WHERE Cnt>1")
+        "SELECT * FROM(SELECT Name, Team, Position, Age, Count(*) Cnt	FROM Staffs GROUP by Name, Team) WHERE Cnt>1"
+    )
     for i in range(176):
         a = cursor.fetchone()
         name.append(a[0])
@@ -92,12 +90,12 @@ def delete_same():
     print("delete 시작")
     for i in range(176):
         cursor.execute(
-            f'DELETE FROM Staffs WHERE Name=="{name[i]}" and Team=="{team[i]}" and Age=="{age[i]}"')
+            f'DELETE FROM Staffs WHERE Name=="{name[i]}" and Team=="{team[i]}" and Age=="{age[i]}"'
+        )
         db.commit()
     print("insert 시작")
     for i in range(176):
-        insert_query = \
-            f'INSERT INTO Staffs VALUES("","{name[i]}", "{team[i]}","{position[i]}","{age[i]}")'
+        insert_query = f'INSERT INTO Staffs VALUES("","{name[i]}", "{team[i]}","{position[i]}","{age[i]}")'
         cursor.execute(insert_query)
         db.commit()
 
@@ -111,8 +109,7 @@ def make_ablity():
     # cursor.execute(
     #     f"UPDATE Players SET Ability='0'")
     # db.commit()
-    cursor.execute(
-        "SELECT Market_Value From Players Group BY Market_Value")
+    cursor.execute("SELECT Market_Value From Players Group BY Market_Value")
     for i in range(116):
         a = cursor.fetchone()[0][1:-2]
         Value_data.append(a)
@@ -159,27 +156,32 @@ def make_ablity():
     for i in range(26, 31):
         for r in range(len(Ability_data)):
             cursor.execute(
-                f"UPDATE Players SET Ability='{i-23+Ability_data[r]-4}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'")
+                f"UPDATE Players SET Ability='{i-23+Ability_data[r]-4}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'"
+            )
             db.commit()
     for i in range(31, 36):
         for r in range(len(Ability_data)):
             cursor.execute(
-                f"UPDATE Players SET Ability='{i-26+Ability_data[r]-4}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'")
+                f"UPDATE Players SET Ability='{i-26+Ability_data[r]-4}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'"
+            )
             db.commit()
     for i in range(36, 55):
         for r in range(len(Ability_data)):
             cursor.execute(
-                f"UPDATE Players SET Ability='{56-i+Ability_data[r]-4}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'")
+                f"UPDATE Players SET Ability='{56-i+Ability_data[r]-4}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'"
+            )
             db.commit()
     for i in range(22, 26):
         for r in range(len(Ability_data)):
             cursor.execute(
-                f"UPDATE Players SET Ability='{27-i+Ability_data[r]-4}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'")
+                f"UPDATE Players SET Ability='{27-i+Ability_data[r]-4}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'"
+            )
             db.commit()
     for i in range(14, 22):
         for r in range(len(Ability_data)):
             cursor.execute(
-                f"UPDATE Players SET Ability='{25-i+Ability_data[r]-7}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'")
+                f"UPDATE Players SET Ability='{25-i+Ability_data[r]-7}'  WHERE Age == '{i}' AND Market_value == '€{Value_data[r]}0m'"
+            )
             db.commit()
 
 
@@ -187,8 +189,7 @@ def make_potential():
     db = sqlite3.connect(f"DB/FO_datafile1.db")
     cursor = db.cursor()
     cursor1 = db.cursor()
-    cursor.execute(
-        "SELECT Seq, Age, Ability, Market_Value From Players")
+    cursor.execute("SELECT Seq, Age, Ability, Market_Value From Players")
     for i in range(56297):
         print(i)
         a = cursor.fetchone()
@@ -197,24 +198,24 @@ def make_potential():
         Ability = int(a[2])
         potential = Ability
         if 31 <= Age:
-            ranpot = random.randrange(Ability, Ability+2)
+            ranpot = random.randrange(Ability, Ability + 2)
             for i in range(3):
                 if ranpot >= 85:
-                    ranpot = random.randrange(Ability, Ability+2)
+                    ranpot = random.randrange(Ability, Ability + 2)
             if potential < ranpot:
                 potential = ranpot
         elif 28 <= Age < 31:
-            ranpot = random.randrange(Ability, Ability+3)
+            ranpot = random.randrange(Ability, Ability + 3)
             for i in range(3):
                 if ranpot >= 85:
-                    ranpot = random.randrange(Ability, Ability+3)
+                    ranpot = random.randrange(Ability, Ability + 3)
             if potential < ranpot:
                 potential = ranpot
         elif 25 <= Age < 28:
-            ranpot = random.randrange(Ability, Ability+4)
+            ranpot = random.randrange(Ability, Ability + 4)
             for i in range(3):
                 if ranpot >= 85:
-                    ranpot = random.randrange(Ability, Ability+4)
+                    ranpot = random.randrange(Ability, Ability + 4)
             if potential < ranpot:
                 potential = ranpot
         elif 22 <= Age < 25:
@@ -233,7 +234,8 @@ def make_potential():
                 potential = ranpot
 
         cursor1.execute(
-            f"UPDATE Players SET Potential='{potential}'  WHERE Seq == '{Seq}'")
+            f"UPDATE Players SET Potential='{potential}'  WHERE Seq == '{Seq}'"
+        )
         db.commit()
 
 
@@ -241,13 +243,12 @@ def make_staff_ability():
     db = sqlite3.connect(f"DB/FO_datafile1.db")
     cursor = db.cursor()
     cursor1 = db.cursor()
-    cursor.execute(
-        "SELECT Team FROM Teams Order By Value")
+    cursor.execute("SELECT Team FROM Teams Order By Value")
     rank = {}
     for i in range(2203):
         a = cursor.fetchone()
         Team = a[0]
-        Value = i+1
+        Value = i + 1
         if Value <= 1000:
             Value = 1000
         rank[Team] = Value
@@ -256,8 +257,7 @@ def make_staff_ability():
     #     cursor1.execute(
     #         f'UPDATE Staffs SET Ability="1"  WHERE Team == "{key}"')
     #     db.commit()
-    cursor.execute(
-        "SELECT Seq, Team FROM Staffs")
+    cursor.execute("SELECT Seq, Team FROM Staffs")
     for i in range(6552):
         a = cursor.fetchone()
         print(a)
@@ -272,8 +272,7 @@ def make_staff_ability():
                 break
         if ability < 20:
             ability = random.randrange(20, 40)
-        cursor1.execute(
-            f"UPDATE Staffs SET Ability='{ability}'  WHERE Seq == '{Seq}'")
+        cursor1.execute(f"UPDATE Staffs SET Ability='{ability}'  WHERE Seq == '{Seq}'")
         db.commit()
 
 
@@ -300,8 +299,7 @@ def make_money():
     #     cursor1.execute(
     #         f'UPDATE Staffs Set Money="{int(money/8)}" Where Seq=="{Seq}"')
     #     db.commit()
-    cursor.execute(
-        "SELECT Seq,Age,Ability,Potential,Position FROM Players")
+    cursor.execute("SELECT Seq,Age,Ability,Potential,Position FROM Players")
     for i in range(56297):
         a = cursor.fetchone()
         Seq = a[0]
@@ -311,21 +309,20 @@ def make_money():
         Ability = int(a[2])
         Potential = int(a[3])
         Position = str(a[4])
-        money = Age*Ability*Potential/5
-        if Position == 'Goalkeeper':
-            money = money*4/5
+        money = Age * Ability * Potential / 5
+        if Position == "Goalkeeper":
+            money = money * 4 / 5
         if Ability < 70:
-            money = money/2
+            money = money / 2
         if Ability < 65:
-            money = money/3
+            money = money / 3
         if Ability < 60:
-            money = money/4
+            money = money / 4
         if Ability < 55:
-            money = money/5
+            money = money / 5
         if Ability < 50:
-            money = money/6
-        cursor1.execute(
-            f'UPDATE Players Set Money="{int(money)}" Where Seq=="{Seq}"')
+            money = money / 6
+        cursor1.execute(f'UPDATE Players Set Money="{int(money)}" Where Seq=="{Seq}"')
         db.commit()
 
 
@@ -335,15 +332,15 @@ def make_contract():
     for i in range(56297):
         contract = random.randrange(1, 6)
         cursor.execute(
-            f'UPDATE Coaches Set Contract="{int(contract)}" Where Seq=="{i+1}"')
+            f'UPDATE Coaches Set Contract="{int(contract)}" Where Seq=="{i+1}"'
+        )
         db.commit()
 
 
 def no_injury():
     db = sqlite3.connect(f"DB/FO_datafile.db")
     cursor = db.cursor()
-    cursor.execute(
-        f"UPDATE Players SET Injury ='0'")
+    cursor.execute(f"UPDATE Players SET Injury ='0'")
     db.commit()
     return 0
 
@@ -354,14 +351,16 @@ def missed_leagues():
     data_db = sqlite3.connect(f"DB/FO_datafile.db")
     d_cursor = data_db.cursor()
     cursor.execute(
-        f'SELECT League, Country, sum(Value), count(*) From Teams Group By League')
+        f"SELECT League, Country, sum(Value), count(*) From Teams Group By League"
+    )
     lost = []
     seq = 142
     for i in range(12):
         lost.append(cursor.fetchone())
     for i in range(12):
         d_cursor.execute(
-            f'INSERT INTO Leagues VALUES("{seq+i}", "{lost[i][0]}", "{lost[i][1]}","{lost[i][3]}","{lost[i][2]}")')
+            f'INSERT INTO Leagues VALUES("{seq+i}", "{lost[i][0]}", "{lost[i][1]}","{lost[i][3]}","{lost[i][2]}")'
+        )
         data_db.commit()
 
 
@@ -369,8 +368,7 @@ def make_row_num():
     db = sqlite3.connect(f"DB/FO_datafile.db")
     cursor = db.cursor()
     cursor1 = db.cursor()
-    cursor.execute(
-        f"SELECT * FROM Teams")
+    cursor.execute(f"SELECT * FROM Teams")
     for i in range(2088):
 
         a = cursor.fetchone()
@@ -380,56 +378,51 @@ def make_row_num():
         value = a[4]
 
         cursor1.execute(
-            f'UPDATE Teams SET Seq = {i+1} Where League = "{league}" AND Country = "{country}" AND Team = "{team}" AND Value = "{value}"')
+            f'UPDATE Teams SET Seq = {i+1} Where League = "{league}" AND Country = "{country}" AND Team = "{team}" AND Value = "{value}"'
+        )
         db.commit()
 
 
 def missed_players():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f'SELECT Team, Name From Player_Stat')
+    cursor.execute(f"SELECT Team, Name From Player_Stat")
     lost = []
     for i in range(53516):
         lost.append(cursor.fetchone())
     for i in range(53516):
         cursor.execute(
-            f'DELETE FROM Players WHERE Team = "{lost[i][0]}" AND Name = "{lost[i][1]}"')
+            f'DELETE FROM Players WHERE Team = "{lost[i][0]}" AND Name = "{lost[i][1]}"'
+        )
         db.commit()
 
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     data_db = sqlite3.connect(f"DB/FO_datafile.db")
     d_cursor = data_db.cursor()
-    cursor.execute(
-        f'SELECT Team From Players Group By Team')
+    cursor.execute(f"SELECT Team From Players Group By Team")
     lost = []
     for i in range(105):
         lost.append(cursor.fetchone()[0])
     for i in range(105):
-        d_cursor.execute(
-            f'DELETE FROM Players WHERE Team =="{lost[i]}"')
+        d_cursor.execute(f'DELETE FROM Players WHERE Team =="{lost[i]}"')
         data_db.commit()
 
 
 def del_ghost_team():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(
-        f'SELECT Team From Players GROUP BY Team')
+    cursor.execute(f"SELECT Team From Players GROUP BY Team")
     a = cursor.fetchall()
     for i in range(len(a)):
-        cursor.execute(
-            f'DELETE FROM Teams WHERE Team = "{a[i][0]}"')
+        cursor.execute(f'DELETE FROM Teams WHERE Team = "{a[i][0]}"')
         db.commit()
-    cursor.execute(
-        f'SELECT Team From Teams')
+    cursor.execute(f"SELECT Team From Teams")
     b = cursor.fetchall()
     db = sqlite3.connect(f"DB/FO_datafile.db")
     cursor = db.cursor()
     for i in range(len(b)):
-        cursor.execute(
-            f'DELETE FROM Teams WHERE Team = "{b[i][0]}"')
+        cursor.execute(f'DELETE FROM Teams WHERE Team = "{b[i][0]}"')
         db.commit()
 
 
