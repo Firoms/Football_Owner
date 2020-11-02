@@ -7,6 +7,7 @@ import time
 import random
 import threading
 import queue
+import concurrent.futures
 
 table_list = [
     "Coaches",
@@ -1126,10 +1127,21 @@ def match_progress(num):
         thr_li[i - num + 26] = threading.Thread(target=lambda: makethread(i))
         thr_li[i - num + 26].daemon = True
         thr_li[i - num + 26].start()
-        time.sleep(0.05)
-    for i in range(27):
-        thr_li[i].join()
-    print("다음 진행")
+
+    def wait_thread():
+        for i in range(27):
+            thr_li[i].join()
+        update_league_table()
+        return 0
+
+    # wait_thr = threading.Thread(wait_thread())
+    # wait_thr.daemon = True
+    # wait_thr.start()
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future = executor.submit(wait_thread)
+        return_value = future.result()
+        return return_value
 
 
 def search_calander():
