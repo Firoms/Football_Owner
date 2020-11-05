@@ -377,7 +377,7 @@ class Screen:
 
     def match_simulate(self):
         next_match = search_calander()
-        simulation = match_progress(next_match[3])
+        simulation = match_progress(next_match[0],next_match[1])
         self.Main_Screen()
 
     def injury(self):

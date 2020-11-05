@@ -1104,7 +1104,18 @@ def play_game(Home, Away, db):
     db.commit()
 
 
-def match_progress(num):
+def match_progress(sta, fin):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT Home, Away FROM League_Calander WHERE Date>=(?) AND Date<=(?) AND result==(?)",
+        (sta, fin, "0"),
+    )
+    li = cursor.fetchall()
+    for i in range(len(li)):
+        play_game(li[i][0], li[i][1], db)
+    print("fininshed")
+
     # def makethread(i):
     #     db = sqlite3.connect(f"DB/FO_savefile3.db")
     #     cursor = db.cursor()
@@ -1157,7 +1168,13 @@ def search_calander():
             my_team,
         ),
     )
-    return cursor.fetchone()
+    fin = cursor.fetchone()[3]
+    cursor.execute(
+        f"SELECT * FROM League_Calander WHERE result==(?) Group By Date",
+        ("0",),
+    )
+    sta = cursor.fetchone()[3]
+    return [sta, fin]
 
 
 def one_position():
