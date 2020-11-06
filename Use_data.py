@@ -8,6 +8,7 @@ import random
 import threading
 import queue
 import concurrent.futures
+from timer import testtime
 
 table_list = [
     "Coaches",
@@ -22,6 +23,7 @@ table_list = [
     "Player_Stat",
 ]
 
+timercheck = testtime()
 ###############################################################################
 # 게이머 생성
 ###############################################################################
@@ -1105,6 +1107,7 @@ def play_game(Home, Away, db):
 
 
 def match_progress(sta, fin):
+    timercheck.start()
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
@@ -1114,8 +1117,7 @@ def match_progress(sta, fin):
     li = cursor.fetchall()
     for i in range(len(li)):
         play_game(li[i][0], li[i][1], db)
-    print("fininshed")
-
+    timercheck.finish()
     # def makethread(i):
     #     db = sqlite3.connect(f"DB/FO_savefile3.db")
     #     cursor = db.cursor()
