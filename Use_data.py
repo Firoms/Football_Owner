@@ -1117,44 +1117,8 @@ def match_progress(sta, fin):
     li = cursor.fetchall()
     for i in range(len(li)):
         play_game(li[i][0], li[i][1], db)
+    update_league_table()
     timercheck.finish()
-    # def makethread(i):
-    #     db = sqlite3.connect(f"DB/FO_savefile3.db")
-    #     cursor = db.cursor()
-    #     lodate = i
-    #     print(f"{lodate} 쓰레드 시작")
-    #     # prepared sql python sqlite
-    #     cursor.execute(
-    #         'SELECT Home, Away FROM League_Calander WHERE Date == (?) AND result=="0"',
-    #         (lodate,),
-    #     )
-    #     # cursor.execute(
-    #     #     f'SELECT Home, Away FROM League_Calander WHERE Date == "{lodate}" AND result=="0"')
-    #     li = cursor.fetchall()
-    #     for i in range(len(li)):
-    #         play_game(li[i][0], li[i][1], db)
-    #     print(f"{lodate} 쓰레드 끝")
-
-    # thr_li = [i for i in range(27)]
-    # for i in range(num - 26, num + 1):
-    #     thr_li[i - num + 26] = threading.Thread(target=lambda: makethread(i))
-    #     thr_li[i - num + 26].daemon = True
-    #     thr_li[i - num + 26].start()
-
-    # def wait_thread():
-    #     for i in range(27):
-    #         thr_li[i].join()
-    #     update_league_table()
-    #     return 0
-
-    # # wait_thr = threading.Thread(wait_thread())
-    # # wait_thr.daemon = True
-    # # wait_thr.start()
-
-    # with concurrent.futures.ThreadPoolExecutor() as executor:
-    #     future = executor.submit(wait_thread)
-    #     return_value = future.result()
-    #     return return_value
 
 
 def search_calander():

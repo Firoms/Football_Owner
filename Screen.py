@@ -4,6 +4,7 @@ from tkinter import *
 import time
 import random
 from tkinter import messagebox
+import threading
 
 
 class Screen:
@@ -76,6 +77,49 @@ class Screen:
             command=reset_datas,
         )
         reset_datas_btn.place(x=75, y=198)
+
+    def Loading_Screen(self, thread):
+        self.destroy()
+        Loading1_Screen_background = Get_label.image_label(
+            self.Gui, "loading1.png", 0, 0
+        )
+        print("loading 들어옴")
+        print(thread.is_alive())
+        while thread.is_alive():
+            print("while 들어옴")
+            Loading1_Screen_background = Get_label.image_label(
+                self.Gui, "loading1.png", 0, 0
+            )
+            Loading1_Screen_background.after(300, self.no_action)
+            Loading2_Screen_background = Get_label.image_label(
+                self.Gui, "로딩2.png", 0, 0
+            )
+            Loading2_Screen_background.after(300, self.no_action)
+            Loading3_Screen_background = Get_label.image_label(
+                self.Gui, "로딩3.png", 0, 0
+            )
+            Loading3_Screen_background.after(300, self.no_action)
+            Loading4_Screen_background = Get_label.image_label(
+                self.Gui, "로딩4.png", 0, 0
+            )
+            Loading4_Screen_background.after(300, self.no_action)
+            Loading5_Screen_background = Get_label.image_label(
+                self.Gui, "로딩5.png", 0, 0
+            )
+            Loading5_Screen_background.after(300, self.no_action)
+            Loading6_Screen_background = Get_label.image_label(
+                self.Gui, "로딩6.png", 0, 0
+            )
+            Loading6_Screen_background.after(300, self.no_action)
+            Loading7_Screen_background = Get_label.image_label(
+                self.Gui, "로딩7.png", 0, 0
+            )
+            Loading7_Screen_background.after(300, self.no_action)
+            Loading8_Screen_background = Get_label.image_label(
+                self.Gui, "로딩8.png", 0, 0
+            )
+            Loading8_Screen_background.after(300, self.no_action)
+        print("while 빠짐")
 
     ############################################################################################################################################################################################
     # 설명 화면
@@ -373,11 +417,13 @@ class Screen:
         Match_Play_background = Get_label.image_label(
             self.Gui, "simulation_bg.png", 0, 0
         )
-        Match_Play_background.after(100, self.match_simulate)
-
-    def match_simulate(self):
         next_match = search_calander()
-        simulation = match_progress(next_match[0],next_match[1])
+        simulation_thr = threading.Thread(
+            target=lambda: match_progress(next_match[0], next_match[1])
+        )
+        simulation_thr.daemon = True
+        simulation_thr.start()
+        self.Loading_Screen(simulation_thr)
         self.Main_Screen()
 
     def injury(self):
