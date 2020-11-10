@@ -1217,3 +1217,24 @@ def update_league_table():
                 f'UPDATE League_table SET Match=Match+1, Lose=Lose+1, Score=Score+{result[0]}, Conceded =Conceded+{result[1]}, GD = GD+({result[0]}-{result[1]}) WHERE Team = "{Home}"'
             )
         db.commit()
+
+
+def get_myteam_table():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(f"SELECT Team FROM Gamer")
+    my_team = cursor.fetchone()
+    # print(my_team)
+    cursor.execute(
+        f"SELECT Country, League FROM League_table Where Team ==(?)", (my_team)
+    )
+    myCountry, myLeague = cursor.fetchone()
+    cursor.execute(
+        f"SELECT * FROM League_table Where Country ==(?) AND League ==(?) ",
+        (myCountry, myLeague),
+    )
+    return cursor.fetchall()
+
+
+if __name__ == "__main__":
+    print(len(get_myteam_table()))

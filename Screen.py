@@ -641,6 +641,7 @@ class Screen:
         Menu_Screen_background = Get_label.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0
         )
+        self.game_buttons()
 
     ############################################################
     # 인수 / 매각 화면
