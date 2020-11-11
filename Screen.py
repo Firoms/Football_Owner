@@ -85,35 +85,12 @@ class Screen:
             Loading1_Screen_background = Get_label.image_label(
                 self.Gui, "로딩1.png", 0, 0
             )
-            Loading1_Screen_background.after(300, self.no_action)
-            Loading2_Screen_background = Get_label.image_label(
-                self.Gui, "로딩2.png", 0, 0
+            Loading1_Screen_background.after(
+                300,
+                Loading2_Screen_background=lambda: Get_label.image_label(
+                    self.Gui, "로딩2.png", 0, 0
+                ),
             )
-            Loading2_Screen_background.after(300, self.no_action)
-            Loading3_Screen_background = Get_label.image_label(
-                self.Gui, "로딩3.png", 0, 0
-            )
-            Loading3_Screen_background.after(300, self.no_action)
-            Loading4_Screen_background = Get_label.image_label(
-                self.Gui, "로딩4.png", 0, 0
-            )
-            Loading4_Screen_background.after(300, self.no_action)
-            Loading5_Screen_background = Get_label.image_label(
-                self.Gui, "로딩5.png", 0, 0
-            )
-            Loading5_Screen_background.after(300, self.no_action)
-            Loading6_Screen_background = Get_label.image_label(
-                self.Gui, "로딩6.png", 0, 0
-            )
-            Loading6_Screen_background.after(300, self.no_action)
-            Loading7_Screen_background = Get_label.image_label(
-                self.Gui, "로딩7.png", 0, 0
-            )
-            Loading7_Screen_background.after(300, self.no_action)
-            Loading8_Screen_background = Get_label.image_label(
-                self.Gui, "로딩8.png", 0, 0
-            )
-            Loading8_Screen_background.after(300, self.no_action)
         print("while 빠짐")
 
     ############################################################
