@@ -80,18 +80,20 @@ class Screen:
 
     def Loading_Screen(self, thread):
         self.destroy()
-        while thread.is_alive():
-            print("while 들어옴")
-            Loading1_Screen_background = Get_label.image_label(
-                self.Gui, "로딩1.png", 0, 0
+
+        def loading(num, thread):
+
+            if num == 9:
+                num = 1
+            if thread.is_alive() == False:
+                self.Main_Screen()
+                return 0
+            Loading_Screen_background = Get_label.image_label(
+                self.Gui, f"로딩{num}.png", 0, 0
             )
-            Loading1_Screen_background.after(
-                300,
-                Loading2_Screen_background=lambda: Get_label.image_label(
-                    self.Gui, "로딩2.png", 0, 0
-                ),
-            )
-        print("while 빠짐")
+            Loading_Screen_background.after(200, lambda: loading(num + 1, thread))
+
+        loading(1, thread)
 
     ############################################################
     # 설명 화면
@@ -396,7 +398,6 @@ class Screen:
         simulation_thr.daemon = True
         simulation_thr.start()
         loading = self.Loading_Screen(simulation_thr)
-        self.Main_Screen()
 
     def injury(self):
         print("부상")
