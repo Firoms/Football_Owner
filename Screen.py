@@ -330,7 +330,7 @@ class Screen:
             self.Gui, "menu1.png", 34, 140, self.message
         )
         self.menu2_button = Get_label.image_button(
-            self.Gui, "menu2.png", 34, 210, self.no_action
+            self.Gui, "menu2.png", 34, 210, self.situation
         )
         self.menu3_button = Get_label.image_button(
             self.Gui, "menu3.png", 34, 280, self.acquisition
@@ -620,6 +620,86 @@ class Screen:
             self.Gui, "Main_Screen_bg.png", 0, 0
         )
         self.game_buttons()
+        self.Intro1 = Get_label.image_button_text(
+            self.Gui,
+            "player1.png",
+            222,
+            133,
+            self.sortpla1,
+            f"번호",
+            "#472f91",
+            ("고도 M", 12),
+        )
+        self.Intro2 = Get_label.image_button_text(
+            self.Gui,
+            "player2.png",
+            282,
+            133,
+            self.sortpla2,
+            f"이름",
+            "#472f91",
+            ("고도 M", 12),
+        )
+        self.Intro3 = Get_label.image_button_text(
+            self.Gui,
+            "player3.png",
+            542,
+            133,
+            self.sortpla3,
+            f"포지션",
+            "#472f91",
+            ("고도 M", 12),
+        )
+        self.Intro4 = Get_label.image_button_text(
+            self.Gui,
+            "player4.png",
+            742,
+            133,
+            self.sortpla4,
+            f"나이",
+            "#472f91",
+            ("고도 M", 12),
+        )
+        self.Intro5 = Get_label.image_button_text(
+            self.Gui,
+            "player5.png",
+            802,
+            133,
+            self.sortpla5,
+            f"선수 가치",
+            "#472f91",
+            ("고도 M", 12),
+        )
+        self.Intro6 = Get_label.image_button_text(
+            self.Gui,
+            "player6.png",
+            932,
+            133,
+            self.sortpla6,
+            f"능력치",
+            "#472f91",
+            ("고도 M", 12),
+        )
+        self.Intro7 = Get_label.image_button_text(
+            self.Gui,
+            "player7.png",
+            992,
+            133,
+            self.sortpla7,
+            f"잠재력",
+            "#472f91",
+            ("고도 M", 12),
+        )
+        self.Intro8 = Get_label.image_button_text(
+            self.Gui,
+            "player8.png",
+            1052,
+            133,
+            self.sortpla8,
+            f"선수 주급",
+            "#472f91",
+            ("고도 M", 12),
+        )
 
     ############################################################
     # 인수 / 매각 화면
