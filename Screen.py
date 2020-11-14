@@ -622,7 +622,7 @@ class Screen:
         self.game_buttons()
         self.Intro1 = Get_label.image_button_text(
             self.Gui,
-            "player1.png",
+            "sit1-1.png",
             222,
             133,
             self.sortpla1,
@@ -632,7 +632,7 @@ class Screen:
         )
         self.Intro2 = Get_label.image_button_text(
             self.Gui,
-            "player2.png",
+            "sit2-1.png",
             282,
             133,
             self.sortpla2,
@@ -642,7 +642,7 @@ class Screen:
         )
         self.Intro3 = Get_label.image_button_text(
             self.Gui,
-            "player3.png",
+            "sit3-1.png",
             542,
             133,
             self.sortpla3,
@@ -652,7 +652,7 @@ class Screen:
         )
         self.Intro4 = Get_label.image_button_text(
             self.Gui,
-            "player4.png",
+            "sit3-1.png",
             742,
             133,
             self.sortpla4,
@@ -662,7 +662,7 @@ class Screen:
         )
         self.Intro5 = Get_label.image_button_text(
             self.Gui,
-            "player5.png",
+            "sit3-1.png",
             802,
             133,
             self.sortpla5,
@@ -672,7 +672,7 @@ class Screen:
         )
         self.Intro6 = Get_label.image_button_text(
             self.Gui,
-            "player6.png",
+            "sit3-1.png",
             932,
             133,
             self.sortpla6,
@@ -682,7 +682,7 @@ class Screen:
         )
         self.Intro7 = Get_label.image_button_text(
             self.Gui,
-            "player7.png",
+            "sit3-1.png",
             992,
             133,
             self.sortpla7,
@@ -692,7 +692,7 @@ class Screen:
         )
         self.Intro8 = Get_label.image_button_text(
             self.Gui,
-            "player8.png",
+            "sit3-1.png",
             1052,
             133,
             self.sortpla8,
