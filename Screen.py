@@ -700,6 +700,26 @@ class Screen:
             "#472f91",
             ("고도 M", 12),
         )
+        self.Intro9 = Get_label.image_button_text(
+            self.Gui,
+            "sit3-1.png",
+            1052,
+            133,
+            self.sortpla8,
+            f"선수 주급",
+            "#472f91",
+            ("고도 M", 12),
+        )
+        self.Intro10 = Get_label.image_button_text(
+            self.Gui,
+            "sit3-1.png",
+            1052,
+            133,
+            self.sortpla8,
+            f"선수 주급",
+            "#472f91",
+            ("고도 M", 12),
+        )
 
     ############################################################
     # 인수 / 매각 화면
