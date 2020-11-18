@@ -724,7 +724,7 @@ class Screen:
             sit1 = Get_label.image_label_text(
                 self.Gui,
                 "sit1-2.png",
-                222,
+                227,
                 173 + (40 * i),
                 f"",
                 "#472f91",
@@ -733,7 +733,7 @@ class Screen:
             sit2 = Get_label.image_label_text(
                 self.Gui,
                 "sit2-2.png",
-                282,
+                287,
                 173 + (40 * i),
                 f"",
                 "#472f91",
@@ -742,7 +742,7 @@ class Screen:
             sit3 = Get_label.image_label_text(
                 self.Gui,
                 "sit3-2.png",
-                542,
+                527,
                 173 + (40 * i),
                 f"",
                 "#472f91",
@@ -751,7 +751,7 @@ class Screen:
             sit4 = Get_label.image_label_text(
                 self.Gui,
                 "sit3-2.png",
-                742,
+                607,
                 173 + (40 * i),
                 f"",
                 "#472f91",
@@ -760,7 +760,7 @@ class Screen:
             sit5 = Get_label.image_label_text(
                 self.Gui,
                 "sit3-2.png",
-                802,
+                687,
                 173 + (40 * i),
                 f"",
                 "#472f91",
@@ -769,7 +769,7 @@ class Screen:
             sit6 = Get_label.image_label_text(
                 self.Gui,
                 "sit3-2.png",
-                932,
+                767,
                 173 + (40 * i),
                 f"",
                 "#472f91",
@@ -778,7 +778,7 @@ class Screen:
             sit7 = Get_label.image_label_text(
                 self.Gui,
                 "sit3-2.png",
-                992,
+                847,
                 173 + (40 * i),
                 f"",
                 "#472f91",
@@ -787,7 +787,7 @@ class Screen:
             sit8 = Get_label.image_label_text(
                 self.Gui,
                 "sit3-2.png",
-                1052,
+                927,
                 173 + (40 * i),
                 f"",
                 "#472f91",
@@ -796,7 +796,7 @@ class Screen:
             sit9 = Get_label.image_label_text(
                 self.Gui,
                 "sit3-2.png",
-                1052,
+                1007,
                 173 + (40 * i),
                 f"",
                 "#472f91",
@@ -805,7 +805,7 @@ class Screen:
             sit10 = Get_label.image_label_text(
                 self.Gui,
                 "sit3-2.png",
-                1052,
+                1087,
                 173 + (40 * i),
                 f"",
                 "#472f91",
