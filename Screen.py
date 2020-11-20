@@ -619,6 +619,24 @@ class Screen:
         Menu_Screen_background = Get_label.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0
         )
+        self.Intro1 = Get_label.image_label_text(
+            self.Gui, "fi1.png", 232, 148, f"구단주 이름", "#472f91", ("고도 M", 12)
+        )
+        self.Intro2 = Get_label.image_label_text(
+            self.Gui, "fi1.png", 232, 218, f"구단 이름", "#472f91", ("고도 M", 12)
+        )
+        self.Intro3 = Get_label.image_label_text(
+            self.Gui, "fi1.png", 232, 288, f"현재 자금", "#472f91", ("고도 M", 12)
+        )
+        self.con1 = Get_label.image_label_text(
+            self.Gui, "fi1-1.png", 402, 148, f"", "#472f91", ("고도 M", 12)
+        )
+        self.con2 = Get_label.image_label_text(
+            self.Gui, "fi1-1.png", 402, 218, f"", "#472f91", ("고도 M", 12)
+        )
+        self.con3 = Get_label.image_label_text(
+            self.Gui, "fi1-1.png", 402, 288, f"", "#472f91", ("고도 M", 12)
+        )
         self.game_buttons()
         self.Intro1 = Get_label.image_button_text(
             self.Gui,
