@@ -633,8 +633,8 @@ class Screen:
         self.sel2 = Get_label.image_button_text(
             self.Gui,
             "sit_btn1.png",
-            232,
-            218,
+            462,
+            148,
             self.no_action,
             f"",
             "#472f91",
@@ -643,8 +643,8 @@ class Screen:
         self.sel3 = Get_label.image_button_text(
             self.Gui,
             "sit_btn2.png",
-            232,
-            288,
+            692,
+            148,
             self.no_action,
             f"",
             "#472f91",
@@ -653,7 +653,7 @@ class Screen:
         self.sel4 = Get_label.image_button_text(
             self.Gui,
             "sit_btn2.png",
-            402,
+            922,
             148,
             self.no_action,
             f"",
@@ -663,8 +663,8 @@ class Screen:
         self.sel5 = Get_label.image_button_text(
             self.Gui,
             "sit_btn2.png",
-            402,
-            218,
+            232,
+            238,
             self.no_action,
             f"",
             "#472f91",
@@ -673,8 +673,8 @@ class Screen:
         self.sel6 = Get_label.image_button_text(
             self.Gui,
             "sit_btn2.png",
-            402,
-            288,
+            462,
+            238,
             self.no_action,
             f"",
             "#472f91",
@@ -683,18 +683,18 @@ class Screen:
         self.sel7 = Get_label.image_button_text(
             self.Gui,
             "sit_btn3.png",
-            402,
-            288,
+            692,
+            238,
             self.no_action,
             f"",
             "#472f91",
             ("고도 M", 12),
         )
         right_button = Get_label.image_button(
-            self.Gui, "right.png", 980, 43, self.no_action
+            self.Gui, "right.png", 1060, 258, self.no_action
         )
         left_button = Get_label.image_button(
-            self.Gui, "left.png", 900, 43, self.no_action
+            self.Gui, "left.png", 980, 258, self.no_action
         )
         self.Intro1 = Get_label.image_button_text(
             self.Gui,
