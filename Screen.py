@@ -626,7 +626,7 @@ class Screen:
             232,
             148,
             self.no_action,
-            f"",
+            f"팀 순위 보기",
             "#472f91",
             ("고도 M", 12),
         )
@@ -636,7 +636,7 @@ class Screen:
             462,
             148,
             self.no_action,
-            f"",
+            f"선수 순위 보기",
             "#472f91",
             ("고도 M", 12),
         )
@@ -646,7 +646,7 @@ class Screen:
             692,
             148,
             self.no_action,
-            f"",
+            f"EPL 상황",
             "#472f91",
             ("고도 M", 12),
         )
@@ -656,7 +656,7 @@ class Screen:
             922,
             148,
             self.no_action,
-            f"",
+            f"라리가 상황",
             "#472f91",
             ("고도 M", 12),
         )
@@ -666,7 +666,7 @@ class Screen:
             232,
             238,
             self.no_action,
-            f"",
+            f"분데스리가 상황",
             "#472f91",
             ("고도 M", 12),
         )
@@ -676,7 +676,7 @@ class Screen:
             462,
             238,
             self.no_action,
-            f"",
+            f"타 리그 상황",
             "#472f91",
             ("고도 M", 12),
         )
@@ -686,7 +686,7 @@ class Screen:
             692,
             238,
             self.no_action,
-            f"",
+            f"현 소속 리그 보기",
             "#472f91",
             ("고도 M", 12),
         )
