@@ -702,17 +702,19 @@ class Screen:
             227,
             333,
             self.no_action,
-            f"",
+            f"순위",
             "#472f91",
             ("고도 M", 12),
         )
+        league_data = get_myteam_table()
+        print(league_data)
         self.Intro2 = Get_label.image_button_text(
             self.Gui,
             "sit2-1.png",
             287,
             333,
             self.no_action,
-            f"",
+            f"팀 이름",
             "#472f91",
             ("고도 M", 12),
         )
@@ -722,7 +724,7 @@ class Screen:
             527,
             333,
             self.no_action,
-            f"",
+            f"경기",
             "#472f91",
             ("고도 M", 12),
         )
@@ -732,7 +734,7 @@ class Screen:
             607,
             333,
             self.no_action,
-            f"",
+            f"승",
             "#472f91",
             ("고도 M", 12),
         )
@@ -742,7 +744,7 @@ class Screen:
             687,
             333,
             self.no_action,
-            f"",
+            f"무",
             "#472f91",
             ("고도 M", 12),
         )
@@ -752,7 +754,7 @@ class Screen:
             767,
             333,
             self.no_action,
-            f"",
+            f"패",
             "#472f91",
             ("고도 M", 12),
         )
@@ -762,7 +764,7 @@ class Screen:
             847,
             333,
             self.no_action,
-            f"",
+            f"득점",
             "#472f91",
             ("고도 M", 12),
         )
@@ -772,7 +774,7 @@ class Screen:
             927,
             333,
             self.no_action,
-            f"",
+            f"실점",
             "#472f91",
             ("고도 M", 12),
         )
@@ -782,7 +784,7 @@ class Screen:
             1007,
             333,
             self.no_action,
-            f"",
+            f"득실",
             "#472f91",
             ("고도 M", 12),
         )
@@ -792,7 +794,7 @@ class Screen:
             1087,
             333,
             self.no_action,
-            f"",
+            f"점수",
             "#472f91",
             ("고도 M", 12),
         )
