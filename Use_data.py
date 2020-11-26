@@ -1230,7 +1230,7 @@ def get_myteam_table():
     )
     myCountry, myLeague = cursor.fetchone()
     cursor.execute(
-        f"SELECT * FROM League_table Where Country ==(?) AND League ==(?) ",
+        f"SELECT * FROM League_table Where Country ==(?) AND League ==(?) Order by Point DESC",
         (myCountry, myLeague),
     )
     return cursor.fetchall()

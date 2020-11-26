@@ -706,8 +706,6 @@ class Screen:
             "#472f91",
             ("고도 M", 12),
         )
-        league_data = get_myteam_table()
-        print(league_data)
         self.Intro2 = Get_label.image_button_text(
             self.Gui,
             "sit2-1.png",
@@ -798,13 +796,22 @@ class Screen:
             "#472f91",
             ("고도 M", 12),
         )
-        for i in range(10):
+        league_data = get_myteam_table()
+        print(league_data)
+        self.show_rank(league_data, 0, 10)
+    
+    def sitleftbtn(self):
+        pass
+        
+
+    def show_rank(self, league,start,end):
+        for i in range(start, end):
             sit1 = Get_label.image_label_text(
                 self.Gui,
                 "sit1-2.png",
                 227,
                 373 + (40 * i),
-                f"",
+                f"{i+1}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -813,7 +820,7 @@ class Screen:
                 "sit2-2.png",
                 287,
                 373 + (40 * i),
-                f"",
+                f"{league[i][3]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -822,7 +829,7 @@ class Screen:
                 "sit3-2.png",
                 527,
                 373 + (40 * i),
-                f"",
+                f"{league[i][4]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -831,7 +838,7 @@ class Screen:
                 "sit3-2.png",
                 607,
                 373 + (40 * i),
-                f"",
+                f"{league[i][5]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -840,7 +847,7 @@ class Screen:
                 "sit3-2.png",
                 687,
                 373 + (40 * i),
-                f"",
+                f"{league[i][6]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -849,7 +856,7 @@ class Screen:
                 "sit3-2.png",
                 767,
                 373 + (40 * i),
-                f"",
+                f"{league[i][7]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -858,7 +865,7 @@ class Screen:
                 "sit3-2.png",
                 847,
                 373 + (40 * i),
-                f"",
+                f"{league[i][8]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -867,7 +874,7 @@ class Screen:
                 "sit3-2.png",
                 927,
                 373 + (40 * i),
-                f"",
+                f"{league[i][9]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -876,7 +883,7 @@ class Screen:
                 "sit3-2.png",
                 1007,
                 373 + (40 * i),
-                f"",
+                f"{league[i][10]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -885,7 +892,7 @@ class Screen:
                 "sit3-2.png",
                 1087,
                 373 + (40 * i),
-                f"",
+                f"{league[i][11]}",
                 "#472f91",
                 ("고도 M", 12),
             )
