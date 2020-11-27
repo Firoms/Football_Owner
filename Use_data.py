@@ -1236,5 +1236,35 @@ def get_myteam_table():
     return cursor.fetchall()
 
 
+def get_EPL_table():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM League_table Where Country ==(?) AND League ==(?) Order by Point DESC",
+        ("England", "Premier League"),
+    )
+    return cursor.fetchall()
+
+
+def get_LaLiga_table():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM League_table Where Country ==(?) AND League ==(?) Order by Point DESC",
+        ("Spain", "LaLiga"),
+    )
+    return cursor.fetchall()
+
+
+def get_Bundes_table():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM League_table Where Country ==(?) AND League ==(?) Order by Point DESC",
+        ("Germany", "Bundesliga"),
+    )
+    return cursor.fetchall()
+
+
 if __name__ == "__main__":
     print(len(get_myteam_table()))
