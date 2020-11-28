@@ -796,15 +796,25 @@ class Screen:
             "#472f91",
             ("고도 M", 12),
         )
-        league_data = get_myteam_table()
+        self.league_data = get_myteam_table()
         print(league_data)
-        self.show_rank(league_data, 0, 10)
-    
-    def sitleftbtn(self):
-        pass
-        
+        self.start_rank = 0
+        self.finish_rank = 10
+        self.show_rank(self.league_data, self.start_rank, self.finish_rank)
 
-    def show_rank(self, league,start,end):
+    def sit_left_btn(self):
+        if self.start_rank != 0:
+            self.start_rank -= 10
+            self.finish_rank -= 10
+            self.show_rank(self.league_data, self.start_rank, self.finish_rank)
+
+    def sit_right_btn(self):
+        if self.finish_rank + 10 <= len(self.leauge_data):
+            self.start_rank += 10
+            self.finish_rank += 10
+            self.show_rank(self.league_data, self.start_rank, self.finish_rank)
+
+    def show_rank(self, league, start, end):
         for i in range(start, end):
             sit1 = Get_label.image_label_text(
                 self.Gui,
