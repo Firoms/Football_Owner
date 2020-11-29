@@ -330,7 +330,11 @@ class Screen:
             self.Gui, "menu1.png", 34, 140, self.message
         )
         self.menu2_button = Get_label.image_button(
-            self.Gui, "menu2.png", 34, 210, self.situation
+            self.Gui,
+            "menu2.png",
+            34,
+            210,
+            lambda: self.situation(0, 10, get_myteam_table()),
         )
         self.menu3_button = Get_label.image_button(
             self.Gui, "menu3.png", 34, 280, self.acquisition
@@ -614,7 +618,10 @@ class Screen:
     ############################################################
     # 현재 상황 화면
     ############################################################
-    def situation(self):
+    def situation(self, start, finish, league_data):
+        self.league_data = league_data
+        self.start_rank = start
+        self.finish_rank = finish
         self.destroy()
         Menu_Screen_background = Get_label.image_label(
             self.Gui, "Main_Screen_bg.png", 0, 0
@@ -691,11 +698,15 @@ class Screen:
             ("고도 M", 12),
         )
         right_button = Get_label.image_button(
-            self.Gui, "right.png", 1060, 258, self.no_action
+            self.Gui, "right.png", 1060, 258, self.sit_right_btn
         )
         left_button = Get_label.image_button(
-            self.Gui, "left.png", 980, 258, self.no_action
+            self.Gui, "left.png", 980, 258, self.sit_left_btn
         )
+        if self.finish_rank == len(self.league_data):
+            right_button.config(state="disabled")
+        if self.start_rank == 0:
+            left_button.config(state="disabled")
         self.Intro1 = Get_label.image_button_text(
             self.Gui,
             "sit1-1.png",
@@ -796,31 +807,34 @@ class Screen:
             "#472f91",
             ("고도 M", 12),
         )
-        self.league_data = get_myteam_table()
-        print(league_data)
-        self.start_rank = 0
-        self.finish_rank = 10
-        self.show_rank(self.league_data, self.start_rank, self.finish_rank)
+        self.show_rank()
 
     def sit_left_btn(self):
+        if self.finish_rank - self.start_rank != 10:
+            self.finish_rank = self.start_rank + 10
+
         if self.start_rank != 0:
             self.start_rank -= 10
             self.finish_rank -= 10
-            self.show_rank(self.league_data, self.start_rank, self.finish_rank)
+            self.situation(self.start_rank, self.finish_rank, self.league_data)
 
     def sit_right_btn(self):
-        if self.finish_rank + 10 <= len(self.leauge_data):
+        if self.finish_rank + 10 <= len(self.league_data):
             self.start_rank += 10
             self.finish_rank += 10
-            self.show_rank(self.league_data, self.start_rank, self.finish_rank)
+            self.situation(self.start_rank, self.finish_rank, self.league_data)
+        else:
+            self.start_rank += 10
+            self.finish_rank = len(self.league_data)
+            self.situation(self.start_rank, self.finish_rank, self.league_data)
 
-    def show_rank(self, league, start, end):
-        for i in range(start, end):
+    def show_rank(self):
+        for i in range(self.start_rank, self.finish_rank):
             sit1 = Get_label.image_label_text(
                 self.Gui,
                 "sit1-2.png",
                 227,
-                373 + (40 * i),
+                373 + (40 * (i - self.start_rank)),
                 f"{i+1}",
                 "#472f91",
                 ("고도 M", 12),
@@ -829,8 +843,8 @@ class Screen:
                 self.Gui,
                 "sit2-2.png",
                 287,
-                373 + (40 * i),
-                f"{league[i][3]}",
+                373 + (40 * (i - self.start_rank)),
+                f"{self.league_data[i][3]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -838,8 +852,8 @@ class Screen:
                 self.Gui,
                 "sit3-2.png",
                 527,
-                373 + (40 * i),
-                f"{league[i][4]}",
+                373 + (40 * (i - self.start_rank)),
+                f"{self.league_data[i][4]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -847,8 +861,8 @@ class Screen:
                 self.Gui,
                 "sit3-2.png",
                 607,
-                373 + (40 * i),
-                f"{league[i][5]}",
+                373 + (40 * (i - self.start_rank)),
+                f"{self.league_data[i][5]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -856,8 +870,8 @@ class Screen:
                 self.Gui,
                 "sit3-2.png",
                 687,
-                373 + (40 * i),
-                f"{league[i][6]}",
+                373 + (40 * (i - self.start_rank)),
+                f"{self.league_data[i][6]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -865,8 +879,8 @@ class Screen:
                 self.Gui,
                 "sit3-2.png",
                 767,
-                373 + (40 * i),
-                f"{league[i][7]}",
+                373 + (40 * (i - self.start_rank)),
+                f"{self.league_data[i][7]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -874,8 +888,8 @@ class Screen:
                 self.Gui,
                 "sit3-2.png",
                 847,
-                373 + (40 * i),
-                f"{league[i][8]}",
+                373 + (40 * (i - self.start_rank)),
+                f"{self.league_data[i][8]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -883,8 +897,8 @@ class Screen:
                 self.Gui,
                 "sit3-2.png",
                 927,
-                373 + (40 * i),
-                f"{league[i][9]}",
+                373 + (40 * (i - self.start_rank)),
+                f"{self.league_data[i][9]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -892,8 +906,8 @@ class Screen:
                 self.Gui,
                 "sit3-2.png",
                 1007,
-                373 + (40 * i),
-                f"{league[i][10]}",
+                373 + (40 * (i - self.start_rank)),
+                f"{self.league_data[i][10]}",
                 "#472f91",
                 ("고도 M", 12),
             )
@@ -901,8 +915,8 @@ class Screen:
                 self.Gui,
                 "sit3-2.png",
                 1087,
-                373 + (40 * i),
-                f"{league[i][11]}",
+                373 + (40 * (i - self.start_rank)),
+                f"{self.league_data[i][11]}",
                 "#472f91",
                 ("고도 M", 12),
             )
