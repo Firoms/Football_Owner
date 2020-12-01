@@ -1267,4 +1267,6 @@ def get_Bundes_table():
 
 
 if __name__ == "__main__":
-    print(len(get_myteam_table()))
+    print(lambda: get_EPL_table())
+    print(len(get_LaLiga_table()))
+    print(len(get_Bundes_table()))
