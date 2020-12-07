@@ -1110,13 +1110,18 @@ def match_progress(sta, fin):
     timercheck.start()
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone[0]
     cursor.execute(
         f"SELECT Home, Away FROM League_Calander WHERE Date>=(?) AND Date<=(?) AND result==(?)",
         (sta, fin, "0"),
     )
     li = cursor.fetchall()
     for i in range(len(li)):
-        play_game(li[i][0], li[i][1], db)
+        if li[i][0] == my_team or li[i][1] == my_team:
+            play_game(li[i][0], li[i][1], db)
+        else:
+            pass
     update_league_table()
     timercheck.finish()
 
