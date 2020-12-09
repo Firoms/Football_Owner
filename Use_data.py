@@ -942,7 +942,171 @@ def make_player_stats(num):
         db.commit()
 
 
-def play_game(Home, Away, db):
+def play_my_game(Home, Away, db):
+    Home_Team_manager = team_manager_ability(Home)
+    Away_Team_manager = team_manager_ability(Away)
+    if Home_Team_manager == None:
+        H_manager_ability = 50
+    else:
+        H_manager_ability = int(Home_Team_manager[5])
+    if Away_Team_manager == None:
+        A_manager_ability = 50
+    else:
+        A_manager_ability = int(Away_Team_manager[5])
+    H_try = H_manager_ability - A_manager_ability + 20
+    A_try = A_manager_ability - H_manager_ability + 20
+    H_keeper = team_keeper_ability(Home)
+    A_keeper = team_keeper_ability(Away)
+    H_defender = team_defender_ability(Home)
+    A_defender = team_defender_ability(Away)
+    H_midfielder = team_midfielder_ability(Home)
+    A_midfielder = team_midfielder_ability(Away)
+    H_forward = team_forward_ability(Home)
+    A_forward = team_forward_ability(Away)
+    try:
+        H1_k_abil = H_keeper[0][7]
+    except:
+        H1_k_abil = 48
+    try:
+        A1_k_abil = A_keeper[0][7]
+    except:
+        A1_k_abil = 48
+    try:
+        H4_d_abil = (
+            H_defender[0][7] + H_defender[1][7] + H_defender[2][7] + H_defender[3][7]
+        )
+    except:
+        H4_d_abil = 200
+    try:
+        A4_d_abil = (
+            A_defender[0][7] + A_defender[1][7] + A_defender[2][7] + A_defender[3][7]
+        )
+    except:
+        A4_d_abil = 200
+    try:
+        H3_m_abil = H_midfielder[0][7] + H_midfielder[1][7] + H_midfielder[2][7]
+    except:
+        H3_m_abil = 150
+    try:
+        A3_m_abil = A_midfielder[0][7] + A_midfielder[1][7] + A_midfielder[2][7]
+    except:
+        A3_m_abil = 150
+    try:
+        H3_f_abil = H_forward[0][7] + H_forward[1][7] + H_midfielder[2][7]
+    except:
+        H3_f_abil = 150
+    try:
+        A3_f_abil = A_forward[0][7] + A_forward[1][7] + A_forward[2][7]
+    except:
+        A3_f_abil = 150
+
+    if H_try < 10:
+        H_try = 10
+    if A_try < 10:
+        A_try = 10
+    if H_try > 27:
+        H_try = 27
+    if A_try > 27:
+        A_try = 27
+    order = []
+    for i in range(H_try):
+        order.append("H")
+    for i in range(A_try):
+        order.append("A")
+    random.shuffle(order)
+    goal1 = 0
+    goal1per = 101
+    goal2 = 0
+    goal2per = 101
+    for i in order:
+        if i == "H":
+            chance_dif = int((H3_m_abil - A3_m_abil) / 4)
+            if chance_dif < 0:
+                chance_dif = int(chance_dif / 2)
+            ran = random.randrange(1, goal1per)
+            if 60 + chance_dif < ran:
+                # print("찬스메이킹 실패1")
+                continue
+            pk_chance = int(H3_f_abil / 100)
+            ran = random.randrange(1, goal1per)
+            if 1 + pk_chance >= ran:
+                # print("pk chance1")
+                ran = random.randrange(1, goal1per)
+                if ran <= 70:
+                    # print("pk 성공1")
+                    goal1per += 15
+                    goal1 += 1
+                    continue
+                else:
+                    # print("pk 실패1")
+                    continue
+            supersave_chance = int(A1_k_abil / 10)
+            ran = random.randrange(1, goal1per)
+            if 1 + supersave_chance >= ran:
+                # print("슈퍼세이브2")
+                continue
+            goal_dif = int(((H3_f_abil + H3_m_abil) - (A4_d_abil + (A1_k_abil))) / 16)
+            ran = random.randrange(1, goal1per)
+            if goal_dif + 20 >= ran:
+                # print("골1")
+                goal1per += 15
+                goal1 += 1
+            else:
+                # print("아 슛팅이 빗나갑니다!1")
+                continue
+            ran = random.randrange(1, goal1per)
+            if ran <= 2:
+                goal1per -= 15
+                goal1 -= 1
+                # print("VAR 취소...")
+        else:
+            chance_dif = int((A3_m_abil - H3_m_abil) / 4)
+            if chance_dif < 0:
+                chance_dif = int(chance_dif / 2)
+            ran = random.randrange(1, goal2per)
+            if 50 + chance_dif < ran:
+                # print("찬스메이킹 실패2")
+                continue
+            pk_chance = int(A3_f_abil / 100)
+            ran = random.randrange(1, goal2per)
+            if 1 + pk_chance >= ran:
+                # print("pk chance2")
+                ran = random.randrange(1, goal2per)
+                if ran <= 70:
+                    # print("pk 성공2")
+                    goal2per += 15
+                    goal2 += 1
+                else:
+                    # print("pk 실패2")
+                    continue
+            supersave_chance = int(H1_k_abil / 10)
+            ran = random.randrange(1, goal2per)
+            if 1 + supersave_chance >= ran:
+                # print("슈퍼세이브1")
+                continue
+            goal_dif = int(((A3_f_abil + A3_m_abil) - (H4_d_abil + (H1_k_abil))) / 16)
+            ran = random.randrange(1, goal2per)
+            if goal_dif + 10 >= ran:
+                # print("골2")
+                goal2per += 15
+                goal2 += 1
+            else:
+                # print("아 슛팅이 빗나갑니다!2")
+                continue
+            ran = random.randrange(1, goal2per)
+            if ran <= 2:
+                goal1per -= 15
+                goal2 -= 1
+                # print("VAR 취소...")
+    cursor = db.cursor()
+    cursor.execute(
+        f"UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)",
+        (f"{goal1}:{goal2}", Home, Away),
+    )
+    db.commit()
+
+
+def play_simulation_game(Home, Away, db):
     Home_Team_manager = team_manager_ability(Home)
     Away_Team_manager = team_manager_ability(Away)
     if Home_Team_manager == None:
