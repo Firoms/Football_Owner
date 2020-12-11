@@ -1330,6 +1330,9 @@ def get_Bundes_table():
     return cursor.fetchall()
 
 
+
+
+
 if __name__ == "__main__":
     print(lambda: get_EPL_table())
     print(len(get_LaLiga_table()))

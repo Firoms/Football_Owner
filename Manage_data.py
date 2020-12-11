@@ -426,4 +426,28 @@ def del_ghost_team():
         db.commit()
 
 
+def make_player_data():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(f"SELECT Team FROM Teams")
+    teams = cursor.fetchall()
+    for team in teams:
+        cursor.execute(
+            f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
+            (team, "Goalkeeper"),
+        )
+        cursor.execute(
+            f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
+            (team, "Defender"),
+        )
+        cursor.execute(
+            f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
+            (team, "Midfielder"),
+        )
+        cursor.execute(
+            f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
+            (team, "Forward"),
+        )
+
+
 make_row_num()
