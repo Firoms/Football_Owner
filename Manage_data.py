@@ -436,18 +436,30 @@ def make_player_data():
             f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
             (team, "Goalkeeper"),
         )
+        goalkeeper_cnt = cursor.fechone()[0]
+        if goalkeeper_cnt < 4:
+            pass
         cursor.execute(
             f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
             (team, "Defender"),
         )
+        defender_cnt = cursor.fechone()[0]
+        if defender_cnt < 6:
+            pass
         cursor.execute(
             f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
             (team, "Midfielder"),
         )
+        midfielder_cnt = cursor.fechone()[0]
+        if midfielder_cnt < 6:
+            pass
         cursor.execute(
             f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
             (team, "Forward"),
         )
+        forward_cnt = cursor.fechone()[0]
+        if forward_cnt < 5:
+            pass
 
 
 make_row_num()
