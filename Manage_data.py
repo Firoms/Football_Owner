@@ -435,7 +435,7 @@ def make_player_data():
         team = str(team[0])
         cursor.execute(f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)", (team, "Goalkeeper"))
         goalkeeper_cnt = cursor.fetchone()[0]
-        if goalkeeper_cnt < 4:
+        if goalkeeper_cnt < 4:  
             for i in range(4-goalkeeper_cnt):
                 make_new_player(team,"Goalkeeper")
         cursor.execute(
@@ -500,6 +500,3 @@ def get_player_seq():
     cursor.execute(f"SELECT count(*) FROM Players")
     players = cursor.fetchone()[0]
     return int(players)
-
-
-make_player_data()
