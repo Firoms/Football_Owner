@@ -2,6 +2,7 @@ import sqlite3
 import random
 import names
 
+
 def change_ages():
     db = sqlite3.connect(f"DB/FO_datafile1.db")
     cursor = db.cursor()
@@ -433,46 +434,49 @@ def make_player_data():
     teams = cursor.fetchall()
     for team in teams:
         team = str(team[0])
-        cursor.execute(f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)", (team, "Goalkeeper"))
+        cursor.execute(
+            f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
+            (team, "Goalkeeper"),
+        )
         goalkeeper_cnt = cursor.fetchone()[0]
-        if goalkeeper_cnt < 4:  
-            for i in range(4-goalkeeper_cnt):
-                make_new_player(team,"Goalkeeper")
+        if goalkeeper_cnt < 4:
+            for i in range(4 - goalkeeper_cnt):
+                make_new_player(team, "Goalkeeper")
         cursor.execute(
             f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
             (team, "Defender"),
         )
         defender_cnt = cursor.fetchone()[0]
         if defender_cnt < 6:
-            for i in range(6-defender_cnt):
-                make_new_player(team,"Defender")
+            for i in range(6 - defender_cnt):
+                make_new_player(team, "Defender")
         cursor.execute(
             f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
             (team, "Midfielder"),
         )
         midfielder_cnt = cursor.fetchone()[0]
         if midfielder_cnt < 6:
-            for i in range(6-midfielder_cnt):
-                make_new_player(team,"Midfielder")
+            for i in range(6 - midfielder_cnt):
+                make_new_player(team, "Midfielder")
         cursor.execute(
             f"SELECT Count(*) FROM Players WHERE Team ==(?) AND Position ==(?)",
             (team, "Forward"),
         )
         forward_cnt = cursor.fetchone()[0]
         if forward_cnt < 5:
-            for i in range(6-forward_cnt):
-                make_new_player(team,"Forward")
+            for i in range(6 - forward_cnt):
+                make_new_player(team, "Forward")
 
 
 def make_new_player(team, position):
-    ran_name = str(names.get_full_name(gender='male'))
+    ran_name = str(names.get_full_name(gender="male"))
     position = str(position)
     seq = get_player_seq() + 50000
-    ran_age = random.randint(21,33)
-    ran_ability = random.randint(49,63)
-    ran_potential = random.randint(ran_ability,68)
+    ran_age = random.randint(21, 33)
+    ran_ability = random.randint(49, 63)
+    ran_potential = random.randint(ran_ability, 68)
     money = ran_age * ran_ability * ran_potential / 5
-    contract = random.randint(1,6)
+    contract = random.randint(1, 6)
     if position == "Goalkeeper":
         money = money * 4 / 5
     if ran_ability < 70:
@@ -486,13 +490,19 @@ def make_new_player(team, position):
     if ran_ability < 50:
         money = money / 6
     money = int(money)
-    Value = int(((ran_ability-ran_age+10)**3) * ((ran_ability-45)**3)*(ran_potential**2)/20000000)
+    Value = int(
+        ((ran_ability - ran_age + 10) ** 3)
+        * ((ran_ability - 45) ** 3)
+        * (ran_potential ** 2)
+        / 20000000
+    )
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-            f'INSERT INTO Players VALUES("{seq}", "{ran_name}", "{team}","0", "{position}","{ran_age}", "{Value}", "{ran_ability}", "{ran_potential}", "{money}", "{contract}", "0")'
-        )
+        f'INSERT INTO Players VALUES("{seq}", "{ran_name}", "{team}","0", "{position}","{ran_age}", "{Value}", "{ran_ability}", "{ran_potential}", "{money}", "{contract}", "0")'
+    )
     db.commit()
+
 
 def get_player_seq():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
