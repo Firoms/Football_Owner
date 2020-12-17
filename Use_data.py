@@ -593,19 +593,19 @@ def team_forward_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
-        f"SELECT count(*) FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC",
-        (my_team, "0", "Forward"),
-    )
-    count = cursor.fetchone()[0]
-    cursor.execute(
         f"SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC",
         (my_team, "0", "Forward"),
     )
-    Ability = []
-    for i in range(count):
-        Ability.append(cursor.fetchone())
-    return list(Ability)
+    return cursor.fetchall
 
+def team_ability(my_team):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(
+        f"SELECT * FROM Players Where Team ==(?) AND Injury ==(?) ORDER By Ability DESC",
+        (my_team, "0"),
+    )
+    return cursor.fetchall()
 
 def team_coaches_ability():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
@@ -940,6 +940,8 @@ def make_player_stats(num):
                 f'INSERT INTO Player_Stat VALUES("{seq}", "{league_list[k][1]}", "{league_list[k][0]}","{player_list[i][0]}","{player_list[i][1]}","0","0","0","0")'
             )
         db.commit()
+
+def 
 
 
 def play_my_game(Home, Away, db):
