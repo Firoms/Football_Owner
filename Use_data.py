@@ -542,15 +542,7 @@ def team_keeper_ability(my_team):
         f"SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC",
         (my_team, "0", "Goalkeeper"),
     )
-    count = cursor.fetchone()[0]
-    cursor.execute(
-        f"SELECT * FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC",
-        (my_team, "0", "Goalkeeper"),
-    )
-    Ability = []
-    for i in range(count):
-        Ability.append(cursor.fetchone())
-    return list(Ability)
+    return cursor.fetchall()
 
 
 def team_defender_ability(my_team):
@@ -560,15 +552,7 @@ def team_defender_ability(my_team):
         f"SELECT count(*) FROM Players Where (Team ==(?) AND Injury ==(?)) AND Position == (?) ORDER By Ability DESC",
         (my_team, "0", "Defender"),
     )
-    count = cursor.fetchone()[0]
-    cursor.execute(
-        f"SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC",
-        (my_team, "0", "Defender"),
-    )
-    Ability = []
-    for i in range(count):
-        Ability.append(cursor.fetchone())
-    return list(Ability)
+    return cursor.fetchall()
 
 
 def team_midfielder_ability(my_team):
@@ -578,15 +562,7 @@ def team_midfielder_ability(my_team):
         f"SELECT count(*) FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC",
         (my_team, "0", "Midfielder"),
     )
-    count = cursor.fetchone()[0]
-    cursor.execute(
-        f"SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC",
-        (my_team, "0", "Midfielder"),
-    )
-    Ability = []
-    for i in range(count):
-        Ability.append(cursor.fetchone())
-    return list(Ability)
+    return cursor.fetchall()
 
 
 def team_forward_ability(my_team):
@@ -596,7 +572,7 @@ def team_forward_ability(my_team):
         f"SELECT * FROM Players Where Team ==(?) AND Injury ==(?) AND Position == (?) ORDER By Ability DESC",
         (my_team, "0", "Forward"),
     )
-    return cursor.fetchall
+    return cursor.fetchall()
 
 def team_ability(my_team):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
@@ -941,9 +917,6 @@ def make_player_stats(num):
             )
         db.commit()
 
-def 
-
-
 def play_my_game(Home, Away, db):
     Home_Team_manager = team_manager_ability(Home)
     Away_Team_manager = team_manager_ability(Away)
@@ -1107,64 +1080,57 @@ def play_my_game(Home, Away, db):
     )
     db.commit()
 
-
 def play_simulation_game(Home, Away, db):
     Home_Team_manager = team_manager_ability(Home)
     Away_Team_manager = team_manager_ability(Away)
-    if Home_Team_manager == None:
-        H_manager_ability = 50
+    Home_Team_players = team_ability(Home)
+    Away_Team_players = team_ability(Away)
+    if Home_Team_manager==None:
+        Home_ability = 0
     else:
-        H_manager_ability = int(Home_Team_manager[5])
-    if Away_Team_manager == None:
-        A_manager_ability = 50
+        Home_ability = int(Home_Team_manager[5])
+    if Away_Team_manager==None:
+        Away_ability = 0
     else:
-        A_manager_ability = int(Away_Team_manager[5])
-    H_try = H_manager_ability - A_manager_ability + 20
-    A_try = A_manager_ability - H_manager_ability + 20
-    H_keeper = team_keeper_ability(Home)
-    A_keeper = team_keeper_ability(Away)
-    H_defender = team_defender_ability(Home)
-    A_defender = team_defender_ability(Away)
-    H_midfielder = team_midfielder_ability(Home)
-    A_midfielder = team_midfielder_ability(Away)
-    H_forward = team_forward_ability(Home)
-    A_forward = team_forward_ability(Away)
-    try:
-        H1_k_abil = H_keeper[0][7]
-    except:
-        H1_k_abil = 48
-    try:
-        A1_k_abil = A_keeper[0][7]
-    except:
-        A1_k_abil = 48
-    try:
-        H4_d_abil = (
-            H_defender[0][7] + H_defender[1][7] + H_defender[2][7] + H_defender[3][7]
-        )
-    except:
-        H4_d_abil = 200
-    try:
-        A4_d_abil = (
-            A_defender[0][7] + A_defender[1][7] + A_defender[2][7] + A_defender[3][7]
-        )
-    except:
-        A4_d_abil = 200
-    try:
-        H3_m_abil = H_midfielder[0][7] + H_midfielder[1][7] + H_midfielder[2][7]
-    except:
-        H3_m_abil = 150
-    try:
-        A3_m_abil = A_midfielder[0][7] + A_midfielder[1][7] + A_midfielder[2][7]
-    except:
-        A3_m_abil = 150
-    try:
-        H3_f_abil = H_forward[0][7] + H_forward[1][7] + H_midfielder[2][7]
-    except:
-        H3_f_abil = 150
-    try:
-        A3_f_abil = A_forward[0][7] + A_forward[1][7] + A_forward[2][7]
-    except:
-        A3_f_abil = 150
+        Away_ability = int(Away_Team_manager[5])
+    Home_ability = 0
+    Away_ability = 0
+    for i in range(11):
+        Home_ability += int(Home_Team_players[i][7])
+        Away_ability += int(Away_Team_players[i][7])
+    ran_goal = 10
+    for i in range(3):
+        ran_goal1 = random.randrange(0,11)
+        if ran_goal1 < ran_goal:
+            ran_goal = ran_goal1
+    if ran_goal == 0:
+        ran_goal = random.randrange(0,3)
+    
+    if Home_ability < Away_ability:
+        minus_ability = Home_ability-75
+    else:
+        minus_ability = Away_ability-75
+    Home_ability -= minus_ability
+    Away_ability -= minus_ability
+    Home_ability += 30
+   
+
+    H_goal = 0
+    A_goal = 0
+    for i in range(ran_goal):
+        goal = random.randrange(0,Home_ability+Away_ability)
+        if goal< Home_ability:
+            H_goal +=1
+        else:
+            A_goal +=1
+    cursor = db.cursor()
+    cursor.execute(
+        f"UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)",
+        (f"{H_goal}:{A_goal2}", Home, Away),
+    )
+    db.commit()
+        
+
 
 
 def match_progress(sta, fin):
@@ -1172,7 +1138,7 @@ def match_progress(sta, fin):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(f"SELECT Team FROM Gamer_Team")
-    my_team = cursor.fetchone[0]
+    my_team = cursor.fetchone()[0]
     cursor.execute(
         f"SELECT Home, Away FROM League_Calander WHERE Date>=(?) AND Date<=(?) AND result==(?)",
         (sta, fin, "0"),
@@ -1180,9 +1146,10 @@ def match_progress(sta, fin):
     li = cursor.fetchall()
     for i in range(len(li)):
         if li[i][0] == my_team or li[i][1] == my_team:
-            play_game(li[i][0], li[i][1], db)
-        else:
+            # play_game(li[i][0], li[i][1], db)
             pass
+        else:
+            play_simulation_game(li[i][0], li[i][1], db)
     update_league_table()
     timercheck.finish()
 
@@ -1336,6 +1303,18 @@ def get_Bundes_table():
 
 
 if __name__ == "__main__":
-    print(lambda: get_EPL_table())
-    print(len(get_LaLiga_table()))
-    print(len(get_Bundes_table()))
+    # num = search_calander()
+    # match_progress(num[0],num[1])
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    win, draw, lose = 0,0,0
+    for i in range(1000):
+        # score = play_simulation_game( "Norwich City","Liverpool FC",db)
+        # score = play_simulation_game("Bayern Munich" ,"Manchester City",db)
+        if int(score[0])>int(score[2]):
+            win +=1
+        elif int(score[0])==int(score[2]):
+            draw +=1
+        else:
+            lose +=1
+
+    print(f"{win}승 {draw}무 {lose}패")
