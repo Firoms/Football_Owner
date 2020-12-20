@@ -1056,13 +1056,13 @@ def play_my_game(Home, Away, db):
                 goal1per -= 15
                 goal2 -= 1
                 # print("VAR 취소...")
-    return f"{goal1}:{goal2}"
-    # cursor = db.cursor()
-    # cursor.execute(
-    #     f"UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)",
-    #     (f"{goal1}:{goal2}", Home, Away),
-    # )
-    # db.commit()
+    # return f"{goal1}:{goal2}"
+    cursor = db.cursor()
+    cursor.execute(
+        f"UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)",
+        (f"{goal1}:{goal2}", Home, Away),
+    )
+    db.commit()
 
 
 def play_simulation_game(Home, Away, db):
@@ -1107,6 +1107,7 @@ def play_simulation_game(Home, Away, db):
             H_goal += 1
         else:
             A_goal += 1
+    # return f"{H_goal}:{A_goal}"
     cursor = db.cursor()
     cursor.execute(
         f"UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)",
@@ -1289,7 +1290,7 @@ if __name__ == "__main__":
     win, draw, lose = 0, 0, 0
     for i in range(30000):
         # score = play_my_game( "Norwich City","Liverpool FC",db)
-        score = play_my_game("Manchester City","Bayern Munich" ,db)
+        score = play_simulation_game("Manchester City","Bayern Munich" ,db)
         if int(score[0]) > int(score[2]):
             win += 1
         elif int(score[0]) == int(score[2]):
