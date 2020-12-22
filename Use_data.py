@@ -1132,12 +1132,13 @@ def match_progress(sta, fin):
     li = cursor.fetchall()
     for i in range(len(li)):
         if li[i][0] == my_team or li[i][1] == my_team:
-            # play_game(li[i][0], li[i][1], db)
-            pass
+            result = play_my_game(li[i][0], li[i][1], db)
+            
         else:
             play_simulation_game(li[i][0], li[i][1], db)
     update_league_table()
     timercheck.finish()
+    return result
 
 
 def search_calander():

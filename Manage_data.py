@@ -368,18 +368,17 @@ def missed_leagues():
 def make_row_num():
     db = sqlite3.connect(f"DB/FO_datafile.db")
     cursor = db.cursor()
-    cursor1 = db.cursor()
-    cursor.execute(f"SELECT * FROM Teams")
-    for i in range(2088):
+    cursor.execute(f"SELECT * FROM Coaches")
+    row_list = cursor.fetchall()
+    for i in range(len(row_list)):
+        a = row_list[i]
+        Name = a[1]
+        Team = a[2]
+        Position = a[3]
+        Money = a[6]
 
-        a = cursor.fetchone()
-        league = a[1]
-        country = a[2]
-        team = a[3]
-        value = a[4]
-
-        cursor1.execute(
-            f'UPDATE Teams SET Seq = {i+1} Where League = "{league}" AND Country = "{country}" AND Team = "{team}" AND Value = "{value}"'
+        cursor.execute(
+            f'UPDATE Coaches SET Seq = {i+1} Where Name = "{Name}" AND Team = "{Team}" AND Position = "{Position}" AND Money = "{Money}"'
         )
         db.commit()
 
@@ -496,7 +495,7 @@ def make_new_player(team, position):
         * (ran_potential ** 2)
         / 20000000
     )
-    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    db = sqlite3.connect(f"DB/FO_datafile.db")
     cursor = db.cursor()
     cursor.execute(
         f'INSERT INTO Players VALUES("{seq}", "{ran_name}", "{team}","0", "{position}","{ran_age}", "{Value}", "{ran_ability}", "{ran_potential}", "{money}", "{contract}", "0")'
@@ -505,8 +504,11 @@ def make_new_player(team, position):
 
 
 def get_player_seq():
-    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    db = sqlite3.connect(f"DB/FO_datafile.db")
     cursor = db.cursor()
     cursor.execute(f"SELECT count(*) FROM Players")
     players = cursor.fetchone()[0]
     return int(players)
+
+
+make_row_num()
