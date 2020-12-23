@@ -1119,12 +1119,27 @@ def play_simulation_game(Home, Away, db):
     db.commit()
 
 
-def match_progress(sta, fin):
+def my_match_progress(sta, fin):
     timercheck.start()
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f"SELECT Home, Away FROM League_Calander WHERE Home==(?) OR Away==(?)",
+        (my_team, my_team),
+    )
+    my_team_match = cursor.fetchone()
+    result = play_my_game(my_team_match[0], my_team_match[1], db)
+    make_thread = threading.Thread(target=lambda:other_match_progress(sta,fin))
+    make_thread.daemon = True
+    make_thread.start()
+    return result
+    
+    
+def other_match_progress(sta,fin):
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
     cursor.execute(
         f"SELECT Home, Away FROM League_Calander WHERE Date>=(?) AND Date<=(?) AND result==(?)",
         (sta, fin, "0"),
@@ -1138,7 +1153,6 @@ def match_progress(sta, fin):
             play_simulation_game(li[i][0], li[i][1], db)
     update_league_table()
     timercheck.finish()
-    return result
 
 
 def search_calander():

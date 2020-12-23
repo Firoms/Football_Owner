@@ -396,12 +396,15 @@ class Screen:
             self.Gui, "simulation_bg.png", 0, 0
         )
         next_match = search_calander()
-        simulation_thr = threading.Thread(
-            target=lambda: match_progress(next_match[0], next_match[1])
-        )
-        simulation_thr.daemon = True
-        simulation_thr.start()
-        loading = self.Loading_Screen(simulation_thr)
+        result = my_match_progress(next_match[0], next_match[1])
+        print(result)
+
+        # simulation_thr = threading.Thread(
+        #     target=lambda: my_match_progress(next_match[0], next_match[1])
+        # )
+        # simulation_thr.daemon = True
+        # simulation_thr.start()
+        # loading = self.Loading_Screen(simulation_thr)
 
     def injury(self):
         print("부상")
