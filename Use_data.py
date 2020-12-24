@@ -957,8 +957,7 @@ def play_my_game(Home, Away, db):
 
     H_Team = H_keeper, H_defender, H_midfielder, H_forward, Home_Team_manager
     A_Team = A_keeper, A_defender, A_midfielder, A_forward, Away_Team_manager
-    H_highlight = []
-    A_highlight = []
+    highlight = []
 
     if H_try < 10:
         H_try = 10
@@ -985,87 +984,87 @@ def play_my_game(Home, Away, db):
                 chance_dif = int(chance_dif / 2)
             ran = random.randrange(1, goal1per)
             if 60 + chance_dif < ran:
-                H_highlight.append("찬스메이킹 실패1")
+                highlight.append("찬스메이킹 실패1")
                 continue
             pk_chance = int(H3_f_abil / 100)
             ran = random.randrange(1, goal1per)
             if 1 + pk_chance >= ran:
-                H_highlight.append("pk chance1")
+                highlight.append("pk chance1")
                 ran = random.randrange(1, goal1per)
                 if ran <= 70:
-                    H_highlight.append("pk 성공1")
+                    highlight.append("pk 성공1")
                     goal1per += 15
                     goal1 += 1
                     continue
                 else:
-                    H_highlight.append("pk 실패1")
+                    highlight.append("pk 실패1")
                     continue
             supersave_chance = int(A1_k_abil / 10)
             ran = random.randrange(1, goal1per)
             if 1 + supersave_chance >= ran:
-                A_highlight.append("슈퍼세이브2")
+                highlight.append("슈퍼세이브2")
                 continue
             goal_dif = int(((H3_f_abil + H3_m_abil) - (A4_d_abil + (A1_k_abil))) / 16)
             ran = random.randrange(1, goal1per)
             if goal_dif + 20 >= ran:
-                H_highlight.append("골1")
+                highlight.append("골1")
                 goal1per += 15
                 goal1 += 1
             else:
-                H_highlight.append("아 슛팅이 빗나갑니다!1")
+                highlight.append("아 슛팅이 빗나갑니다!1")
                 continue
             ran = random.randrange(1, goal1per)
             if ran <= 2:
                 goal1per -= 15
                 goal1 -= 1
-                H_highlight.append("VAR 취소...")
+                highlight.append("VAR 취소...")
         else:
             chance_dif = int((A3_m_abil - H3_m_abil) / 4)
             if chance_dif < 0:
                 chance_dif = int(chance_dif / 2)
             ran = random.randrange(1, goal2per)
             if 50 + chance_dif < ran:
-                A_highlight.append("찬스메이킹 실패2")
+                highlight.append("찬스메이킹 실패2")
                 continue
             pk_chance = int(A3_f_abil / 100)
             ran = random.randrange(1, goal2per)
             if 1 + pk_chance >= ran:
-                A_highlight.append("pk chance2")
+                highlight.append("pk chance2")
                 ran = random.randrange(1, goal2per)
                 if ran <= 70:
-                    A_highlight.append("pk 성공2")
+                    highlight.append("pk 성공2")
                     goal2per += 15
                     goal2 += 1
                 else:
-                    A_highlight.append("pk 실패2")
+                    highlight.append("pk 실패2")
                     continue
             supersave_chance = int(H1_k_abil / 10)
             ran = random.randrange(1, goal2per)
             if 1 + supersave_chance >= ran:
-                H_highlight.append("슈퍼세이브1")
+                highlight.append("슈퍼세이브1")
                 continue
             goal_dif = int(((A3_f_abil + A3_m_abil) - (H4_d_abil + (H1_k_abil))) / 16)
             ran = random.randrange(1, goal2per)
             if goal_dif + 10 >= ran:
-                A_highlight.append("골2")
+                highlight.append("골2")
                 goal2per += 15
                 goal2 += 1
             else:
-                A_highlight.append("아 슛팅이 빗나갑니다!2")
+                highlight.append("아 슛팅이 빗나갑니다!2")
                 continue
             ran = random.randrange(1, goal2per)
             if ran <= 2:
                 goal1per -= 15
                 goal2 -= 1
-                A_highlight.append("VAR 취소...")
+                highlight.append("VAR 취소...")
     cursor = db.cursor()
     cursor.execute(
         f"UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)",
         (f"{goal1}:{goal2}", Home, Away),
     )
     db.commit()
-    
-    return H_Team, A_Team, H_highlight, A_highlight
+    print(goal1, goal2)
+    return H_Team, A_Team, highlight
 
 
 def play_simulation_game(Home, Away, db):
@@ -1126,10 +1125,11 @@ def my_match_progress(sta, fin):
     cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
     cursor.execute(
-        f"SELECT Home, Away FROM League_Calander WHERE Home==(?) OR Away==(?)",
-        (my_team, my_team),
+        f"SELECT Home, Away FROM League_Calander WHERE (Home==(?) OR Away==(?)) AND result==(?) ORDER BY Date",
+        (my_team, my_team, "0"),
     )
     my_team_match = cursor.fetchone()
+    print(my_team_match)
     result = play_my_game(my_team_match[0], my_team_match[1], db)
     make_thread = threading.Thread(target=lambda:other_match_progress(sta,fin))
     make_thread.daemon = True
@@ -1146,11 +1146,7 @@ def other_match_progress(sta,fin):
     )
     li = cursor.fetchall()
     for i in range(len(li)):
-        if li[i][0] == my_team or li[i][1] == my_team:
-            result = play_my_game(li[i][0], li[i][1], db)
-            
-        else:
-            play_simulation_game(li[i][0], li[i][1], db)
+        play_simulation_game(li[i][0], li[i][1], db)
     update_league_table()
     timercheck.finish()
 
