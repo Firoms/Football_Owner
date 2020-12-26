@@ -396,15 +396,29 @@ class Screen:
             self.Gui, "simulation_bg.png", 0, 0
         )
         next_match = search_calander()
-        result = my_match_progress(next_match[0], next_match[1])
-        print(result)
-
+        self.result = my_match_progress(next_match[0], next_match[1])
+        self.match_result(0)
         # simulation_thr = threading.Thread(
         #     target=lambda: my_match_progress(next_match[0], next_match[1])
         # )
         # simulation_thr.daemon = True
         # simulation_thr.start()
         # loading = self.Loading_Screen(simulation_thr)
+
+    def match_result(self, num):
+        match_label = Get_label.image_label_text(
+            self.Gui,
+            "intro2.png",
+            500,
+            100 + (i * 100),
+            f"{self.result[0]}번",
+            "#ed1c24",
+            ("1훈떡볶이 Regular", 32),
+        )
+        if num <= len(self.result):
+            match_label.after(2000, lambda: self.match_result(num + 1))
+        else:
+            match_label.after(5000, lambda: self.Main_Screen())
 
     def injury(self):
         print("부상")
