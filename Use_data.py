@@ -984,79 +984,79 @@ def play_my_game(Home, Away, db):
                 chance_dif = int(chance_dif / 2)
             ran = random.randrange(1, goal1per)
             if 60 + chance_dif < ran:
-                highlight.append("찬스메이킹 실패1")
+                highlight.append("찬스메이킹 실패1","1")
                 continue
             pk_chance = int(H3_f_abil / 100)
             ran = random.randrange(1, goal1per)
             if 1 + pk_chance >= ran:
-                highlight.append("pk chance1")
+                highlight.append("pk chance1","1")
                 ran = random.randrange(1, goal1per)
                 if ran <= 70:
-                    highlight.append("pk 성공1")
+                    highlight.append("pk 성공1","1")
                     goal1per += 15
                     goal1 += 1
                     continue
                 else:
-                    highlight.append("pk 실패1")
+                    highlight.append("pk 실패1","1")
                     continue
             supersave_chance = int(A1_k_abil / 10)
             ran = random.randrange(1, goal1per)
             if 1 + supersave_chance >= ran:
-                highlight.append("슈퍼세이브2")
+                highlight.append("슈퍼세이브2","2")
                 continue
             goal_dif = int(((H3_f_abil + H3_m_abil) - (A4_d_abil + (A1_k_abil))) / 16)
             ran = random.randrange(1, goal1per)
             if goal_dif + 20 >= ran:
-                highlight.append("골1")
+                highlight.append("골1","1")
                 goal1per += 15
                 goal1 += 1
             else:
-                highlight.append("아 슛팅이 빗나갑니다!1")
+                highlight.append("아 슛팅이 빗나갑니다!1","1")
                 continue
             ran = random.randrange(1, goal1per)
             if ran <= 2:
                 goal1per -= 15
                 goal1 -= 1
-                highlight.append("VAR 취소...")
+                highlight.append("VAR 취소...1","1")
         else:
             chance_dif = int((A3_m_abil - H3_m_abil) / 4)
             if chance_dif < 0:
                 chance_dif = int(chance_dif / 2)
             ran = random.randrange(1, goal2per)
             if 50 + chance_dif < ran:
-                highlight.append("찬스메이킹 실패2")
+                highlight.append("찬스메이킹 실패2","2")
                 continue
             pk_chance = int(A3_f_abil / 100)
             ran = random.randrange(1, goal2per)
             if 1 + pk_chance >= ran:
-                highlight.append("pk chance2")
+                highlight.append("pk chance2","2")
                 ran = random.randrange(1, goal2per)
                 if ran <= 70:
-                    highlight.append("pk 성공2")
+                    highlight.append("pk 성공2","2")
                     goal2per += 15
                     goal2 += 1
                 else:
-                    highlight.append("pk 실패2")
+                    highlight.append("pk 실패2","2")
                     continue
             supersave_chance = int(H1_k_abil / 10)
             ran = random.randrange(1, goal2per)
             if 1 + supersave_chance >= ran:
-                highlight.append("슈퍼세이브1")
+                highlight.append("슈퍼세이브1","1")
                 continue
             goal_dif = int(((A3_f_abil + A3_m_abil) - (H4_d_abil + (H1_k_abil))) / 16)
             ran = random.randrange(1, goal2per)
             if goal_dif + 10 >= ran:
-                highlight.append("골2")
+                highlight.append("골2","2")
                 goal2per += 15
                 goal2 += 1
             else:
-                highlight.append("아 슛팅이 빗나갑니다!2")
+                highlight.append("아 슛팅이 빗나갑니다!2","2")
                 continue
             ran = random.randrange(1, goal2per)
             if ran <= 2:
                 goal1per -= 15
                 goal2 -= 1
-                highlight.append("VAR 취소...")
+                highlight.append("VAR 취소...2","2")
     cursor = db.cursor()
     cursor.execute(
         f"UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)",

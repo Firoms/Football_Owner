@@ -406,16 +406,27 @@ class Screen:
         # loading = self.Loading_Screen(simulation_thr)
 
     def match_result(self, num):
-        match_label = Get_label.image_label_text(
-            self.Gui,
-            "intro2.png",
-            500,
-            100 + (i * 100),
-            f"{self.result[0]}번",
-            "#ed1c24",
-            ("1훈떡볶이 Regular", 32),
-        )
-        if num <= len(self.result):
+        if self.result[2][num][1]=="1":
+            match_label = Get_label.image_label_text(
+                self.Gui,
+                "Home_hi.png",
+                500,
+                30 + (num * 20),
+                f"{self.result[0][2][num]}번",
+                "#ed1c24",
+                ("1훈떡볶이 Regular", 10),
+            )
+        elif self.result[2][num][1]=="2":
+            match_label = Get_label.image_label_text(
+                self.Gui,
+                "Home_hi.png",
+                500,
+                30 + (num * 20),
+                f"{self.result[0][2][num]}번",
+                "#ed1c24",
+                ("1훈떡볶이 Regular", 10),
+            )
+        if num < len(self.result[2]):
             match_label.after(2000, lambda: self.match_result(num + 1))
         else:
             match_label.after(5000, lambda: self.Main_Screen())
