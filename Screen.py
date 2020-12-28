@@ -406,29 +406,41 @@ class Screen:
         # loading = self.Loading_Screen(simulation_thr)
 
     def match_result(self, num):
+        locnum = num%10
         if self.result[2][num][1]=="1":
             match_label = Get_label.image_label_text(
                 self.Gui,
                 "Home_hi.png",
-                500,
-                30 + (num * 20),
-                f"{self.result[0][2][num]}번",
+                320,
+                152 + (locnum * 59),
+                f"{self.result[2][num][0]}번",
                 "#ed1c24",
                 ("1훈떡볶이 Regular", 10),
             )
         elif self.result[2][num][1]=="2":
             match_label = Get_label.image_label_text(
                 self.Gui,
-                "Home_hi.png",
-                500,
-                30 + (num * 20),
-                f"{self.result[0][2][num]}번",
+                "Away_hi.png",
+                320,
+                152 + (locnum * 59),
+                f"{self.result[2][num][0]}번",
                 "#ed1c24",
                 ("1훈떡볶이 Regular", 10),
             )
-        if num < len(self.result[2]):
+        if locnum !=9:
+            match_label_reset = Get_label.image_label_text(
+                self.Gui,
+                "hi.png",
+                320,
+                152 + ((locnum+1) * 59),
+                f"",
+                "#ed1c24",
+                ("1훈떡볶이 Regular", 10),
+            )
+        if num < len(self.result[2])-1:
             match_label.after(2000, lambda: self.match_result(num + 1))
         else:
+            print(self.result[2])
             match_label.after(5000, lambda: self.Main_Screen())
 
     def injury(self):
