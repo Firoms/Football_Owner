@@ -1064,7 +1064,7 @@ def play_my_game(Home, Away, db):
     )
     db.commit()
     print(goal1, goal2)
-    return H_Team, A_Team, highlight
+    return H_Team, A_Team, highlight,Home,Away
 
 
 def play_simulation_game(Home, Away, db):
