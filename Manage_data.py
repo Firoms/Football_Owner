@@ -463,7 +463,7 @@ def make_player_data():
         )
         forward_cnt = cursor.fetchone()[0]
         if forward_cnt < 5:
-            for i in range(6 - forward_cnt):
+            for i in range(5 - forward_cnt):
                 make_new_player(team, "Forward")
 
 

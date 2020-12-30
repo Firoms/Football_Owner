@@ -166,6 +166,8 @@ def Auto_save_get_data(num):
     db_save.commit()
 
     def makethread():
+        make_messages(3)
+        make_messages(num)
         make_calander(num)
         make_calander(3)
         make_player_stats(num)
@@ -176,6 +178,17 @@ def Auto_save_get_data(num):
     make_thread = threading.Thread(target=makethread)
     make_thread.daemon = True
     make_thread.start()
+
+
+def make_messages(num):
+    db = sqlite3.connect(f"DB/FO_savefile{num}.db")
+    cursor = db.cursor()
+    for i in range(4):
+        cursor.execute(f"INSERT INTO Message_box VALUES('{i+1}','','','','','')")
+    cursor.execute(
+        f"INSERT INTO Message_box VALUES('5','FO','오신것을','환영합니다','','Football Owner은 축구 시뮬레이션 게임입니다.\n 아직 많이 부족하지만,\n 재밌게 즐겨주세요.')"
+    )
+    db.commit()
 
 
 def time_auto_save():
@@ -696,35 +709,16 @@ def ability_ran_change():
     )
     player_list = []
     random_list = []
-    player = cursor.fetchone()
-    player_seq = player[0]
-    player_ability = player[7]
-    player_potential = player[8]
-    random = random.randrange(-2, 2)
-    if player_ability + random > player_potential:
-        cursor.execute(
-            f"UPDATE Players SET ability = (?) Where Seq == (?)",
-            (player_potential, player_seq),
-        )
-    else:
-        cursor.execute(
-            f"UPDATE Players SET ability = (?) Where Seq == (?)",
-            (player_ability + random, player_seq),
-        )
-    db.commit()
-    player_list.append(player)
-    random_list.append(random)
-
-    cursor.execute(
-        f"SELECT * FROM Players Where Team !=(?) ORDER BY random()", (my_team,)
-    )
-    for i in range(1000):
-        player = cursor.fetchone()
-        player_seq = player[0]
-        player_ability = player[7]
-        player_potential = player[8]
-        random = random.randrange(-2, 2)
-        if player_ability + random > player_potential:
+    players = cursor.fetchall()
+    for i in range(3):
+        player = players[i]
+        player_seq = int(player[0])
+        player_ability = int(player[7])
+        player_potential = int(player[8])
+        ran = 0
+        while ran == 0:
+            ran = random.randrange(-2, 2)
+        if player_ability + ran > player_potential:
             cursor.execute(
                 f"UPDATE Players SET ability = (?) Where Seq == (?)",
                 (player_potential, player_seq),
@@ -732,12 +726,41 @@ def ability_ran_change():
         else:
             cursor.execute(
                 f"UPDATE Players SET ability = (?) Where Seq == (?)",
-                (player_ability + random, player_seq),
+                (player_ability + ran, player_seq),
             )
         db.commit()
         player_list.append(player)
-        random_list.append(random)
-    return (player_list, random_list)
+        random_list.append(ran)
+
+    cursor.execute(
+        f"SELECT * FROM Players Where Team !=(?) ORDER BY random()", (my_team,)
+    )
+    players = cursor.fetchall()
+    for i in range(1000):
+        player = players[i]
+        player_seq = int(player[0])
+        player_ability = int(player[7])
+        player_potential = int(player[8])
+        ran = random.randrange(-2, 2)
+        if player_ability + ran > player_potential:
+            cursor.execute(
+                f"UPDATE Players SET ability = (?) Where Seq == (?)",
+                (player_potential, player_seq),
+            )
+        else:
+            cursor.execute(
+                f"UPDATE Players SET ability = (?) Where Seq == (?)",
+                (player_ability + ran, player_seq),
+            )
+        db.commit()
+        player_list.append(player)
+        random_list.append(ran)
+    cursor.execute(f"SELECT count(*) FROM Message_box")
+    cnt = cursor.fetchone()[0]
+    insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","능력치 변화","{player_list[0][1]}","{player_list[1][1]}","{player_list[2][1]}" ,"{player_list[0][1]} 선수의 능력치가 {random_list[0]} 되었습니다.\n{player_list[1][1]} 선수의 능력치가 {random_list[1]} 되었습니다.\n{player_list[2][1]} 선수의 능력치가 {random_list[2]} 되었습니다.\n")'
+    cursor.execute(insert_query)
+    db.commit()
+    print(player_list[0:3], random_list[0:3])
 
 
 def fan_res():
@@ -1329,21 +1352,24 @@ def get_Bundes_table():
     return cursor.fetchall()
 
 
-if __name__ == "__main__":
-    timercheck.start()
-    # num = search_calander()
-    # match_progress(num[0],num[1])
+def get_message_data():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
-    win, draw, lose = 0, 0, 0
-    for i in range(30000):
-        # score = play_my_game( "Norwich City","Liverpool FC",db)
-        score = play_simulation_game("Manchester City", "Bayern Munich", db)
-        if int(score[0]) > int(score[2]):
-            win += 1
-        elif int(score[0]) == int(score[2]):
-            draw += 1
-        else:
-            lose += 1
+    cursor = db.cursor()
+    cursor.execute(f"SELECT * FROM Message_box Order by Seq DESC")
+    messages = cursor.fetchall()
+    return messages[0:5]
 
-    print(f"{win}승 {draw}무 {lose}패")
-    timercheck.finish()
+
+def check_gamer_team():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(f"SELECT * FROM Gamer")
+    player_team = cursor.fetchone()[1]
+    if player_team == "무직":
+        return False
+    else:
+        return True
+
+
+if __name__ == "__main__":
+    pass

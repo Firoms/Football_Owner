@@ -48,13 +48,13 @@ class Screen:
         )
         Version_label = Label(
             self.Gui.Gui,
-            text="Version 0.5",
+            text="Version 1.0 BETA",
             fg="yellow",
             bg="purple",
             font=("맑은 고딕", 12),
             height=1,
         )
-        Version_label.place(x=1100, y=5)
+        Version_label.place(x=1050, y=5)
 
     ############################################################
     # 미완성 화면
@@ -94,6 +94,13 @@ class Screen:
             Loading_Screen_background.after(200, lambda: loading(num + 1, thread))
 
         loading(1, thread)
+
+    def cant_use_Screen(self):
+        self.destroy()
+        Team_Player_Screen_background = Get_label.image_label(
+            self.Gui, "cantuse_bg.png", 0, 0
+        )
+        game_button = self.game_buttons()
 
     ############################################################
     # 설명 화면
@@ -323,19 +330,33 @@ class Screen:
         Save_button = Get_label.image_button(
             self.Gui, "save_btn.png", 121, 33, self.Savefiles_Screen
         )
-        Go_button = Get_label.image_button(
-            self.Gui, "go_btn.png", 1090, 33, self.continue_btn
-        )
+        if check_gamer_team() == False:
+            Go_button = Get_label.image_button(
+                self.Gui, "go_btn.png", 1090, 33, self.no_action
+            )
+        else:
+            Go_button = Get_label.image_button(
+                self.Gui, "go_btn.png", 1090, 33, self.continue_btn
+            )
         self.menu1_button = Get_label.image_button(
             self.Gui, "menu1.png", 34, 140, self.message
         )
-        self.menu2_button = Get_label.image_button(
-            self.Gui,
-            "menu2.png",
-            34,
-            210,
-            lambda: self.situation(0, 10, get_myteam_table()),
-        )
+        if check_gamer_team() == False:
+            self.menu2_button = Get_label.image_button(
+                self.Gui,
+                "menu2.png",
+                34,
+                210,
+                lambda: self.cant_use_Screen(),
+            )
+        else:
+            self.menu2_button = Get_label.image_button(
+                self.Gui,
+                "menu2.png",
+                34,
+                210,
+                lambda: self.situation(0, 10, get_myteam_table()),
+            )
         self.menu3_button = Get_label.image_button(
             self.Gui, "menu3.png", 34, 280, self.acquisition
         )
@@ -352,10 +373,10 @@ class Screen:
             self.Gui, "menu7.png", 34, 560, self.Team_Staff_Screen
         )
         self.menu8_button = Get_label.image_button(
-            self.Gui, "menu8.png", 34, 630, self.no_action
+            self.Gui, "menu8.png", 34, 630, self.cant_use_Screen
         )
         self.menu9_button = Get_label.image_button(
-            self.Gui, "menu9.png", 34, 700, self.no_action
+            self.Gui, "menu9.png", 34, 700, self.cant_use_Screen
         )
 
     def logo_com(self):
@@ -593,7 +614,8 @@ class Screen:
         print("재계약")
 
     def ability_change(self):
-        print("능력치 변동")
+        ability_ran_change()
+        self.Main_Screen()
 
     def fan_res(self):
         print("팬 반응")
@@ -627,20 +649,56 @@ class Screen:
                 self.Gui, "message_box_bg.png", 0, 0
             )
             self.game_buttons()
-            message_notice1 = Get_label.image_button(
-                self.Gui, "message_notice_btn.png", 219, 130, self.no_action
+            data = get_message_data()
+            message_notice1 = Get_label.image_button_text(
+                self.Gui,
+                "message_notice_btn.png",
+                219,
+                130,
+                self.no_action,
+                f"{data[0][1]}\n{data[0][2]}\n{data[0][3]}\n{data[0][4]}",
+                "#28a44a",
+                ("타이포_헬로피오피 테두리B", 15),
             )
-            message_notice1 = Get_label.image_button(
-                self.Gui, "message_notice_btn.png", 219, 260, self.no_action
+            message_notice2 = Get_label.image_button_text(
+                self.Gui,
+                "message_notice_btn.png",
+                219,
+                260,
+                self.no_action,
+                f"{data[1][1]}\n{data[1][2]}\n{data[1][3]}\n{data[1][4]} ",
+                "#28a44a",
+                ("타이포_헬로피오피 테두리B", 15),
             )
-            message_notice1 = Get_label.image_button(
-                self.Gui, "message_notice_btn.png", 219, 390, self.no_action
+            message_notice3 = Get_label.image_button_text(
+                self.Gui,
+                "message_notice_btn.png",
+                219,
+                390,
+                self.no_action,
+                f"{data[2][1]}\n{data[2][2]}\n{data[2][3]}\n{data[2][4]}",
+                "#28a44a",
+                ("타이포_헬로피오피 테두리B", 15),
             )
-            message_notice1 = Get_label.image_button(
-                self.Gui, "message_notice_btn.png", 219, 520, self.no_action
+            message_notice4 = Get_label.image_button_text(
+                self.Gui,
+                "message_notice_btn.png",
+                219,
+                520,
+                self.no_action,
+                f"{data[3][1]}\n{data[3][2]}\n{data[3][3]}\n{data[3][4]}",
+                "#28a44a",
+                ("타이포_헬로피오피 테두리B", 15),
             )
-            message_notice1 = Get_label.image_button(
-                self.Gui, "message_notice_btn.png", 219, 650, self.no_action
+            message_notice5 = Get_label.image_button_text(
+                self.Gui,
+                "message_notice_btn.png",
+                219,
+                650,
+                self.no_action,
+                f"{data[4][1]}\n{data[4][2]}\n{data[4][3]}\n{data[4][4]}",
+                "#28a44a",
+                ("타이포_헬로피오피 테두리B", 15),
             )
 
     ############################################################

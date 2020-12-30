@@ -41,7 +41,8 @@ class Execution:
     def Game_menu(self):
         def _msgBox():
             tkinter.messagebox.showinfo(
-                "소개", "Firoms가 만든 Football_Owner\n 약 8000명의 축구 선수와 함께하는 시뮬레이션 게임입니다."
+                "소개",
+                "Firoms가 만든 Football_Owner\n 약 57000명의 축구 선수와 약 6500명의 코치, 약 5700명의 스탭들과 함께하는 축구 시뮬레이션 게임입니다.",
             )
 
         def _quit():
