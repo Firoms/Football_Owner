@@ -944,14 +944,24 @@ def play_my_game(Home, Away, db):
     H1_k_abil = int(H_keeper[0][7])
     A1_k_abil = int(A_keeper[0][7])
     H4_d_abil = (
-        int(H_defender[0][7]) + int(H_defender[1][7]) + int(H_defender[2][7]) + int(H_defender[3][7])
+        int(H_defender[0][7])
+        + int(H_defender[1][7])
+        + int(H_defender[2][7])
+        + int(H_defender[3][7])
     )
 
     A4_d_abil = (
-        int(A_defender[0][7]) + int(A_defender[1][7]) + int(A_defender[2][7]) + int(A_defender[3][7])
+        int(A_defender[0][7])
+        + int(A_defender[1][7])
+        + int(A_defender[2][7])
+        + int(A_defender[3][7])
     )
-    H3_m_abil = int(H_midfielder[0][7]) + int(H_midfielder[1][7]) + int(H_midfielder[2][7])
-    A3_m_abil = int(A_midfielder[0][7]) + int(A_midfielder[1][7]) + int(A_midfielder[2][7])
+    H3_m_abil = (
+        int(H_midfielder[0][7]) + int(H_midfielder[1][7]) + int(H_midfielder[2][7])
+    )
+    A3_m_abil = (
+        int(A_midfielder[0][7]) + int(A_midfielder[1][7]) + int(A_midfielder[2][7])
+    )
     H3_f_abil = int(H_forward[0][7]) + int(H_forward[1][7]) + int(H_midfielder[2][7])
     A3_f_abil = int(A_forward[0][7]) + int(A_forward[1][7]) + int(A_forward[2][7])
 
@@ -984,79 +994,101 @@ def play_my_game(Home, Away, db):
                 chance_dif = int(chance_dif / 2)
             ran = random.randrange(1, goal1per)
             if 60 + chance_dif < ran:
-                highlight.append(["찬스메이킹 실패1","1"])
+                highlight.append([f"{Home} 앞으로 나아갑니다", "1"])
+                highlight.append([f"아, 패스가 끊겼어요", "1"])
                 continue
             pk_chance = int(H3_f_abil / 100)
             ran = random.randrange(1, goal1per)
             if 1 + pk_chance >= ran:
-                highlight.append(["pk chance1","1"])
+                highlight.append([f"아 이게 뭔가요, {Home}팀 선수가 페널티 박스에서 넘어졌는데요...", "1"])
+                highlight.append(["PK가 선언됩니다.", "1"])
                 ran = random.randrange(1, goal1per)
                 if ran <= 70:
-                    highlight.append(["pk 성공1","1"])
+                    highlight.append(["슛~~", "1"])
+                    highlight.append([f"PK는 놓치면 안돼죠, {Home}의 골이 들어갑니다", "골1"])
                     goal1per += 15
                     goal1 += 1
                     continue
                 else:
-                    highlight.append(["pk 실패1","1"])
+                    highlight.append(["슛~~", "1"])
+                    highlight.append([f"아 이 좋은 기회를 실축으로 날려버리나요...", "1"])
                     continue
             supersave_chance = int(A1_k_abil / 10)
             ran = random.randrange(1, goal1per)
             if 1 + supersave_chance >= ran:
-                highlight.append(["슈퍼세이브2","2"])
+                highlight.append([f"{Home} 벼락같은 슛!", "1"])
+                highlight.append(["엄청난 슈퍼세이브가 나옵니다", "2"])
                 continue
             goal_dif = int(((H3_f_abil + H3_m_abil) - (A4_d_abil + (A1_k_abil))) / 16)
             ran = random.randrange(1, goal1per)
             if goal_dif + 20 >= ran:
-                highlight.append(["골1","1"])
+                highlight.append([f"{Home} 앞으로 나아갑니다", "1"])
+                highlight.append([f"좋은 패스죠", "1"])
+                highlight.append([f"그대로 슛!!!", "1"])
+                highlight.append([f"골~~~~ {Home} 팀이 골을 터트립니다.", "골1"])
                 goal1per += 15
                 goal1 += 1
             else:
-                highlight.append(["아 슛팅이 빗나갑니다!1","1"])
+                highlight.append([f"{Home} 앞으로 나아갑니다", "1"])
+                highlight.append([f"좋은 패스죠", "1"])
+                highlight.append([f"그대로 슛!!!", "1"])
+                highlight.append(["아 이걸 날려먹나요...", "1"])
                 continue
             ran = random.randrange(1, goal1per)
             if ran <= 2:
                 goal1per -= 15
                 goal1 -= 1
-                highlight.append(["VAR 취소...1","1"])
+                highlight.append(["어? VAR 체크를 하는데요.. 아 노골이에요...", "ㄴ1"])
         else:
             chance_dif = int((A3_m_abil - H3_m_abil) / 4)
             if chance_dif < 0:
                 chance_dif = int(chance_dif / 2)
             ran = random.randrange(1, goal2per)
             if 50 + chance_dif < ran:
-                highlight.append(["찬스메이킹 실패2","2"])
+                highlight.append([f"{Away} 앞으로 나아갑니다", "2"])
+                highlight.append([f"아, 패스가 끊겼어요", "2"])
                 continue
             pk_chance = int(A3_f_abil / 100)
             ran = random.randrange(1, goal2per)
             if 1 + pk_chance >= ran:
-                highlight.append(["pk chance2","2"])
+                highlight.append([f"아 이게 뭔가요, {Away}팀 선수가 페널티 박스에서 넘어졌는데요...", "2"])
+                highlight.append(["PK가 선언됩니다.", "2"])
                 ran = random.randrange(1, goal2per)
                 if ran <= 70:
-                    highlight.append(["pk 성공2","2"])
+                    highlight.append(["슛~~", "2"])
+                    highlight.append([f"PK는 놓치면 안돼죠, {Away}의 골이 들어갑니다", "골2"])
                     goal2per += 15
                     goal2 += 1
                 else:
-                    highlight.append(["pk 실패2","2"])
+                    highlight.append(["슛~~", "2"])
+                    highlight.append([f"아 이 좋은 기회를 실축으로 날려버리나요...", "2"])
                     continue
             supersave_chance = int(H1_k_abil / 10)
             ran = random.randrange(1, goal2per)
             if 1 + supersave_chance >= ran:
-                highlight.append(["슈퍼세이브1","1"])
+                highlight.append([f"{Away} 벼락같은 슛!", "2"])
+                highlight.append(["엄청난 슈퍼세이브가 나옵니다", "1"])
                 continue
             goal_dif = int(((A3_f_abil + A3_m_abil) - (H4_d_abil + (H1_k_abil))) / 16)
             ran = random.randrange(1, goal2per)
             if goal_dif + 10 >= ran:
-                highlight.append(["골2","2"])
+                highlight.append([f"{Away} 앞으로 나아갑니다", "2"])
+                highlight.append([f"좋은 패스죠", "2"])
+                highlight.append([f"그대로 슛!!!", "2"])
+                highlight.append([f"골~~~~ {Away} 팀이 골을 터트립니다.", "골2"])
                 goal2per += 15
                 goal2 += 1
             else:
-                highlight.append(["아 슛팅이 빗나갑니다!2","2"])
+                highlight.append([f"{Away} 앞으로 나아갑니다", "2"])
+                highlight.append([f"좋은 패스죠", "2"])
+                highlight.append([f"그대로 슛!!!", "2"])
+                highlight.append(["아 이걸 날려먹나요...", "2"])
                 continue
             ran = random.randrange(1, goal2per)
             if ran <= 2:
                 goal1per -= 15
                 goal2 -= 1
-                highlight.append(["VAR 취소...2","2"])
+                highlight.append(["어? VAR 체크를 하는데요.. 아 노골이에요...", "ㄴ2"])
     cursor = db.cursor()
     cursor.execute(
         f"UPDATE League_Calander SET result=(?) WHERE Home == (?) AND Away == (?)",
@@ -1064,7 +1096,8 @@ def play_my_game(Home, Away, db):
     )
     db.commit()
     print(goal1, goal2)
-    return H_Team, A_Team, highlight,Home,Away
+    highlight.append([f"경기{goal1}:{goal2}로 종료됩니다. ", "3"])
+    return H_Team, A_Team, highlight, Home, Away
 
 
 def play_simulation_game(Home, Away, db):
@@ -1131,13 +1164,13 @@ def my_match_progress(sta, fin):
     my_team_match = cursor.fetchone()
     print(my_team_match)
     result = play_my_game(my_team_match[0], my_team_match[1], db)
-    make_thread = threading.Thread(target=lambda:other_match_progress(sta,fin))
+    make_thread = threading.Thread(target=lambda: other_match_progress(sta, fin))
     make_thread.daemon = True
     make_thread.start()
     return result
-    
-    
-def other_match_progress(sta,fin):
+
+
+def other_match_progress(sta, fin):
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(
@@ -1304,7 +1337,7 @@ if __name__ == "__main__":
     win, draw, lose = 0, 0, 0
     for i in range(30000):
         # score = play_my_game( "Norwich City","Liverpool FC",db)
-        score = play_simulation_game("Manchester City","Bayern Munich" ,db)
+        score = play_simulation_game("Manchester City", "Bayern Munich", db)
         if int(score[0]) > int(score[2]):
             win += 1
         elif int(score[0]) == int(score[2]):

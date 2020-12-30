@@ -397,54 +397,56 @@ class Screen:
         )
         next_match = search_calander()
         self.result = my_match_progress(next_match[0], next_match[1])
-        self.team_squad('Home')
-        self.team_squad('Away')
+        self.team_squad("Home")
+        self.team_squad("Away")
+        self.home_score = 0
+        self.away_score = 0
         self.match_result(0)
 
     def team_squad(self, pos):
-        if pos == 'Home':
+        if pos == "Home":
             team = 0
             x = 49
             scorex = 295
-            
-        elif pos == 'Away':
+
+        elif pos == "Away":
             team = 1
             x = 928
             scorex = 810
-        
+
         Team_label = Get_label.image_label_text(
-                self.Gui,
-                f"{pos}_name.png",
-                x,
-                67,
-                f"{self.result[team+3]}",
-                "#ed1c24",
-                ("1훈떡볶이 Regular", 14),
-            )
+            self.Gui,
+            f"{pos}_name.png",
+            x,
+            67,
+            f"{self.result[team+3]}",
+            "#ed1c24",
+            ("1훈떡볶이 Regular", 14),
+        )
         Score_label = Get_label.image_label_text(
-                self.Gui,
-                f"{pos}_score.png",
-                scorex,
-                60,
-                f"0",
-                "#ed1c24",
-                ("1훈떡볶이 Regular", 20),
-            )
+            self.Gui,
+            f"{pos}_score.png",
+            scorex,
+            60,
+            f"0",
+            "#ed1c24",
+            ("1훈떡볶이 Regular", 20),
+        )
         coach_label = Get_label.image_label_text(
-                self.Gui,
-                "coach.png",
-                x,
-                152,
-                f"{self.result[team][-1][1]}",
-                "#ed1c24",
-                ("1훈떡볶이 Regular", 12),
-            )
+            self.Gui,
+            "coach.png",
+            x,
+            152,
+            f"{self.result[team][-1][1]}",
+            "#ed1c24",
+            ("1훈떡볶이 Regular", 12),
+        )
         for i in range(1):
             player_label = Get_label.image_label_text(
                 self.Gui,
                 "player.png",
                 x,
-                152 + ((i+1) * 49),
+                152 + ((i + 1) * 49),
                 f"{self.result[team][0][i][1]}",
                 "#ed1c24",
                 ("1훈떡볶이 Regular", 12),
@@ -454,7 +456,7 @@ class Screen:
                 self.Gui,
                 "player.png",
                 x,
-                152 + ((i+2) * 49),
+                152 + ((i + 2) * 49),
                 f"{self.result[team][1][i][1]}",
                 "#ed1c24",
                 ("1훈떡볶이 Regular", 12),
@@ -464,7 +466,7 @@ class Screen:
                 self.Gui,
                 "player.png",
                 x,
-                152 + ((i+6) * 49),
+                152 + ((i + 6) * 49),
                 f"{self.result[team][2][i][1]}",
                 "#ed1c24",
                 ("1훈떡볶이 Regular", 12),
@@ -474,46 +476,100 @@ class Screen:
                 self.Gui,
                 "player.png",
                 x,
-                152 + ((i+9) * 49),
+                152 + ((i + 9) * 49),
                 f"{self.result[team][3][i][1]}",
                 "#ed1c24",
                 ("1훈떡볶이 Regular", 12),
             )
 
     def match_result(self, num):
-        locnum = num%10
-        if self.result[2][num][1]=="1":
+        locnum = num % 10
+        if self.result[2][num][1][-1] == "1":
             match_label = Get_label.image_label_text(
                 self.Gui,
                 "Home_hi.png",
                 320,
                 152 + (locnum * 59),
-                f"{self.result[2][num][0]}번",
-                "#ed1c24",
-                ("1훈떡볶이 Regular", 10),
+                f"{self.result[2][num][0]}",
+                "#9563E0",
+                ("1훈떡볶이 Regular", 14),
             )
-        elif self.result[2][num][1]=="2":
+            if self.result[2][num][1][0] == "골":
+                self.home_score += 1
+                Score_label = Get_label.image_label_text(
+                    self.Gui,
+                    f"Home_score.png",
+                    295,
+                    60,
+                    f"{self.home_score}",
+                    "#ed1c24",
+                    ("1훈떡볶이 Regular", 20),
+                )
+            elif self.result[2][num][1][0] == "ㄴ":
+                self.home_score -= 1
+                Score_label = Get_label.image_label_text(
+                    self.Gui,
+                    f"Home_score.png",
+                    295,
+                    60,
+                    f"{self.home_score}",
+                    "#ed1c24",
+                    ("1훈떡볶이 Regular", 20),
+                )
+        elif self.result[2][num][1][-1] == "2":
             match_label = Get_label.image_label_text(
                 self.Gui,
                 "Away_hi.png",
                 320,
                 152 + (locnum * 59),
-                f"{self.result[2][num][0]}번",
-                "#ed1c24",
-                ("1훈떡볶이 Regular", 10),
+                f"{self.result[2][num][0]}",
+                "#DAE3D6",
+                ("1훈떡볶이 Regular", 14),
             )
-        if locnum !=9:
+            if self.result[2][num][1][0] == "골":
+                self.away_score += 1
+                Score_label = Get_label.image_label_text(
+                    self.Gui,
+                    f"Away_score.png",
+                    810,
+                    60,
+                    f"{self.away_score}",
+                    "#ed1c24",
+                    ("1훈떡볶이 Regular", 20),
+                )
+            elif self.result[2][num][1][0] == "ㄴ":
+                self.away_score -= 1
+                Score_label = Get_label.image_label_text(
+                    self.Gui,
+                    f"Away_score.png",
+                    810,
+                    60,
+                    f"{self.away_score}",
+                    "#ed1c24",
+                    ("1훈떡볶이 Regular", 20),
+                )
+        if self.result[2][num][1][-1] == "3":
+            match_label = Get_label.image_label_text(
+                self.Gui,
+                "hi.png",
+                320,
+                152 + (locnum * 59),
+                f"{self.result[2][num][0]}",
+                "#E07988",
+                ("1훈떡볶이 Regular", 14),
+            )
+        if locnum != 9:
             match_label_reset = Get_label.image_label_text(
                 self.Gui,
                 "hi.png",
                 320,
-                152 + ((locnum+1) * 59),
+                152 + ((locnum + 1) * 59),
                 f"",
-                "#ed1c24",
+                "#E07988",
                 ("1훈떡볶이 Regular", 10),
             )
-        if num < len(self.result[2])-1:
-            match_label.after(2000, lambda: self.match_result(num + 1))
+        if num < len(self.result[2]) - 1:
+            match_label.after(1000, lambda: self.match_result(num + 1))
         else:
             print(self.result[2])
             match_label.after(5000, lambda: self.Main_Screen())
