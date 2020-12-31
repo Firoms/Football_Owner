@@ -186,7 +186,7 @@ def make_messages(num):
     for i in range(4):
         cursor.execute(f"INSERT INTO Message_box VALUES('{i+1}','','','','','')")
     cursor.execute(
-        f"INSERT INTO Message_box VALUES('5','FO','오신것을','환영합니다','','Football Owner은 축구 시뮬레이션 게임입니다.\n 아직 많이 부족하지만,\n 재밌게 즐겨주세요.')"
+        f"INSERT INTO Message_box VALUES('5','Football Owner','오신것을','환영합니다','','Football Owner은 축구 시뮬레이션 게임입니다.\n 아직 많이 부족하지만,\n 재밌게 즐겨주세요.')"
     )
     db.commit()
 
@@ -388,8 +388,6 @@ def save_sell_team(Team):
 def get_injury():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
-    cursor.execute(f'UPDATE Players SET Injury ="0"')
-    db.commit()
     cursor.execute(
         f"SELECT Seq, Market_Value FROM Players WHERE Injury =='0' ORDER BY random()"
     )
@@ -424,8 +422,20 @@ def get_injury():
         return_list.append(cursor.fetchone())
     cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
-    cursor.execute(f"SELECT * FROM Players WHERE Team = '{my_team}' AND Injury != '0'")
+    cursor.execute(
+        f"SELECT * FROM Players WHERE Team = '{my_team}' AND Injury != '0' Order by Market_Value DESC"
+    )
     return_list += cursor.fetchall()
+    for i in range(3):
+        return_list.append(["", "선수 없음", "", "", "", "0"])
+    cursor.execute(f"SELECT count(*) FROM Message_box")
+    cnt = cursor.fetchone()[0]
+    insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","부상 안내","{return_list[0][1]}","{return_list[1][1]}","{return_list[2][1]}" ,"{return_list[0][2]} 소속 {return_list[0][1]} 선수가\n 부상당하여 {return_list[0][-1]}경기 출전불가입니다.\
+        \n{return_list[1][2]} 소속 {return_list[1][1]} 선수가\n 부상당하여 {return_list[1][-1]}경기 출전불가입니다.\n{return_list[2][2]} 소속 {return_list[2][1]} 선수가\n 부상당하여 {return_list[2][-1]}경기 출전불가입니다.\
+        \n{return_list[3][2]} 소속 {return_list[3][1]} 선수가\n 부상당하여 {return_list[3][-1]}경기 출전불가입니다.\n{return_list[4][2]} 소속 {return_list[4][1]} 선수가\n 부상당하여 {return_list[4][-1]}경기 출전불가입니다.\
+        \n {my_team} 부상자는\n {return_list[5][1]}, {return_list[6][1]}, {return_list[7][1]}등으로\n각각 {return_list[5][-1]}, {return_list[6][-1]}, {return_list[7][-1]} 경기 출전불가입니다 ")'
+    cursor.execute(insert_query)
+    db.commit()
 
 
 ###############################################################################
@@ -732,69 +742,86 @@ def ability_ran_change():
         player_list.append(player)
         random_list.append(ran)
 
-    cursor.execute(
-        f"SELECT * FROM Players Where Team !=(?) ORDER BY random()", (my_team,)
-    )
-    players = cursor.fetchall()
-    for i in range(1000):
-        player = players[i]
-        player_seq = int(player[0])
-        player_ability = int(player[7])
-        player_potential = int(player[8])
-        ran = random.randrange(-2, 2)
-        if player_ability + ran > player_potential:
-            cursor.execute(
-                f"UPDATE Players SET ability = (?) Where Seq == (?)",
-                (player_potential, player_seq),
-            )
-        else:
-            cursor.execute(
-                f"UPDATE Players SET ability = (?) Where Seq == (?)",
-                (player_ability + ran, player_seq),
-            )
-        db.commit()
-        player_list.append(player)
-        random_list.append(ran)
+    def random_pick():
+        cursor.execute(
+            f"SELECT * FROM Players Where Team !=(?) ORDER BY random()", (my_team,)
+        )
+        players = cursor.fetchall()
+        for i in range(1000):
+            player = players[i]
+            player_seq = int(player[0])
+            player_ability = int(player[7])
+            player_potential = int(player[8])
+            ran = random.randrange(-2, 2)
+            if player_ability + ran > player_potential:
+                cursor.execute(
+                    f"UPDATE Players SET ability = (?) Where Seq == (?)",
+                    (player_potential, player_seq),
+                )
+            else:
+                cursor.execute(
+                    f"UPDATE Players SET ability = (?) Where Seq == (?)",
+                    (player_ability + ran, player_seq),
+                )
+            db.commit()
+            player_list.append(player)
+            random_list.append(ran)
+
+    make_thread = threading.Thread(target=lambda: random_pick)
+    make_thread.daemon = True
+    make_thread.start()
     cursor.execute(f"SELECT count(*) FROM Message_box")
     cnt = cursor.fetchone()[0]
-    insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","능력치 변화","{player_list[0][1]}","{player_list[1][1]}","{player_list[2][1]}" ,"{player_list[0][1]} 선수의 능력치가 {random_list[0]} 되었습니다.\n{player_list[1][1]} 선수의 능력치가 {random_list[1]} 되었습니다.\n{player_list[2][1]} 선수의 능력치가 {random_list[2]} 되었습니다.\n")'
+    insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","능력치 변화","{player_list[0][1]}","{player_list[1][1]}","{player_list[2][1]}" ,"{player_list[0][1]} 선수의 능력치가 {random_list[0]} 만큼 변화하였습니다.\n{player_list[1][1]} 선수의 능력치가 {random_list[1]} 만큼 변화하였습니다.\n{player_list[2][1]} 선수의 능력치가 {random_list[2]} 만큼 변화하였습니다.\n")'
     cursor.execute(insert_query)
     db.commit()
-    print(player_list[0:3], random_list[0:3])
 
 
 def fan_res():
+    minus = team_money()
+    minus = (minus[0] + minus[1] + minus[2]) // 20
+    plus = int(match_money()[2:-3])
+    print(plus)
+    score = plus - minus
+    print(score)
+    if score >= 50000:
+        return ("최상", 0)
+    elif 50000 > score >= 40000:
+        return ("상", 0)
+    elif 40000 > score >= 20000:
+        return ("보통", 0)
+    elif 20000 > score >= 10000:
+        return ("하", 1)
+    else:
+        return ("최하", 1)
+
+
+def fan_msg_res():
     db = sqlite3.connect(f"DB/FO_savefile3.db")
     cursor = db.cursor()
     cursor.execute(f"SELECT Team FROM Gamer_Team")
     my_team = cursor.fetchone()[0]
-    cursor.execute(
-        f"SELECT count(*) FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?))",
-        ("0", my_team, my_team),
-    )
-    count = int(cursor.fetchone()[0])
-    if count < 5:
-        return False
+    cursor.execute(f"SELECT count(*) FROM Message_box")
+    cnt = cursor.fetchone()[0]
+    minus = team_money()
+    minus = (minus[0] + minus[1] + minus[2]) // 20
+    plus = int(match_money()[2:-3])
+    score = plus - minus
+    if score >= 50000:
+        insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","팬 반응","","","" ,"최근 {my_team}은 경기당 {score} 만원 이익을 냈으며 \n 팬들은 이에 대하여 매우 기뻐하고 있습니다. \n 앞으로도 구단을 재정적으로 잘 이끌어 주세요.")'
+    elif 50000 > score >= 40000:
+        insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","팬 반응","","","" ,"최근 {my_team}은 경기당 {score} 만원 이익을 냈으며 \n 팬들은 이에 대하여 만족하고 있습니다. \n 하지만 아직 발전할 가능성은 충분합니다.")'
+
+    elif 40000 > score >= 20000:
+        insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","팬 반응","","","" ,"최근 {my_team}은 경기당 {score} 만원 이익을 냈으며 \n 팬들은 이에 대하여 아무 생각이 없습니다. \n 조금 더 열심히 하여 좋은 결과를 낼 필요가 있습니다.")'
+
+    elif 20000 > score >= 10000:
+        insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","팬 반응","","","" ,"최근 {my_team}은 경기당 {score} 만원 이익을 냈으며 \n 팬들은 이에 대하여 실망하고 있습니다. \n 조금 이익을 위해 분발해주세요.")'
+
     else:
-        cursor.execute(
-            f"SELECT * FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC",
-            ("0", my_team, my_team),
-        )
-        score = 0
-        for i in range(5):
-            Data = cursor.fetchone()
-            Home = str(Data[4])
-            Away = str(Data[5])
-            result = int(Data[6])
-            if result == 3:
-                score += 1
-            elif result == 1:
-                if Home == my_team:
-                    score += 3
-            elif result == 2:
-                if Away == my_team:
-                    score += 3
-        return score
+        insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","팬 반응","","","" ,"최근 {my_team}은 경기당 {score} 만원 이익을 냈으며 \n 팬들은 이에 대하여 매우 절망하고 있습니다. \n 구단을 매각하고 다른 구단을 찾아보는 것도...")'
+    cursor.execute(insert_query)
+    db.commit()
 
 
 def pla_Res():
@@ -808,7 +835,7 @@ def pla_Res():
     )
     count = int(cursor.fetchone()[0])
     if count < 5:
-        return False
+        return ("미정", 0)
     else:
         cursor.execute(
             f"SELECT * FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC",
@@ -828,7 +855,71 @@ def pla_Res():
             elif result == 2:
                 if Away == my_team:
                     score += 3
-        return score
+
+        if score >= 13:
+            return ("최상", 0)
+        elif 13 > score >= 10:
+            return ("상", 0)
+        elif 10 > score >= 7:
+            return ("보통", 0)
+        elif 7 > score >= 4:
+            return ("하", 1)
+        else:
+            return ("최하", 1)
+
+
+def pla_msg_Res():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(f"SELECT Team FROM Gamer_Team")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(
+        f"SELECT count(*) From League_Calander Where result != (?) AND (Home == (?) OR Away == (?))",
+        ("0", my_team, my_team),
+    )
+    count = int(cursor.fetchone()[0])
+    cursor.execute(f"SELECT count(*) FROM Message_box")
+    cnt = cursor.fetchone()[0]
+    if count < 5:
+        insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","선수단 반응","","","" ,"최근 {my_team}은 치룬 경기가 아직 부족합니다. \n 선수들은 경기를 열심히 준비하고 있습니다. \n 5경기를 치룬 이후에 선수들의 반응이 나올 것입니다.")'
+
+    else:
+        cursor.execute(
+            f"SELECT * FROM League_Calander Where result != (?) AND (Home == (?) OR Away == (?)) ORDER BY Seq DESC",
+            ("0", my_team, my_team),
+        )
+        score = 0
+        for i in range(5):
+            Data = cursor.fetchone()
+            Home = str(Data[4])
+            Away = str(Data[5])
+            result = int(Data[6])
+            if result == 3:
+                score += 1
+            elif result == 1:
+                if Home == my_team:
+                    score += 3
+            elif result == 2:
+                if Away == my_team:
+                    score += 3
+
+        if score >= 13:
+            insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","선수단 반응","","","" ,"최근 {my_team}은 승점 {score}점을 획득했으며 \n 선수들은 이에 대하여 매우 기뻐하고 있습니다. \n 앞으로도 이를 유지하면 될 것 같습니다.")'
+
+        elif 13 > score >= 10:
+            insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","선수단 반응","","","" ,"최근 {my_team}은 승점 {score}점을 획득했으며 \n 선수들은 이에 대하여 나름 만족하고 있습니다. \n 하지만 아직 발전 할 가능성은 충분합니다.")'
+
+        elif 10 > score >= 7:
+            insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","선수단 반응","","","" ,"최근 {my_team}은 승점 {score}점을 획득했으며 \n 선수들은 이에 대하여 아무생각이 없습니다. \n 조금 더 열심히 하여 좋은 결과를 낼 필요가 있습니다.")'
+
+        elif 7 > score >= 4:
+            insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","선수단 반응","","","" ,"최근 {my_team}은 승점 {score}점을 획득했으며 \n 선수들은 이에 대하여 실망하고 있습니다. \n 새로운 변화가 필요할 수도 있을 것 같습니다.")'
+
+        else:
+            insert_query = f'INSERT INTO Message_box VALUES("{cnt+1}","선수단 반응","","","" ,"최근 {my_team}은 승점 {score}점을 획득했으며 \n 선수들은 이에 대하여 매우 절망하고 있습니다. \n 최악의 상황에서 분위기를 반전시켜야 합니다.")'
+
+    cursor.execute(insert_query)
+    db.commit()
 
 
 ###############################################################################
@@ -924,7 +1015,6 @@ def make_player_stats(num):
             Team_list.append(cursor.fetchone()[0])
         all_team += Team_list
         player_list = []
-        # print(Team_list[0])
         for i in range(len(Team_list)):
             cursor.execute(
                 f"SELECT count(*) From Players WHERE Team == (?)", (Team_list[i],)
@@ -1120,7 +1210,87 @@ def play_my_game(Home, Away, db):
     db.commit()
     print(goal1, goal2)
     highlight.append([f"경기{goal1}:{goal2}로 종료됩니다. ", "3"])
+
+    cursor.execute(f"SELECT Team FROM Gamer")
+    my_team = cursor.fetchone()[0]
+    ticket = (
+        H_manager_ability
+        + A_manager_ability
+        + H3_f_abil
+        + A3_f_abil
+        + H3_m_abil
+        + A3_m_abil
+        + H4_d_abil
+        + A4_d_abil
+        + H1_k_abil
+        + A1_k_abil
+    )
+    ticket //= 2
+    ticket = ticket ** 7
+    if my_team == Home:
+        ticket *= 2
+        if goal1 > goal2:
+            ticket *= 3
+        elif goal1 == goal2:
+            ticket *= 2
+    else:
+        if goal1 < goal2:
+            ticket *= 3
+        elif goal1 == goal2:
+            ticket *= 2
+    money = team_money()
+    money = (money[0] + money[1] + money[2]) // 20
+    cursor.execute(
+        f"UPDATE Gamer SET Money=Money+{(ticket//60000000000000000-money) + 2000}"
+    )
+    db.commit()
     return H_Team, A_Team, highlight, Home, Away
+
+
+def match_money():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(f"SELECT Team FROM Gamer")
+    my_team = cursor.fetchone()[0]
+    Home_Team_manager = team_manager_ability(my_team)
+    if Home_Team_manager == None:
+        H_manager_ability = 50
+    else:
+        H_manager_ability = int(Home_Team_manager[5])
+    H_keeper = team_keeper_ability(my_team)
+    H_defender = team_defender_ability(my_team)
+    H_midfielder = team_midfielder_ability(my_team)
+    H_forward = team_forward_ability(my_team)
+    H1_k_abil = int(H_keeper[0][7])
+    H4_d_abil = (
+        int(H_defender[0][7])
+        + int(H_defender[1][7])
+        + int(H_defender[2][7])
+        + int(H_defender[3][7])
+    )
+    H3_m_abil = (
+        int(H_midfielder[0][7]) + int(H_midfielder[1][7]) + int(H_midfielder[2][7])
+    )
+    H3_f_abil = int(H_forward[0][7]) + int(H_forward[1][7]) + int(H_midfielder[2][7])
+    ticket = H_manager_ability + H3_f_abil + H3_m_abil + H4_d_abil + H1_k_abil
+    ticket = ticket ** 7
+    ticket *= 3
+    ticket *= 2
+    return f"약 {(ticket//60000000000000000)+2000} 만원"
+
+
+def team_money():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(f"SELECT Team FROM Gamer")
+    my_team = cursor.fetchone()[0]
+    cursor.execute(f'SELECT Sum(Money) FROM Players Where Team =="{my_team}"')
+    player_money = cursor.fetchone()[0]
+    cursor.execute(f'SELECT Sum(Money) FROM Coaches Where Team =="{my_team}"')
+    coach_money = cursor.fetchone()[0]
+    cursor.execute(f'SELECT Sum(Money) FROM Staffs Where Team =="{my_team}"')
+    staff_money = cursor.fetchone()[0]
+    return player_money, coach_money, staff_money
 
 
 def play_simulation_game(Home, Away, db):
@@ -1310,7 +1480,6 @@ def get_myteam_table():
     cursor = db.cursor()
     cursor.execute(f"SELECT Team FROM Gamer")
     my_team = cursor.fetchone()
-    # print(my_team)
     cursor.execute(
         f"SELECT Country, League FROM League_table Where Team ==(?)", (my_team)
     )
@@ -1369,6 +1538,14 @@ def check_gamer_team():
         return False
     else:
         return True
+
+
+def get_gamer_team():
+    db = sqlite3.connect(f"DB/FO_savefile3.db")
+    cursor = db.cursor()
+    cursor.execute(f"SELECT * FROM Gamer")
+    player_team = cursor.fetchone()
+    return player_team
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 from Make_label import Get_label
 from Use_data import *
+from Manage_data import *
 from tkinter import *
 import time
 import random
@@ -392,7 +393,9 @@ class Screen:
     def continue_btn(self):
         event = random.randrange(0, 100)
         if event < 20:
-            self.match_play()
+            # self.match_play()
+            pass
+            
         elif 20 <= event < 25:
             self.injury()
         elif 25 <= event < 35:
@@ -441,7 +444,7 @@ class Screen:
             x,
             67,
             f"{self.result[team+3]}",
-            "#ed1c24",
+            "#0051C9",
             ("1훈떡볶이 Regular", 14),
         )
         Score_label = Get_label.image_label_text(
@@ -450,18 +453,29 @@ class Screen:
             scorex,
             60,
             f"0",
-            "#ed1c24",
+            "#0051C9",
             ("1훈떡볶이 Regular", 20),
         )
-        coach_label = Get_label.image_label_text(
-            self.Gui,
-            "coach.png",
-            x,
-            152,
-            f"{self.result[team][-1][1]}",
-            "#ed1c24",
-            ("1훈떡볶이 Regular", 12),
-        )
+        if self.result[team][-1]==None:
+            coach_label = Get_label.image_label_text(
+                self.Gui,
+                "coach.png",
+                x,
+                152,
+                f"No Coach",
+                "#0051C9",
+                ("1훈떡볶이 Regular", 12),
+            )
+        else:
+            coach_label = Get_label.image_label_text(
+                self.Gui,
+                "coach.png",
+                x,
+                152,
+                f"{self.result[team][-1][1]}",
+                "#0051C9",
+                ("1훈떡볶이 Regular", 12),
+            )
         for i in range(1):
             player_label = Get_label.image_label_text(
                 self.Gui,
@@ -469,7 +483,7 @@ class Screen:
                 x,
                 152 + ((i + 1) * 49),
                 f"{self.result[team][0][i][1]}",
-                "#ed1c24",
+                "#0051C9",
                 ("1훈떡볶이 Regular", 12),
             )
         for i in range(4):
@@ -479,7 +493,7 @@ class Screen:
                 x,
                 152 + ((i + 2) * 49),
                 f"{self.result[team][1][i][1]}",
-                "#ed1c24",
+                "#0051C9",
                 ("1훈떡볶이 Regular", 12),
             )
         for i in range(3):
@@ -489,7 +503,7 @@ class Screen:
                 x,
                 152 + ((i + 6) * 49),
                 f"{self.result[team][2][i][1]}",
-                "#ed1c24",
+                "#0051C9",
                 ("1훈떡볶이 Regular", 12),
             )
         for i in range(3):
@@ -499,7 +513,7 @@ class Screen:
                 x,
                 152 + ((i + 9) * 49),
                 f"{self.result[team][3][i][1]}",
-                "#ed1c24",
+                "#0051C9",
                 ("1훈떡볶이 Regular", 12),
             )
 
@@ -592,11 +606,14 @@ class Screen:
         if num < len(self.result[2]) - 1:
             match_label.after(1000, lambda: self.match_result(num + 1))
         else:
-            print(self.result[2])
             match_label.after(5000, lambda: self.Main_Screen())
 
     def injury(self):
-        print("부상")
+        get_injury()
+        make_thread = threading.Thread(target=make_player_data)
+        make_thread.daemon = True
+        make_thread.start()
+        self.Main_Screen()
 
     def buy_player(self):
         print("선수 구입")
@@ -618,10 +635,12 @@ class Screen:
         self.Main_Screen()
 
     def fan_res(self):
-        print("팬 반응")
+        fan_msg_res()
+        self.Main_Screen()
 
     def player_res(self):
-        print("선수 반응")
+        pla_msg_Res()
+        self.Main_Screen()
 
     ############################################################
     # 메세지 화면
@@ -655,9 +674,9 @@ class Screen:
                 "message_notice_btn.png",
                 219,
                 130,
-                self.no_action,
+                lambda: self.message_content(0),
                 f"{data[0][1]}\n{data[0][2]}\n{data[0][3]}\n{data[0][4]}",
-                "#28a44a",
+                "#564AF7",
                 ("타이포_헬로피오피 테두리B", 15),
             )
             message_notice2 = Get_label.image_button_text(
@@ -665,9 +684,9 @@ class Screen:
                 "message_notice_btn.png",
                 219,
                 260,
-                self.no_action,
+                lambda: self.message_content(1),
                 f"{data[1][1]}\n{data[1][2]}\n{data[1][3]}\n{data[1][4]} ",
-                "#28a44a",
+                "#564AF7",
                 ("타이포_헬로피오피 테두리B", 15),
             )
             message_notice3 = Get_label.image_button_text(
@@ -675,9 +694,9 @@ class Screen:
                 "message_notice_btn.png",
                 219,
                 390,
-                self.no_action,
+                lambda: self.message_content(2),
                 f"{data[2][1]}\n{data[2][2]}\n{data[2][3]}\n{data[2][4]}",
-                "#28a44a",
+                "#564AF7",
                 ("타이포_헬로피오피 테두리B", 15),
             )
             message_notice4 = Get_label.image_button_text(
@@ -685,9 +704,9 @@ class Screen:
                 "message_notice_btn.png",
                 219,
                 520,
-                self.no_action,
+                lambda: self.message_content(3),
                 f"{data[3][1]}\n{data[3][2]}\n{data[3][3]}\n{data[3][4]}",
-                "#28a44a",
+                "#564AF7",
                 ("타이포_헬로피오피 테두리B", 15),
             )
             message_notice5 = Get_label.image_button_text(
@@ -695,11 +714,35 @@ class Screen:
                 "message_notice_btn.png",
                 219,
                 650,
-                self.no_action,
+                lambda: self.message_content(4),
                 f"{data[4][1]}\n{data[4][2]}\n{data[4][3]}\n{data[4][4]}",
-                "#28a44a",
+                "#564AF7",
                 ("타이포_헬로피오피 테두리B", 15),
             )
+    def message_content(self, num):
+        data = get_message_data()
+        msg_content1 = Get_label.image_label_text(
+            self.Gui,
+            "msg1.png",
+            460,
+            135,
+            f"{data[num][1]}\n{data[num][2]}\n{data[num][3]}\n{data[num][4]}",
+            "#003D35",
+            ("타이포_헬로피오피 테두리B", 18),
+        )
+        content = data[num][5]
+        con_list = content.split("\\n")
+        for i in range(10):
+            con_list.append("")
+        msg_content1 = Get_label.image_label_text(
+            self.Gui,
+            "msg2.png",
+            460,
+            315,
+            f"{con_list[0]}\n{con_list[1]}\n{con_list[2]}\n{con_list[3]}",
+            "#003D35",
+            ("1훈떡볶이 Regular", 18),
+        )
 
     ############################################################
     # 미니게임 화면
@@ -1356,6 +1399,7 @@ class Screen:
             self.Gui, "financial_bg.png", 0, 0
         )
         self.game_buttons()
+        gamer_data = get_gamer_team()
         self.Intro1 = Get_label.image_label_text(
             self.Gui, "fi1.png", 232, 148, f"구단주 이름", "#472f91", ("고도 M", 12)
         )
@@ -1366,15 +1410,15 @@ class Screen:
             self.Gui, "fi1.png", 232, 288, f"현재 자금", "#472f91", ("고도 M", 12)
         )
         self.con1 = Get_label.image_label_text(
-            self.Gui, "fi1-1.png", 402, 148, f"", "#472f91", ("고도 M", 12)
+            self.Gui, "fi1-1.png", 402, 148, f"{gamer_data[0]}", "#472f91", ("고도 M", 12)
         )
         self.con2 = Get_label.image_label_text(
-            self.Gui, "fi1-1.png", 402, 218, f"", "#472f91", ("고도 M", 12)
+            self.Gui, "fi1-1.png", 402, 218, f"{gamer_data[1]}", "#472f91", ("고도 M", 12)
         )
         self.con3 = Get_label.image_label_text(
-            self.Gui, "fi1-1.png", 402, 288, f"", "#472f91", ("고도 M", 12)
+            self.Gui, "fi1-1.png", 402, 288, f"{gamer_data[3]}", "#472f91", ("고도 M", 12)
         )
-
+        money = team_money()
         self.Intro4 = Get_label.image_label_text(
             self.Gui, "fi2.png", 232, 398, f"선수 주급", "#472f91", ("고도 M", 12)
         )
@@ -1388,18 +1432,20 @@ class Screen:
             self.Gui, "fi2.png", 232, 608, f"이적료 지출", "#472f91", ("고도 M", 12)
         )
         self.con4 = Get_label.image_label_text(
-            self.Gui, "fi1-2.png", 402, 398, f"", "#472f91", ("고도 M", 12)
+            self.Gui, "fi1-2.png", 402, 398, f"{money[0]} 만원", "#472f91", ("고도 M", 12)
         )
         self.con5 = Get_label.image_label_text(
-            self.Gui, "fi1-2.png", 402, 468, f"", "#472f91", ("고도 M", 12)
+            self.Gui, "fi1-2.png", 402, 468, f"{money[1]} 만원", "#472f91", ("고도 M", 12)
         )
         self.con6 = Get_label.image_label_text(
-            self.Gui, "fi1-2.png", 402, 538, f"", "#472f91", ("고도 M", 12)
+            self.Gui, "fi1-2.png", 402, 538, f"{money[2]} 만원", "#472f91", ("고도 M", 12)
         )
         self.con7 = Get_label.image_label_text(
             self.Gui, "fi1-2.png", 402, 608, f"", "#472f91", ("고도 M", 12)
         )
 
+        player_think = pla_Res()
+        
         self.Intro1 = Get_label.image_label_text(
             self.Gui, "fi5.png", 782, 148, f"팀 명성", "#472f91", ("고도 M", 12)
         )
@@ -1412,13 +1458,20 @@ class Screen:
         self.con1 = Get_label.image_label_text(
             self.Gui, "fi5-1.png", 922, 148, f"", "#472f91", ("고도 M", 12)
         )
-        self.con2 = Get_label.image_label_text(
-            self.Gui, "fi5-1.png", 922, 218, f"", "#472f91", ("고도 M", 12)
-        )
+        if player_think[1]==0:
+            self.con2 = Get_label.image_label_text(
+                self.Gui, "fi5-2.png", 922, 218, f"{player_think[0]}", "#472f91", ("고도 M", 12)
+            )
+        else:
+            self.con2 = Get_label.image_label_text(
+                self.Gui, "fi5-1.png", 922, 218, f"{player_think[0]}", "#472f91", ("고도 M", 12)
+            )
         self.con3 = Get_label.image_label_text(
             self.Gui, "fi5-1.png", 922, 288, f"", "#472f91", ("고도 M", 12)
         )
 
+        match = match_money()
+       
         self.Intro4 = Get_label.image_label_text(
             self.Gui, "fi3.png", 712, 398, f"경기당 수익", "#472f91", ("고도 M", 12)
         )
@@ -1432,13 +1485,13 @@ class Screen:
             self.Gui, "fi3.png", 712, 608, f"이적료 수익", "#472f91", ("고도 M", 12)
         )
         self.con4 = Get_label.image_label_text(
-            self.Gui, "fi1-2.png", 882, 398, f"", "#472f91", ("고도 M", 12)
+            self.Gui, "fi1-2.png", 882, 398, f"{match}", "#472f91", ("고도 M", 12)
         )
         self.con5 = Get_label.image_label_text(
             self.Gui, "fi1-2.png", 882, 468, f"", "#472f91", ("고도 M", 12)
         )
         self.con6 = Get_label.image_label_text(
-            self.Gui, "fi1-2.png", 882, 538, f"", "#472f91", ("고도 M", 12)
+            self.Gui, "fi1-2.png", 882, 538, f"{(money[0]+money[1]+money[2])*9//10} 만원", "#472f91", ("고도 M", 12)
         )
         self.con7 = Get_label.image_label_text(
             self.Gui, "fi1-2.png", 882, 608, f"", "#472f91", ("고도 M", 12)
